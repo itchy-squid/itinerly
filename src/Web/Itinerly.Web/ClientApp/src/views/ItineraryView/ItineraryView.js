@@ -2,17 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { firestore } from '../../services/firebase.js';
 import { collection, getDocs } from "firebase/firestore";
 import moment from 'moment';
+import { toast } from 'react-toastify';
 
 export const ItineraryView = () => {
-  const [forecasts, setForecasts] = useState([]);
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         //const db = firebase.firestore();
-        const querySnapshot = await getDocs(collection(firestore, "weatherforecasts"))
+        const querySnapshot = await getDocs(collection(firestore, "activities"))
 
         const docs = querySnapshot.docs.map(
           (doc) => {
@@ -20,16 +20,14 @@ export const ItineraryView = () => {
 
             return {
               ...data,
-              id: doc.id,
-              date: moment(data.date.toDate())
+              id: doc.id
             };
           });
-        console.log(docs);
 
-        setForecasts(docs);
+        setData(docs);
       }
       catch (err) {
-        setError(err);
+        toast.error(err);
       }
       finally {
         setLoading(false);
@@ -39,22 +37,18 @@ export const ItineraryView = () => {
     fetchData();
   }, []);
 
-  const renderForecastsTable = (forecasts) => {
+  const renderForecastsTable = (records) => {
     return (
       <table className="table table-striped" aria-labelledby="tableLabel">
         <thead>
           <tr>
-            <th>Date</th>
-            <th>Temp. (C)</th>
-            <th>Summary</th>
+            <th>Name</th>
           </tr>
         </thead>
         <tbody>
-          {forecasts.map(forecast =>
-            <tr key={forecast.id}>
-              <td>{forecast.date.format('YYYY-MM-DD')}</td>
-              <td>{forecast.temperatureC}</td>
-              <td>{forecast.summary}</td>
+          {records.map(record =>
+            <tr key={record.id}>
+              <td>{record.name}</td>
             </tr>
           )}
         </tbody>
@@ -64,12 +58,12 @@ export const ItineraryView = () => {
 
   let contents = loading
     ? <p><em>Loading...</em></p>
-    : renderForecastsTable(forecasts);
+    : renderForecastsTable(data);
 
   return (
     <div>
-      <h1 id="tableLabel">Weather forecast</h1>
-      <p>This component demonstrates fetching data from the server.</p>
+      <h1 id="tableLabel">Itinerary</h1>
+      <p>List itinerary details and activities.</p>
       {contents}
     </div>
   );

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { firestore } from '../../services/firebase.js';
-import { collection, getDocs } from "firebase/firestore";
+import { activityService } from '../../services/firestore';
 import moment from 'moment';
 import { toast } from 'react-toastify';
 
@@ -11,19 +10,8 @@ export const ItineraryView = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        //const db = firebase.firestore();
-        const querySnapshot = await getDocs(collection(firestore, "activities"))
-
-        const docs = querySnapshot.docs.map(
-          (doc) => {
-            const data = doc.data();
-
-            return {
-              ...data,
-              id: doc.id
-            };
-          });
-
+        const docs = await activityService.getActivities('1');
+        console.log(docs);
         setData(docs);
       }
       catch (err) {

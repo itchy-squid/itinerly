@@ -30,7 +30,6 @@
     <Folder Include="ClientApp\src\assets\" />
     <Folder Include="ClientApp\src\utils\" />
     <Folder Include="ClientApp\src\routes\" />
-    <Folder Include="ClientApp\src\services\" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

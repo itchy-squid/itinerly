@@ -103,4 +103,5 @@ pids
 # misc
 .DS_Store
 .TSBuildInfo
-
+*.v2
+/src/Api/.vs/Api/FileContentIndex/21eb42ef-bcff-4d90-a90d-b0e08a67ff17.vsidx

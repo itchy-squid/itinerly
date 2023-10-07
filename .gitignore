@@ -105,3 +105,4 @@ pids
 .TSBuildInfo
 FileContentIndex
 DesignTimeBuild
+/src/Web/Itinerly.Web/ClientApp/.env.development

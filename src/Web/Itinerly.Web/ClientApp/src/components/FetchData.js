@@ -14,8 +14,7 @@ export const FetchData = () => {
             try {
                 //const db = firebase.firestore();
                 const querySnapshot = await getDocs(collection(firestore, "weatherforecasts"))
-                console.log(querySnapshot);
-
+                
                 const docs = querySnapshot.docs.map(
                     (doc) => {
                         const data = doc.data();
@@ -23,7 +22,7 @@ export const FetchData = () => {
                         return {
                             ...data,
                             id: doc.id,
-                            date: moment(data.Date.toDate())
+                            date: moment(data.date.toDate())
                         };
                     });
                 console.log(docs);
@@ -55,8 +54,8 @@ export const FetchData = () => {
                     {forecasts.map(forecast =>
                         <tr key={forecast.id}>
                             <td>{forecast.date.format('YYYY-MM-DD')}</td>
-                            <td>{forecast.TemperatureC}</td>
-                            <td>{forecast.Summary}</td>
+                            <td>{forecast.temperatureC}</td>
+                            <td>{forecast.summary}</td>
                         </tr>
                     )}
                 </tbody>

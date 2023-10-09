@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { activityService } from '../../services/firestore';
 import moment from 'moment';
 import { toast } from 'react-toastify';
+import { CalendarView } from '../CalendarView';
 
 export const ItineraryView = () => {
   const [data, setData] = useState([]);
@@ -25,22 +26,9 @@ export const ItineraryView = () => {
     fetchData();
   }, []);
 
-  const renderForecastsTable = (records) => {
+  const renderForecastsTable = (events) => {
     return (
-      <table className="table table-striped" aria-labelledby="tableLabel">
-        <thead>
-          <tr>
-            <th>Name</th>
-          </tr>
-        </thead>
-        <tbody>
-          {records.map(record =>
-            <tr key={record.id}>
-              <td>{record.name}</td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+      <CalendarView events={events}/>
     );
   }
 

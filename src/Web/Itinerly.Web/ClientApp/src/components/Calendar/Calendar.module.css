@@ -1,0 +1,7 @@
+.calendar {
+    display: flex;
+}
+
+.day {
+    flex-grow: 1;
+}

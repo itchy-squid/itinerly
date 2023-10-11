@@ -5,7 +5,7 @@ import { TIME_UNITS } from '../../constants';
 
 export const Calendar = ({ events, days }) => {
     return (
-        <div className={styles.multiday}>
+        <div className={styles.calendar}>
             <div>
                 {Array(24).fill(null).map((_, idx) => (
                     <div key={`segment-${idx}`} className={styles.hour}>
@@ -13,9 +13,11 @@ export const Calendar = ({ events, days }) => {
                     </div>
                 ))}
             </div>
-            {days.map((date, index) => (
-                <Day activities={events} date={date} key={`day-${index}`}/>
-            ))}
+            <div className={styles.daysContainer}>
+                {days.map((date, index) => (
+                    <Day activities={events} date={date} key={`day-${index}`}/>
+                ))}
+            </div>
         </div>
     );
 }
@@ -36,7 +38,7 @@ const Day = ({ date, activities }) => {
     );
 }
 
-const CalendarItem = ({name, duration, start, children}) => {
+const CalendarItem = ({name, duration, start}) => {
     const style = {
       position: `relative`,
       height: `calc((100% / 24) * ${duration})`,

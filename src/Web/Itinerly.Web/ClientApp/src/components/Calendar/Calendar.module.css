@@ -9,16 +9,28 @@
     src: url();
 }
 
-.multiday {
+.calendar {
     display: flex;
     min-height: 600px;
 }
 
+.daysContainer {
+    flex: 1 1 auto;
+    display: flex;
+    background: repeating-linear-gradient(
+        to bottom,
+        var(--hairline),  /* Line color */
+        var(--hairline) 1px,  /* Line width */
+        transparent 1px,
+        transparent 48px  /* Space between lines */
+    );
+}
+
 .day {
     flex: 1 1 auto;
-    border-right: var(--hairline) 1px solid;
     padding-right: 12px;
     max-width: 200px;
+    border-right: var(--hairline) 1px solid;
 }
 
 .hour {

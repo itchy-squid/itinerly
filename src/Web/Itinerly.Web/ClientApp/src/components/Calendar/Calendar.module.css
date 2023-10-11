@@ -1,5 +1,12 @@
 :root {
     --hairline: rgb(218,220,224);
+    --primary: rgb(109, 165, 255);
+    --on-primary: #fff;
+}
+
+@font-face {
+    font-family: fa;
+    src: url();
 }
 
 .multiday {
@@ -28,6 +35,13 @@
 }
 
 .calendarItem {
-    background-color: rgb(66,133,244);
+    border-radius: 4px;
+    background-color: var(--primary);
     width: 100%;
+    padding: 4px 8px;
+}
+
+.calendarItemLabel {
+    font-weight: bold;
+    color: var(--on-primary);
 }

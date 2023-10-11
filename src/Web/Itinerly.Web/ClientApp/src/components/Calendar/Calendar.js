@@ -29,8 +29,8 @@ const Day = ({ date, activities }) => {
 
     return (
         <div className={styles.day}>
-            {activities.map(({id, duration, start}, idx) => (
-                <CalendarItem key={`item-${idx}`} duration={duration} start={moment(start).hour()}/>
+            {todaysEvents.map(({id, name, duration, start}, idx) => (
+                <CalendarItem key={`item-${id}`} name={name} duration={duration} start={moment(start).hour()}/>
             ))}
         </div>
     );
@@ -45,7 +45,9 @@ const CalendarItem = ({name, duration, start, children}) => {
 
     return (
         <div className={styles.calendarItem} style={style}>
-            {name}
+            <span className={styles.calendarItemLabel}>
+                {name}
+            </span>
         </div>
     );
 }

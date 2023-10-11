@@ -27,12 +27,14 @@ export const activityService = {
 
         return {
           ...data,
-          id: doc.id
+          id: doc.id,
+          start: data.start.toDate()
         };
       });
 
-    return docs;
-  },
+      console.log(docs);
+      return docs;
+    },
 
   // Add a new post
   async addActivity(post) {

@@ -33,7 +33,7 @@ export class NavMenu extends Component {
               {AppRoutes
                 .filter(route => route.inNavMenu)
                 .map((item, index) => (
-                  <NavItem>
+                  <NavItem key={`navmenu-${index}`}>
                     <NavLink tag={Link} className="text-dark" to={item.path}>{item.name}</NavLink>
                   </NavItem>
                 ))}

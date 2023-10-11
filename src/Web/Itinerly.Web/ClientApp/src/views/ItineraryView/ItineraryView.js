@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { activityService } from '../../services/firestore';
-import moment from 'moment';
 import { toast } from 'react-toastify';
 import { CalendarView } from '../CalendarView';
 
@@ -12,7 +11,6 @@ export const ItineraryView = () => {
     const fetchData = async () => {
       try {
         const docs = await activityService.getActivities('1');
-        console.log(docs);
         setData(docs);
       }
       catch (err) {

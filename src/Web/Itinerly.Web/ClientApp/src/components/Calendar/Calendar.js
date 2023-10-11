@@ -1,36 +1,50 @@
 import styles from './Calendar.module.css';
+import moment, { duration } from 'moment';
+import {filter, sortBy} from 'lodash';
+import { TIME_UNITS } from '../../constants';
 
 export const Calendar = ({ events, days }) => {
-    console.log(events);
     return (
-        <div className={styles.calendar}>
-            <div className="hour-labels">
-                {/* Render hour labels here. Perhaps map through an array of hours. */}
+        <div className={styles.multiday}>
+            <div>
+                {Array(24).fill(null).map((_, idx) => (
+                    <div key={`segment-${idx}`} className={styles.hour}>
+                        <span className={styles.hourlabel}>{idx}</span>
+                    </div>
+                ))}
             </div>
-            {days.map((day) => (
-                <Day events={events} day={day} key={day}/>
+            {days.map((date, index) => (
+                <Day activities={events} date={date} key={`day-${index}`}/>
             ))}
         </div>
     );
 }
 
-function Day({ day, events }) {
+const Day = ({ date, activities }) => {
+    const today = moment(date);
+
+    const todaysEvents = sortBy(
+        filter(activities, ev => moment(ev.start).isSame(today, TIME_UNITS.DAY)),
+        ev => ev.start);
+
     return (
         <div className={styles.day}>
-            {day}<br/>
-            {events.map(event => <Event key={event.id} {...event} />)}
+            {activities.map(({id, duration, start}, idx) => (
+                <CalendarItem key={`item-${idx}`} duration={duration} start={moment(start).hour()}/>
+            ))}
         </div>
     );
 }
 
-function Event({ id, name, startHour, duration }) {
+const CalendarItem = ({name, duration, start, children}) => {
     const style = {
-        gridColumn: 'span 1',
-        gridRow: `span ${duration}`
+      position: `relative`,
+      height: `calc((100% / 24) * ${duration})`,
+      top: `calc((100% / 24) * ${start})`
     };
 
     return (
-        <div className="event">
+        <div className={styles.calendarItem} style={style}>
             {name}
         </div>
     );

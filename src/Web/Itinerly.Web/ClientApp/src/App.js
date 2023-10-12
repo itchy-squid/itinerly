@@ -10,9 +10,9 @@ const App = () => {
         <ProjectsProvider>
             <Layout>
                 <Routes>
-                    {AppRoutes.map((route, index) => {
+                    {AppRoutes.map((route, idx) => {
                         const { element, path, exact, ...rest } = route;
-                        return <Route key={index} path={path} exact={exact} {...rest} element={element} />;
+                        return <Route key={idx} path={path} exact={exact} {...rest} element={element} />;
                     })}
                 </Routes>
             </Layout>

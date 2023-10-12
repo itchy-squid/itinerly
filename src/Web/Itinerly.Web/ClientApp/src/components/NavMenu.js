@@ -32,8 +32,8 @@ export class NavMenu extends Component {
             <ul className="navbar-nav flex-grow">
               {AppRoutes
                 .filter(route => route.inNavMenu)
-                .map((item, index) => (
-                  <NavItem key={`navmenu-${index}`}>
+                .map((item, idx) => (
+                  <NavItem key={`navmenu-${idx}`}>
                     <NavLink tag={Link} className="text-dark" to={item.path}>{item.name}</NavLink>
                   </NavItem>
                 ))}

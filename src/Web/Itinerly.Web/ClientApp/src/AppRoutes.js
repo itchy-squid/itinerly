@@ -4,7 +4,8 @@ import {ProjectsView} from './views/ProjectsView';
 
 export const AppRoutes = [
     {
-        index: true,
+        // index: true,
+        path: '/',
         name: 'Home',
         element: <Home />,
         exact: true,

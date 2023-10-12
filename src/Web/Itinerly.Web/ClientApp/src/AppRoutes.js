@@ -1,6 +1,6 @@
-import { Counter } from "./components/Counter";
 import { Home } from "./components/Home";
 import { ItineraryView } from './views/ItineraryView';
+import {ProjectsView} from './views/ProjectsView';
 
 export const AppRoutes = [
     {
@@ -11,10 +11,9 @@ export const AppRoutes = [
         inNavMenu: true 
     },
     {
-        path: '/counter',
-        name: 'Counter',
-        element: <Counter />,
-        exact: true,
+        path: '/projects',
+        name: 'Projects',
+        element: <ProjectsView />,
         inNavMenu: true 
     },
     {

@@ -1,5 +1,5 @@
 import { Fragment, useState } from 'react';
-import { useNavigation } from 'react-router-dom';
+import { useNavigate, useNavigation } from 'react-router-dom';
 import { useProjects } from '../../contexts/ProjectsContext';
 import { Box, Fab, LinearProgress, List, ListItemButton, ListItemText, TextField } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
@@ -7,7 +7,7 @@ import AddIcon from '@mui/icons-material/Add';
 export const ProjectsView = () => {
   const { projects, loading, onSelectProject } = useProjects();
   const [searchTerm, setSearchTerm] = useState('');
-  const navigation = useNavigation();
+  const navigate = useNavigate();
 
   const filteredProjects = projects.filter(project => 
     project.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -18,7 +18,7 @@ export const ProjectsView = () => {
     onSelectProject(projectId);
     
     // Navigate to the detailed view
-    navigation.push(`/projects/${projectId}`);
+    navigate(`/projects/${projectId}`);
   };
 
   if (loading) return <LinearProgress />;  // Assuming you have a Loading component

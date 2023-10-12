@@ -3,7 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import { AppRoutes } from './AppRoutes';
 import { Layout } from './components/Layout';
 import './custom.css';
-import { ProjectsProvider } from './contexts/ProjectsContext';
+import { ProjectsProvider } from './contexts/ProjectContext';
 
 const App = () => {
     return (

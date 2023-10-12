@@ -24,7 +24,7 @@
         transparent 1px,
         transparent var(--hour-height) /* Space between lines */
     );
-    border-left: var(--hairline) 1px;
+    border-bottom: var(--hairline) 1px solid;
 }
 
 .daysPrelude {

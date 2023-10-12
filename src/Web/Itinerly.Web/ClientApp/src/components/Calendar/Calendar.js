@@ -2,27 +2,39 @@ import styles from './Calendar.module.css';
 import moment, { duration } from 'moment';
 import {filter, sortBy} from 'lodash';
 import { TIME_UNITS } from '../../constants';
+import {range} from 'lodash';
+
 
 export const Calendar = ({ events, days }) => {
+    const renderSettings = { 
+        renderStartTime: 16,
+        renderDuration: 8
+    }
+
+    const style = {
+      height: `calc(var(--hour-height) * ${renderSettings.duration})`,
+    };
+
     return (
-        <div className={styles.calendar}>
+        <div className={styles.calendar} style={style}>
             <div>
-                {Array(24).fill(null).map((_, idx) => (
-                    <div key={`segment-${idx}`} className={styles.hour}>
-                        <span className={styles.hourlabel}>{idx}</span>
+                {range(renderSettings.renderStartTime, renderSettings.renderStartTime + renderSettings.renderDuration).map((hour, idx) => (
+                    <div key={`segment-${hour}`} className={styles.hour}>
+                        <span className={styles.hourlabel}>{hour}</span>
                     </div>
                 ))}
             </div>
             <div className={styles.daysContainer}>
+                <div className={styles.daysPrelude}/>
                 {days.map((date, index) => (
-                    <Day activities={events} date={date} key={`day-${index}`}/>
+                    <Day activities={events} date={date} key={`day-${index}`} renderSettings={renderSettings} />
                 ))}
             </div>
         </div>
     );
 }
 
-const Day = ({ date, activities }) => {
+const Day = ({ date, activities, renderSettings }) => {
     const today = moment(date);
 
     const todaysEvents = sortBy(
@@ -32,17 +44,17 @@ const Day = ({ date, activities }) => {
     return (
         <div className={styles.day}>
             {todaysEvents.map(({id, name, duration, start}, idx) => (
-                <CalendarItem key={`item-${id}`} name={name} duration={duration} start={moment(start).hour()}/>
+                <CalendarItem key={`item-${id}`} name={name} duration={duration} start={moment(start).hour()} renderSettings={renderSettings}/>
             ))}
         </div>
     );
 }
 
-const CalendarItem = ({name, duration, start}) => {
+const CalendarItem = ({name, duration, start, renderSettings}) => {
     const style = {
       position: `relative`,
-      height: `calc((100% / 24) * ${duration})`,
-      top: `calc((100% / 24) * ${start})`
+      height: `calc(var(--hour-height) * ${duration})`,
+      top: `calc(var(--hour-height) * (${start - renderSettings.renderStartTime}))`
     };
 
     return (

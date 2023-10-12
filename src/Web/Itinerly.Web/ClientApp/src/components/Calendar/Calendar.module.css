@@ -2,6 +2,7 @@
     --hairline: rgb(218,220,224);
     --primary: rgb(109, 165, 255);
     --on-primary: #fff;
+    --hour-height: 48px;
 }
 
 @font-face {
@@ -11,7 +12,6 @@
 
 .calendar {
     display: flex;
-    min-height: 600px;
 }
 
 .daysContainer {
@@ -22,8 +22,14 @@
         var(--hairline),  /* Line color */
         var(--hairline) 1px,  /* Line width */
         transparent 1px,
-        transparent 48px  /* Space between lines */
+        transparent var(--hour-height) /* Space between lines */
     );
+    border-left: var(--hairline) 1px;
+}
+
+.daysPrelude {
+    width: 8px;
+    border-right: var(--hairline) 1px solid;
 }
 
 .day {
@@ -34,7 +40,7 @@
 }
 
 .hour {
-    height: 48px;
+    height: var(--hour-height);
     padding-right: 8px;
     text-align: right;
 }

@@ -19,8 +19,6 @@ export const activityService = {
         where(propertyNames.itineraryId, queryOperators.equals, itineraryId))
     );
 
-    console.log(querySnapshot);
-
     const docs = querySnapshot.docs.map(
       (doc) => {
         const data = doc.data();
@@ -32,7 +30,6 @@ export const activityService = {
         };
       });
 
-      console.log(docs);
       return docs;
     },
 

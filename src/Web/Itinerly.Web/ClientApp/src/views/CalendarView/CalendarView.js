@@ -6,7 +6,6 @@ import { TIME_UNITS } from '../../constants';
 
 export const CalendarView = ({events}) => {
   const days = events.map(ev => moment(ev.start).startOf(TIME_UNITS.DAY).toDate());
-  console.log(events);
 
   return (
     <Calendar events={events} days={days}>

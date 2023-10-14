@@ -1,10 +1,11 @@
 import React from 'react';
 import { 
   Container, Paper, Typography, List, ListItem, Divider, Table, TableBody, 
-  TableCell, TableHead, TableRow, LinearProgress, Fab, IconButton, Box, useMediaQuery 
+  TableCell, TableHead, TableRow, LinearProgress, Fab, IconButton, Box, useMediaQuery, Accordion, AccordionSummary, AccordionDetails 
 }from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useSelectedProject } from '../../contexts/SelectedProjectContext';
 import moment from 'moment';
 import useFocusedId from '../../hooks/useFocusedId';
@@ -35,31 +36,35 @@ export const ProjectView = () => {
       </Typography>
 
       {activities.map((activity, index) => (
-        <Paper 
+        <Accordion
           key={index} 
           elevation={3} 
-          style={{ position: 'relative' }}  
-          sx={{p: 2, my: 2}}
           onClick={handleActivityClicked(activity.id)}>
           
-          <Box>
-            <Typography variant="h6" gutterBottom>
+          <AccordionSummary
+            id={`activity${index}-header`}
+            aria-controls={`activity${index}-content`}
+            expandIcon={<ExpandMoreIcon/>}>
+
+            <Typography>
               {activity.name}
             </Typography>
-            <Typography variant="body1" gutterBottom>
+          </AccordionSummary>
+
+          <AccordionDetails
+            style={{ position: 'relative' }}>
+
+            <Typography variant="body1">
               {activity.description}
             </Typography>
-          </Box>
-
-          {isFocused(activity.id) && (
-          <>
+{/*             
             <IconButton
               sx={{p: 1, m: 1}}
               style={{ position: 'absolute', top: 0, right: 0 }}
               onClick={handleEditActivityClicked(activity.id)}
             >
               <EditIcon />
-            </IconButton>
+            </IconButton> */}
           
             <List>
               <ListItem>
@@ -93,9 +98,8 @@ export const ProjectView = () => {
                 {/* ))} */}
               </TableBody>
             </Table>
-          </>
-        )}
-      </Paper>
+          </AccordionDetails>
+        </Accordion>
       ))}
 
         <Fab 

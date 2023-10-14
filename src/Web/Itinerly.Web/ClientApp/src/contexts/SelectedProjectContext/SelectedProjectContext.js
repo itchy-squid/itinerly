@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useProjects } from '../ProjectsContext';
-import { activityService } from '../../services/firestore';
+import { activityService, projectService } from '../../services/firestore';
 
 const SelectedProjectContext = createContext();
 
@@ -12,12 +12,12 @@ export const SelectedProjectProvider = ({ children }) => {
 
   useEffect(() => {
     setLoading(true);
-    
+
     if (selectedProjectId) {
       // Fetch the details for the selected project and set them
       fetchProjectDetails(selectedProjectId)
-      .then(({ activities }) => { 
-        setProject(null);
+      .then(({ project, activities }) => { 
+        setProject(project);
         setActivities(activities) 
         setLoading(false);
       });
@@ -26,9 +26,11 @@ export const SelectedProjectProvider = ({ children }) => {
 
   // Assuming an API call like:
   const fetchProjectDetails = async (projectId) => {
+    const project = (await projectService.fetchProjects()).filter(p => p.id == projectId)[0];
     const activities = await activityService.getActivities(projectId);
 
     return {
+      project: project,
       activities: activities
     };
   };

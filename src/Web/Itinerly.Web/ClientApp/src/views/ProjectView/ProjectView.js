@@ -16,13 +16,19 @@ export const ProjectView = () => {
   return (
     <Container>
       <Typography variant="h4" gutterBottom>
-        Activities
+        {project.name}
+      </Typography>
+      <Typography variant="body1" gutterBottom>
+        {project.description}
       </Typography>
 
       {activities.map((activity, index) => (
         <Paper elevation={3} style={{ marginBottom: '20px', padding: '15px' }} key={index}>
         <Typography variant="h6" gutterBottom>
           {activity.name}
+        </Typography>
+        <Typography variant="body1" gutterBottom>
+          {activity.description}
         </Typography>
         <List>
           <ListItem>

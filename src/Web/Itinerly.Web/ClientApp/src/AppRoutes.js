@@ -1,3 +1,5 @@
+import { Outlet } from "react-router-dom";
+import Root from "./Root";
 import { Home } from "./components/Home";
 import { Layout } from "./components/Layout";
 import { ItineraryView } from './views/ItineraryView';
@@ -34,3 +36,37 @@ export const AppRoutes = [
         inNavMenu: true 
     }
 ];
+
+export const AppRoutesV2 = [
+  {
+    element: <Root/>,
+    path: "/",
+    children: [
+      {
+        index: true,
+        element: <Home/>
+      },
+      {
+        path: "projects",
+        element: <ProjectsView/>,
+        children:
+        [
+          {
+            path: ":projectId",
+            element: <ProjectView/>
+          }
+        ]
+      },
+      {
+        path: 'itinerary',
+        element: <Outlet/>,
+        children: [
+          {
+            index: true,
+            element: <ItineraryView/>
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,17 +1,25 @@
 import { Fragment, useState } from 'react';
-import { useProjects } from '../../contexts/ProjectContext';
-import {Box, Card, CardActions, CardContent, Divider, Fab, Grid, LinearProgress, List, ListItem, ListItemButton, ListItemText, ListSubheader, TextField, Typography} from '@mui/material';
-import Button from '@mui/material/Button';
+import { useNavigate, useNavigation } from 'react-router-dom';
+import { useProjects } from '../../contexts/ProjectsContext';
+import { Box, Fab, LinearProgress, List, ListItemButton, ListItemText, TextField } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 
 export const ProjectsView = () => {
-  const { projects, loading, selectProject } = useProjects();
+  const { projects, loading, onSelectProject } = useProjects();
   const [searchTerm, setSearchTerm] = useState('');
+  const navigate = useNavigate();
 
   const filteredProjects = projects.filter(project => 
     project.name.toLowerCase().includes(searchTerm.toLowerCase())
     || project.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const handleProjectClick = (projectId) => {
+    onSelectProject(projectId);
+    
+    // Navigate to the detailed view
+    navigate(`/projects/${projectId}`);
+  };
 
   if (loading) return <LinearProgress />;  // Assuming you have a Loading component
 
@@ -28,10 +36,10 @@ export const ProjectsView = () => {
       </Box>
 
       <List>
-      {filteredProjects.map((project) => (
-        <Fragment key={project.id}>
-          <ListItemButton onClick={() => selectProject(project)}>
-            <ListItemText primary={project.name} secondary={project.description}/>
+      {filteredProjects.map(({id, name, description}) => (
+        <Fragment key={id}>
+          <ListItemButton onClick={() => handleProjectClick(id)}>
+            <ListItemText primary={name} secondary={description}/>
           </ListItemButton>
         </Fragment>
       ))}

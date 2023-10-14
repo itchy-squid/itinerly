@@ -1,11 +1,12 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { projectService } from '../../services/firestore';
 
-const ProjectContext = createContext();
+const ProjectsContext = createContext();
 
-const ProjectProvider = ({ children }) => {
+const ProjectsProvider = ({ children }) => {
     const [projects, setProjects] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [selectedProjectId, setSelectedProjectId] = useState(null);
 
     useEffect(() => {
         async function loadProjects() {
@@ -16,19 +17,19 @@ const ProjectProvider = ({ children }) => {
         loadProjects();
     }, []);
 
-    const selectProject = (project) => {
-      // Handle project selection
+    const onSelectProject = (id) => {
+      setSelectedProjectId(id);
     };
 
     return (
-        <ProjectContext.Provider value={{ projects, loading, selectProject }}>
+        <ProjectsContext.Provider value={{ projects, loading, selectedProjectId, onSelectProject }}>
             {children}
-        </ProjectContext.Provider>
+        </ProjectsContext.Provider>
     );
 }
 
 const useProjects = () => {
-  return useContext(ProjectContext);
+  return useContext(ProjectsContext);
 }
 
-export { ProjectContext as ProjectsContext, ProjectProvider as ProjectsProvider, useProjects };
+export { ProjectsContext, ProjectsProvider, useProjects };

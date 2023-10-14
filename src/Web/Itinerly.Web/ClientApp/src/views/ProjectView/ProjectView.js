@@ -1,29 +1,25 @@
 import React from 'react';
 import { 
-  Container, Paper, Typography, List, ListItem, Divider, Table, TableBody, 
-  TableCell, TableHead, TableRow, LinearProgress, Fab, IconButton, Box, useMediaQuery, Accordion, AccordionSummary, AccordionDetails 
+  Accordion, AccordionSummary, AccordionDetails, Container, Divider, 
+  Fab, LinearProgress, List, ListItem, Table, TableBody, 
+  TableCell, TableHead, TableRow, Typography, Checkbox, 
 }from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useSelectedProject } from '../../contexts/SelectedProjectContext';
 import moment from 'moment';
-import useFocusedId from '../../hooks/useFocusedId';
+import { toast } from 'react-toastify';
 
 export const ProjectView = () => {
-  const {project, activities, loading} = useSelectedProject();
-  const {toggleFocus, isFocused} = useFocusedId();
+  const {project, activities, expenses, loading, error} = useSelectedProject();
 
   if(loading) {
     return <LinearProgress/>
   }
 
-  const handleEditActivityClicked = (id) => {
-    return (ev) => { ev.stopPropagation(); }
-  }
-
-  const handleActivityClicked = (id) => {
-    return () => { toggleFocus(id); }
+  if(error){
+    toast.error(error);
+    return <></>
   }
 
   return (
@@ -36,79 +32,91 @@ export const ProjectView = () => {
       </Typography>
 
       {activities.map((activity, index) => (
-        <Accordion
-          key={index} 
-          elevation={3} 
-          onClick={handleActivityClicked(activity.id)}>
-          
-          <AccordionSummary
-            id={`activity${index}-header`}
-            aria-controls={`activity${index}-content`}
-            expandIcon={<ExpandMoreIcon/>}>
-
-            <Typography>
-              {activity.name}
-            </Typography>
-          </AccordionSummary>
-
-          <AccordionDetails
-            style={{ position: 'relative' }}>
-
-            <Typography variant="body1">
-              {activity.description}
-            </Typography>
-{/*             
-            <IconButton
-              sx={{p: 1, m: 1}}
-              style={{ position: 'absolute', top: 0, right: 0 }}
-              onClick={handleEditActivityClicked(activity.id)}
-            >
-              <EditIcon />
-            </IconButton> */}
-          
-            <List>
-              <ListItem>
-                {moment(activity.start).toISOString()}
-              </ListItem>
-            </List>
-            <Divider />
-
-            <Typography variant="subtitle1" gutterBottom style={{ marginTop: '15px' }}>
-              Expenses
-            </Typography>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Item Name</TableCell>
-                  <TableCell>Cost</TableCell>
-                  <TableCell>Units Bought</TableCell>
-                  <TableCell>Tax</TableCell>
-                  <TableCell>Tip</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {/* {activity.expenses.map((expense, eIndex) => ( */}
-                  <TableRow>
-                    <TableCell>expense.itemName</TableCell>
-                    <TableCell>expense.itemCost</TableCell>
-                    <TableCell>expense.unitsBought</TableCell>
-                    <TableCell>expense.tax</TableCell>
-                    <TableCell>expense.tip</TableCell>
-                  </TableRow>
-                {/* ))} */}
-              </TableBody>
-            </Table>
-          </AccordionDetails>
-        </Accordion>
+        <Activity key={index} activity={activity} expenses={expenses} project={project}/>
       ))}
 
-        <Fab 
-          color="primary" 
-          aria-label="add" 
-          sx={{ m: 4 }}
-          style={{ position: 'fixed', bottom: 0, right: 0 }} >
-          <AddIcon />
-        </Fab>
+      <Accordion>
+        <AccordionSummary IconButton={<AddIcon/>}>
+          <AddIcon/>
+          <Typography>
+            Activity
+          </Typography>
+        </AccordionSummary>
+      </Accordion>
+
+      <Fab 
+        color="primary" 
+        aria-label="add" 
+        sx={{ m: 4 }}
+        style={{ position: 'fixed', bottom: 0, right: 0 }} >
+        <AddIcon />
+      </Fab>
     </Container>
   );
+}
+
+export const Activity = ({ project, activity, expenses, key }) => {
+  
+  const calculateExpense = (project, expense) => {
+    return expense.unitCost * expense.units * (1 + (expense.hasTax ? project.tax : 0)) * (1 + (expense.hasTip ? project.tip : 0));
+  }
+
+  return (
+    <Accordion
+      key={key}>
+      
+      <AccordionSummary
+        id={`${key}-header`}
+        aria-controls={`${key}-content`}
+        expandIcon={<ExpandMoreIcon/>}>
+
+        <Typography>
+          {activity.name}
+        </Typography>
+      </AccordionSummary>
+
+      <AccordionDetails
+        style={{ position: 'relative' }}>
+
+        <Typography>
+          {activity.description}
+        </Typography>
+      
+        <List>
+          <ListItem>
+            {moment(activity.start).toISOString()}
+          </ListItem>
+        </List>
+        <Divider />
+
+        <Typography variant="subtitle1" gutterBottom style={{ marginTop: '15px' }}>
+          Expenses
+        </Typography>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Description</TableCell>
+              <TableCell>Unit Cost</TableCell>
+              <TableCell>No. of Units</TableCell>
+              <TableCell>Tax</TableCell>
+              <TableCell>Tip</TableCell>
+              <TableCell>Cost</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {expenses.map((expense, idx) => (
+              <TableRow>
+                <TableCell>{expense.description}</TableCell>
+                <TableCell>{expense.unitCost}</TableCell>
+                <TableCell>{expense.units}</TableCell>
+                <TableCell><Checkbox sx={{p: 0}} checked={expense.hasTax} disabled /></TableCell>
+                <TableCell><Checkbox sx={{p: 0}} checked={expense.hasTip} disabled /></TableCell>
+                <TableCell>{calculateExpense(project, expense)}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </AccordionDetails>
+    </Accordion>
+  )
 }

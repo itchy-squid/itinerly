@@ -1,8 +1,9 @@
 import { Fragment, useState } from 'react';
-import { useNavigate, useNavigation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useProjects } from '../../contexts/ProjectsContext';
 import { Box, Fab, LinearProgress, List, ListItemButton, ListItemText, TextField } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 export const ProjectsView = () => {
   const { projects, loading, onSelectProject } = useProjects();
@@ -40,6 +41,7 @@ export const ProjectsView = () => {
         <Fragment key={id}>
           <ListItemButton onClick={() => handleProjectClick(id)}>
             <ListItemText primary={name} secondary={description}/>
+            <ChevronRightIcon/>
           </ListItemButton>
         </Fragment>
       ))}
@@ -48,8 +50,8 @@ export const ProjectsView = () => {
       <Fab 
         color="primary" 
         aria-label="add" 
-        style={{ position: 'fixed', bottom: '2rem', right: '2rem' }} 
-      >
+        sx={{ m: 4 }}
+        style={{ position: 'fixed', bottom: 0, right: 0 }} >
         <AddIcon />
       </Fab>
     </Box>

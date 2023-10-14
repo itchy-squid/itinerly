@@ -6,51 +6,26 @@ import { ItineraryView } from './views/ItineraryView';
 import { ProjectsView } from './views/ProjectsView';
 import { ProjectView } from './views/ProjectView';
 
-export const AppRoutes = [
-    {
-        // index: true,
-        path: '/',
-        name: 'Home',
-        element: (<Layout><Home /></Layout>),
-        exact: true,
-        inNavMenu: true 
-    },
-    {
-        path: '/projects',
-        name: 'Projects',
-        element: (<Layout><ProjectsView /></Layout>),
-        exact: true,
-        inNavMenu: true 
-    },
-    {
-        path: '/projects/:id',
-        name: 'Project',
-        element: (<Layout><ProjectView /></Layout>),
-        inNavMenu: false 
-    },
-    {
-        path: '/itinerary',
-        name: 'Itinerary',
-        element: (<Layout><ItineraryView /></Layout>),
-        exact: true,
-        inNavMenu: true 
-    }
-];
-
-export const AppRoutesV2 = [
+const appRoutes = [
   {
     element: <Root/>,
-    path: "/",
+    path: "",
     children: [
       {
         index: true,
-        element: <Home/>
+        element: <Home/>,
+        name: 'Home'
       },
       {
         path: "projects",
-        element: <ProjectsView/>,
+        element: <Outlet/>,
         children:
         [
+          {
+            index: true,
+            element: <ProjectsView/>,
+            name: 'Projects'
+          },
           {
             path: ":projectId",
             element: <ProjectView/>
@@ -63,10 +38,39 @@ export const AppRoutesV2 = [
         children: [
           {
             index: true,
-            element: <ItineraryView/>
+            element: <ItineraryView/>,
+            name: 'Itinerary'
           }
         ]
       }
     ]
   }
 ]
+
+function flattenRoutes(routes, parentPath = '') {
+  let flatRoutes = [];
+
+  routes
+  .forEach(route => {
+    const fullPath = route.path ? `${parentPath}/${route.path}` : parentPath;
+    
+    // Push current route to the flat model
+    if(route.index) {
+      flatRoutes.push({path: fullPath, name: route.name});
+    }
+
+    // If this route has children, recurse and add them to the flat model
+    if (route.children && route.children.length) {
+      flatRoutes = flatRoutes.concat(flattenRoutes(route.children, fullPath));
+    }
+  });
+
+  return flatRoutes;
+}
+
+const navRoutes = flattenRoutes(appRoutes);
+
+export {
+  appRoutes,
+  navRoutes
+};

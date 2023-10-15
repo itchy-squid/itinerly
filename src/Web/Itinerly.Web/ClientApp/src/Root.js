@@ -1,25 +1,27 @@
 import React from 'react';
-import { BrowserRouter, Outlet, Route, RouterProvider, Routes, createBrowserRouter, createRoutesFromElements } from 'react-router-dom';
-import { AppRoutes } from './AppRoutes';
+import { Outlet} from 'react-router-dom';
 import { Layout } from './components/Layout';
 import './custom.css';
 import { ProjectsProvider } from './contexts/ProjectsContext';
 import { SelectedProjectProvider } from './contexts/SelectedProjectContext';
 import { ThemeProvider } from '@emotion/react';
 import { createTheme } from '@mui/material';
+import { UserProvider } from './contexts/UserContext/UserContext';
 
 const theme = createTheme({});
 
 const Root = () => {
     return (
       <ThemeProvider theme={theme}>
-        <ProjectsProvider>
-          <SelectedProjectProvider>
-            <Layout>
-              <Outlet/>
-            </Layout>
-          </SelectedProjectProvider>
-        </ProjectsProvider>
+        <UserProvider>
+          <ProjectsProvider>
+            <SelectedProjectProvider>
+              <Layout>
+                <Outlet/>
+              </Layout>
+            </SelectedProjectProvider>
+          </ProjectsProvider>
+        </UserProvider>
       </ThemeProvider>
     );
 }

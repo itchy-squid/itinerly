@@ -1,24 +1,22 @@
 import { firestore } from '../../config/firebase';
 import { collection, getDocs, query, where } from "firebase/firestore";
 
-const expensesRef = collection(firestore, "expenses");
+const collectionRef = collection(firestore, "locations");
 
 const propertyNames = {
   projectId: 'projectId'
 };
 
 const queryOperators = {
-  equals: '==',
-  in: 'in'
+  equals: '=='
 }
 
-export const expensesService = {
+export const locationsService = {
   
-  async fetchExpenses(projectId) {
+  async fetchLocations(projectId) {
     const querySnapshot = await getDocs(
-      query(expensesRef,
-        where(propertyNames.projectId, queryOperators.equals, projectId))
-    );
+      query(collectionRef,
+        where(propertyNames.projectId, queryOperators.equals, projectId)));
 
     const docs = querySnapshot.docs.map(
       (doc) => {
@@ -32,4 +30,5 @@ export const expensesService = {
 
       return docs;
     },
+
 };

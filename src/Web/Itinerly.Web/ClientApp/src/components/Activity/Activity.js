@@ -1,24 +1,31 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { 
   Accordion, AccordionDetails, AccordionSummary, Box, Divider, List, ListItem, 
-  Table, TableBody, TableCell, TableHead, TableRow, Typography, Checkbox, IconButton, 
+  Table, TableBody, TableCell, TableHead, TableRow, Typography, Checkbox, IconButton, makeStyles, TextField, LinearProgress, 
 }from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
+import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useSelectedProject } from '../../contexts/SelectedProjectContext';
 import moment from 'moment';
+import { cloneDeep }from 'lodash';
 
 const StyledTableCell = (props) => {
   return (<TableCell sx={{py: 1}} {...props}>{props.children}</TableCell>);
 }
 
-export const Activity = ({ activity, expenses }) => {
+export const Activity = ({ initialActivity, expenses }) => {
+  const [ updatedActivity, setUpdatedActivity ] = useState({...initialActivity});
+
+  // const { updatedExpenses, setUpdatedExpenses } = useState(expenses);
   const { locations } = useSelectedProject();
   const [ expanded, setExpanded ] = useState(false);
+  const [ isEditing, setIsEditing ] = useState(false);
 
   const calculateExpense = (expense) => {
-    const location = locations.filter(l => l.id === activity.locationId)[0];
+    const location = locations.filter(l => l.id === updatedActivity.locationId)[0];
 
     const baseCost = expense.unitCost * expense.units;
     const taxMultiplier = (1 + (expense.hasTax ? (location.tax / 100.0) : 0));
@@ -29,29 +36,48 @@ export const Activity = ({ activity, expenses }) => {
 
   const handleAccordionChange = () => {
     return (ev) => {
-      ev.preventDefault();
-      if(!expanded) setExpanded(true);
+      if(!isEditing) setExpanded(!expanded);
     }
-  }
-  
-  const handleExpandClick = () => {
-    return (ev) => { ev.stopPropagation(); }
   }
 
   const handleEditClick = () => {
-    return (ev) => { ev.stopPropagation(); }
-  }
-  
-  const handleCloseClick = () => {
-    return () => { if(expanded) setExpanded(false); }
+    return (ev) => { 
+      setIsEditing(true); 
+      ev.stopPropagation();
+    }
   }
 
+  const handleSaveClick = () => {
+    return (ev) => { 
+      setIsEditing(false); 
+      ev.stopPropagation();
+    }
+  }
+  
+  const handleCancelClick = () => {
+    return (ev) => { 
+      setIsEditing(false);
+      setUpdatedActivity({...initialActivity});
+      ev.stopPropagation();
+    }
+  }
+
+  const handleNameChange = () => {
+    return (ev) => {
+      setUpdatedActivity({...updatedActivity, hasChanges:true, name: ev.target.value});
+    }
+  }
+
+  if(!updatedActivity) {
+    return <LinearProgress/>
+  }
 
   return (
     <Accordion expanded={expanded} onChange={handleAccordionChange()}>      
       <AccordionSummary
-        sx={{mY: 0}}
-        style={{display: 'flex'}}>
+          expandIcon={<ExpandMoreIcon />}
+        sx={{my: 0}}
+        style={{display: 'flex', margin: 0}}>
 
           <Box style={{
             display: 'flex',
@@ -60,24 +86,45 @@ export const Activity = ({ activity, expenses }) => {
             justifyContent: 'center'
           }}>
             <Box style={{flex: 1}}>
+              {isEditing ? (
+                <TextField style={{flex: 1}} defaultValue={updatedActivity.name} variant='standard' onChange={handleNameChange()}/>
+              )
+            : (
               <Typography style={{textOverflow: 'ellipsis', whiteSpace: 'no-wrap', overflow: 'hidden'}}>
-                {activity.name}
+                {updatedActivity.name}
               </Typography>
+            )}
+              
             </Box>
           </Box>
 
           {expanded && (
-            <Fragment>
-              <IconButton onClick={handleEditClick()}>
-                <EditIcon/>
-              </IconButton>
-              <IconButton>
-                <MoreVertIcon/>
-              </IconButton>
-              <IconButton onClick={handleCloseClick()}>
-                <CloseIcon/>
-              </IconButton>
-            </Fragment>
+            <>
+            {
+              isEditing ? 
+              (
+                <>
+                  <IconButton 
+                    color='primary'
+                    sx={{p: 0.25, mx: 1}} 
+                    onClick={handleSaveClick()}>
+                    <CheckIcon/>
+                  </IconButton>
+                  <IconButton sx={{p: 0.25, mx: 1}} onClick={handleCancelClick()}>
+                    <CloseIcon/>
+                  </IconButton>
+                </>
+              )
+              : 
+              (
+                <>
+                  <IconButton sx={{p: 0.25, mx: 1}} onClick={handleEditClick()}>
+                    <EditIcon/>
+                  </IconButton>
+                </>
+              )
+            }
+            </>
           )}
       </AccordionSummary>
     
@@ -85,12 +132,12 @@ export const Activity = ({ activity, expenses }) => {
         style={{ position: 'relative' }}>
 
         <Typography>
-          {activity.description}
+          {updatedActivity.description}
         </Typography>
       
         <List>
           <ListItem>
-            {moment(activity.start).toISOString()}
+            {moment(updatedActivity.start).toISOString()}
           </ListItem>
         </List>
         <Divider />

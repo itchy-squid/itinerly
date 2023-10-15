@@ -9,10 +9,9 @@ import { useProjects } from '../../contexts/ProjectsContext';
 
 export const ProjectView = () => {
   const routeParams = useParams();
-  const { setSelectedProjectId } = useProjects();
-  const {project, activities, expenses, loading, error} = useSelectedProject();
+  const { selectProjectId, project, activities, expenses, loading, error} = useSelectedProject();
 
-  setSelectedProjectId(routeParams.projectId);
+  selectProjectId(routeParams.projectId);
 
   if(loading) {
     return <LinearProgress/>
@@ -36,7 +35,7 @@ export const ProjectView = () => {
         <Activity 
           key={index} 
           project={project}
-          activity={activity} 
+          initialActivity={activity} 
           expenses={expenses.filter(e => e.activityId == activity.id)} />
       ))}
 

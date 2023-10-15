@@ -5,7 +5,7 @@ import { activityService, projectService, expensesService, locationsService } fr
 const SelectedProjectContext = createContext();
 
 export const SelectedProjectProvider = ({ children }) => {
-  const { selectedProjectId } = useProjects();
+  const [ selectedProjectId, setSelectedProjectId ] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [project, setProject] = useState(null);
@@ -32,6 +32,10 @@ export const SelectedProjectProvider = ({ children }) => {
     fetchData(selectedProjectId);
   }, [selectedProjectId]);
 
+  const selectProjectId = (id) => {
+    setSelectedProjectId(id);
+  }
+
   // Assuming an API call like:
   const fetchProjectDetails = async (projectId) => {
     const project = (await projectService.fetchProjects()).filter(p => p.id == projectId)[0];
@@ -48,7 +52,7 @@ export const SelectedProjectProvider = ({ children }) => {
   };
 
   return (
-    <SelectedProjectContext.Provider value={{ project, loading, error, activities, expenses, locations }}>
+    <SelectedProjectContext.Provider value={{ selectProjectId, project, loading, error, activities, expenses, locations }}>
       {children}
     </SelectedProjectContext.Provider>
   );

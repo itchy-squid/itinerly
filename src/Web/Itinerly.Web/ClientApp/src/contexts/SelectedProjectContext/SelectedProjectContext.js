@@ -30,7 +30,6 @@ export const SelectedProjectProvider = ({ children }) => {
 
     setLoading(true);
     fetchData(selectedProjectId);
-
   }, [selectedProjectId]);
 
   // Assuming an API call like:

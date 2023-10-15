@@ -1,11 +1,10 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useProjects } from '../ProjectsContext';
-import { activityService, projectService, expensesService, locationsService } from '../../services/firestore';
+import { activitiesService, projectService, expensesService, locationsService } from '../../services/firestore';
 
 const SelectedProjectContext = createContext();
 
-export const SelectedProjectProvider = ({ children }) => {
-  const { selectedProjectId } = useProjects();
+export const SelectedProjectProvider = ({ projectId, children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [project, setProject] = useState(null);
@@ -14,11 +13,11 @@ export const SelectedProjectProvider = ({ children }) => {
   const [locations, setLocations] = useState([]);
 
   useEffect(() => {
-    const fetchData = async (projectId) => {
+    const fetchData = async (id) => {
 
-      if (projectId) {
+      if (id) {
         // Fetch the details for the selected project and set them
-        const details = await fetchProjectDetails(projectId)
+        const details = await fetchProjectDetails(id)
         
         setProject(details.project);
         setActivities(details.activities);
@@ -29,13 +28,13 @@ export const SelectedProjectProvider = ({ children }) => {
     }
 
     setLoading(true);
-    fetchData(selectedProjectId);
-  }, [selectedProjectId]);
+    fetchData(projectId);
+  }, [projectId]);
 
   // Assuming an API call like:
   const fetchProjectDetails = async (projectId) => {
     const project = (await projectService.fetchProjects()).filter(p => p.id == projectId)[0];
-    const activities = await activityService.getActivities(projectId);
+    const activities = await activitiesService.getActivities(projectId);
     const expenses = await expensesService.fetchExpenses(projectId);
     const locations = await locationsService.fetchLocations(projectId);
 

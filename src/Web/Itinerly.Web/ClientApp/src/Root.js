@@ -7,6 +7,7 @@ import { SelectedProjectProvider } from './contexts/SelectedProjectContext';
 import { ThemeProvider } from '@emotion/react';
 import { createTheme } from '@mui/material';
 import { UserProvider } from './contexts/UserContext/UserContext';
+import { ToastContainer } from 'react-toastify';
 
 const theme = createTheme({});
 
@@ -15,11 +16,10 @@ const Root = () => {
       <ThemeProvider theme={theme}>
         <UserProvider>
           <ProjectsProvider>
-            <SelectedProjectProvider>
-              <Layout>
-                <Outlet/>
-              </Layout>
-            </SelectedProjectProvider>
+            <Layout>
+              <Outlet/>
+              <ToastContainer/>
+            </Layout>
           </ProjectsProvider>
         </UserProvider>
       </ThemeProvider>

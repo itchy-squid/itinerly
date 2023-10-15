@@ -17,12 +17,8 @@ const ProjectsProvider = ({ children }) => {
         loadProjects();
     }, []);
 
-    const onSelectProject = (id) => {
-      setSelectedProjectId(id);
-    };
-
     return (
-        <ProjectsContext.Provider value={{ projects, loading, selectedProjectId, onSelectProject }}>
+        <ProjectsContext.Provider value={{ projects, loading, selectedProjectId, setSelectedProjectId }}>
             {children}
         </ProjectsContext.Provider>
     );

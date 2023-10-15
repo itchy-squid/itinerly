@@ -32,17 +32,12 @@ export const ProjectView = () => {
       </Typography>
 
       {activities.map((activity, index) => (
-        <Activity key={index} activity={activity} expenses={expenses} project={project}/>
+        <Activity 
+          key={index} 
+          project={project}
+          activity={activity} 
+          expenses={expenses.filter(e => e.activityId == activity.id)} />
       ))}
-
-      <Accordion>
-        <AccordionSummary IconButton={<AddIcon/>}>
-          <AddIcon/>
-          <Typography>
-            Activity
-          </Typography>
-        </AccordionSummary>
-      </Accordion>
 
       <Fab 
         color="primary" 
@@ -55,19 +50,27 @@ export const ProjectView = () => {
   );
 }
 
-export const Activity = ({ project, activity, expenses, key }) => {
-  
-  const calculateExpense = (project, expense) => {
-    return expense.unitCost * expense.units * (1 + (expense.hasTax ? project.tax : 0)) * (1 + (expense.hasTip ? project.tip : 0));
+const StyledTableCell = (props) => {
+  return (<TableCell sx={{py: 1}} {...props}>{props.children}</TableCell>);
+}
+
+export const Activity = ({ activity, expenses }) => {
+  const { locations } = useSelectedProject();
+
+  const calculateExpense = (expense) => {
+    const location = locations.filter(l => l.id === activity.locationId)[0];
+
+    const baseCost = expense.unitCost * expense.units;
+    const taxMultiplier = (1 + (expense.hasTax ? (location.tax / 100.0) : 0));
+    const tipMultiplier = (1 + (expense.hasTip ? (location.tip / 100.0) : 0));
+
+    return baseCost * taxMultiplier * tipMultiplier;
   }
 
   return (
-    <Accordion
-      key={key}>
+    <Accordion>
       
       <AccordionSummary
-        id={`${key}-header`}
-        aria-controls={`${key}-content`}
         expandIcon={<ExpandMoreIcon/>}>
 
         <Typography>
@@ -95,23 +98,23 @@ export const Activity = ({ project, activity, expenses, key }) => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Description</TableCell>
-              <TableCell>Unit Cost</TableCell>
-              <TableCell>No. of Units</TableCell>
-              <TableCell>Tax</TableCell>
-              <TableCell>Tip</TableCell>
-              <TableCell>Cost</TableCell>
+              <StyledTableCell>Description</StyledTableCell>
+              <StyledTableCell>Unit Cost</StyledTableCell>
+              <StyledTableCell>No. of Units</StyledTableCell>
+              <StyledTableCell>Tax</StyledTableCell>
+              <StyledTableCell>Tip</StyledTableCell>
+              <StyledTableCell>Cost</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {expenses.map((expense, idx) => (
-              <TableRow>
-                <TableCell>{expense.description}</TableCell>
-                <TableCell>{expense.unitCost}</TableCell>
-                <TableCell>{expense.units}</TableCell>
-                <TableCell><Checkbox sx={{p: 0}} checked={expense.hasTax} disabled /></TableCell>
-                <TableCell><Checkbox sx={{p: 0}} checked={expense.hasTip} disabled /></TableCell>
-                <TableCell>{calculateExpense(project, expense)}</TableCell>
+              <TableRow key={idx}>
+                <StyledTableCell>{expense.description}</StyledTableCell>
+                <StyledTableCell>{expense.unitCost}</StyledTableCell>
+                <StyledTableCell>{expense.units}</StyledTableCell>
+                <StyledTableCell><Checkbox sx={{p: 0}} checked={expense.hasTax} disabled /></StyledTableCell>
+                <StyledTableCell><Checkbox sx={{p: 0}} checked={expense.hasTip} disabled /></StyledTableCell>
+                <StyledTableCell>{calculateExpense(expense)}</StyledTableCell>
               </TableRow>
             ))}
           </TableBody>

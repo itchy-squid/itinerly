@@ -4,7 +4,7 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 const activitiesRef = collection(firestore, "activities");
 
 const propertyNames = {
-  itineraryId: 'itineraryId'
+  projectId: 'projectId'
 };
 
 const queryOperators = {
@@ -16,7 +16,7 @@ export const activityService = {
   async getActivities(itineraryId) {
     const querySnapshot = await getDocs(
       query(activitiesRef,
-        where(propertyNames.itineraryId, queryOperators.equals, itineraryId))
+        where(propertyNames.projectId, queryOperators.equals, itineraryId))
     );
 
     const docs = querySnapshot.docs.map(

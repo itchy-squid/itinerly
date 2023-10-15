@@ -4,8 +4,7 @@ import { activitiesService, projectService, expensesService, locationsService } 
 
 const SelectedProjectContext = createContext();
 
-export const SelectedProjectProvider = ({ children }) => {
-  const [ selectedProjectId, setSelectedProjectId ] = useState(null);
+export const SelectedProjectProvider = ({ projectId, children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [project, setProject] = useState(null);
@@ -14,11 +13,11 @@ export const SelectedProjectProvider = ({ children }) => {
   const [locations, setLocations] = useState([]);
 
   useEffect(() => {
-    const fetchData = async (projectId) => {
+    const fetchData = async (id) => {
 
-      if (projectId) {
+      if (id) {
         // Fetch the details for the selected project and set them
-        const details = await fetchProjectDetails(projectId)
+        const details = await fetchProjectDetails(id)
         
         setProject(details.project);
         setActivities(details.activities);
@@ -29,12 +28,8 @@ export const SelectedProjectProvider = ({ children }) => {
     }
 
     setLoading(true);
-    fetchData(selectedProjectId);
-  }, [selectedProjectId]);
-
-  const selectProjectId = (id) => {
-    setSelectedProjectId(id);
-  }
+    fetchData(projectId);
+  }, [projectId]);
 
   // Assuming an API call like:
   const fetchProjectDetails = async (projectId) => {
@@ -52,7 +47,7 @@ export const SelectedProjectProvider = ({ children }) => {
   };
 
   return (
-    <SelectedProjectContext.Provider value={{ selectProjectId, project, loading, error, activities, expenses, locations }}>
+    <SelectedProjectContext.Provider value={{ project, loading, error, activities, expenses, locations }}>
       {children}
     </SelectedProjectContext.Provider>
   );

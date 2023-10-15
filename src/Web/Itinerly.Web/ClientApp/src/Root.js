@@ -16,12 +16,10 @@ const Root = () => {
       <ThemeProvider theme={theme}>
         <UserProvider>
           <ProjectsProvider>
-            <SelectedProjectProvider>
-              <Layout>
-                <Outlet/>
-                <ToastContainer/>
-              </Layout>
-            </SelectedProjectProvider>
+            <Layout>
+              <Outlet/>
+              <ToastContainer/>
+            </Layout>
           </ProjectsProvider>
         </UserProvider>
       </ThemeProvider>

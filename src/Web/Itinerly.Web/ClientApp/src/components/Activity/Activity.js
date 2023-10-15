@@ -10,7 +10,8 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useSelectedProject } from '../../contexts/SelectedProjectContext';
 import moment from 'moment';
-import { cloneDeep }from 'lodash';
+import { activitiesService } from '../../services/firestore';
+import { toast } from 'react-toastify';
 
 const StyledTableCell = (props) => {
   return (<TableCell sx={{py: 1}} {...props}>{props.children}</TableCell>);
@@ -18,6 +19,7 @@ const StyledTableCell = (props) => {
 
 export const Activity = ({ initialActivity, expenses }) => {
   const [ updatedActivity, setUpdatedActivity ] = useState({...initialActivity});
+  const [ hasUpdates, setHasUpdates ] = useState(false);
 
   // const { updatedExpenses, setUpdatedExpenses } = useState(expenses);
   const { locations } = useSelectedProject();
@@ -47,24 +49,37 @@ export const Activity = ({ initialActivity, expenses }) => {
     }
   }
 
-  const handleSaveClick = () => {
-    return (ev) => { 
+  const handleSaveClick = async (ev) => {
+    ev.stopPropagation();
+    
+    try 
+    {
+      if(hasUpdates) {
+        await activitiesService.updateActivity(updatedActivity);
+      }
+
       setIsEditing(false); 
-      ev.stopPropagation();
+    }
+    catch(err)
+    {
+      console.log(err);
+      toast.error('An error occurred while updating the activity.');
     }
   }
   
   const handleCancelClick = () => {
     return (ev) => { 
-      setIsEditing(false);
       setUpdatedActivity({...initialActivity});
+      setHasUpdates(false);
+      setIsEditing(false);
       ev.stopPropagation();
     }
   }
 
   const handleNameChange = () => {
     return (ev) => {
-      setUpdatedActivity({...updatedActivity, hasChanges:true, name: ev.target.value});
+      setUpdatedActivity({...updatedActivity, name: ev.target.value});
+      setHasUpdates(true);
     }
   }
 
@@ -107,7 +122,7 @@ export const Activity = ({ initialActivity, expenses }) => {
                   <IconButton 
                     color='primary'
                     sx={{p: 0.25, mx: 1}} 
-                    onClick={handleSaveClick()}>
+                    onClick={handleSaveClick}>
                     <CheckIcon/>
                   </IconButton>
                   <IconButton sx={{p: 0.25, mx: 1}} onClick={handleCancelClick()}>

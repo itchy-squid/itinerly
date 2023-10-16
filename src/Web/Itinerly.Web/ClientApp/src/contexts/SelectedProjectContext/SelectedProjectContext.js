@@ -46,8 +46,13 @@ export const SelectedProjectProvider = ({ projectId, children }) => {
     };
   };
 
+  const updateActivity = async (activity) => {
+    await activitiesService.updateActivity(activity);
+    setActivities(prev => prev.map(a => a.id == activity.id ? activity : a));
+  }
+
   return (
-    <SelectedProjectContext.Provider value={{ project, loading, error, activities, expenses, locations }}>
+    <SelectedProjectContext.Provider value={{ project, loading, error, activities, expenses, locations, updateActivity }}>
       {children}
     </SelectedProjectContext.Provider>
   );

@@ -33,13 +33,13 @@ export const Expenses = ({location, expenses, isEditing}) => {
         {expenses && expenses.map((expense, idx) => (
           <TableRow key={idx}>
             <StyledTableCell>
-              <EditableText isEditing={isEditing} defaultValue={expense.description}>{expense.description}</EditableText>
+              <EditableText isEditing={isEditing} defaultValue={expense.description}/>
             </StyledTableCell>
             <StyledTableCell>
-              <EditableText isEditing={isEditing} defaultValue={expense.unitCost}>{expense.unitCost}</EditableText>
+              <EditableText isEditing={isEditing} defaultValue={expense.unitCost}/>
             </StyledTableCell>
             <StyledTableCell>
-              <EditableText isEditing={isEditing} defaultValue={expense.units}>{expense.units}</EditableText>
+              <EditableText isEditing={isEditing} defaultValue={expense.units}/>
             </StyledTableCell>
             <StyledTableCell>
               <EditableCheckbox isEditing={isEditing} checked={expense.hasTax}/>

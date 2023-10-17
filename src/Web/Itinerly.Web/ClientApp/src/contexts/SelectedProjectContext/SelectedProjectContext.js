@@ -8,8 +8,8 @@ export const SelectedProjectProvider = ({ projectId, children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [project, setProject] = useState(null);
-  const [activities, setActivities] = useState([]);
-  const [expenses, setExpenses] = useState([]);
+  const [_activities, setActivities] = useState([]);
+  const [_expenses, setExpenses] = useState([]);
   const [locations, setLocations] = useState([]);
 
   useEffect(() => {
@@ -34,7 +34,7 @@ export const SelectedProjectProvider = ({ projectId, children }) => {
   // Assuming an API call like:
   const fetchProjectDetails = async (projectId) => {
     const project = (await projectService.fetchProjects()).filter(p => p.id == projectId)[0];
-    const activities = await activitiesService.getActivities(projectId);
+    const activities = await activitiesService.fetchActivities(projectId);
     const expenses = await expensesService.fetchExpenses(projectId);
     const locations = await locationsService.fetchLocations(projectId);
 
@@ -51,12 +51,20 @@ export const SelectedProjectProvider = ({ projectId, children }) => {
     setActivities(prev => prev.map(a => a.id == activity.id ? activity : a));
   }
 
-  const updateExpenses = async (expenses) => {
-    setExpenses(prev => prev.map(e => expenses.find(f => f.id == e.id) ?? e ));
+  const updateExpenses = async (updates) => {
+    const updatesById = new Map(updates.map(e => [e.id, e]));
+    await expensesService.updateExpenses(updates);
+    setExpenses(prev => prev.map(e => ({...e, ...updatesById.get(e.id)})));
   }
 
   return (
-    <SelectedProjectContext.Provider value={{ project, loading, error, activities, expenses, locations, updateActivity, updateExpenses }}>
+    <SelectedProjectContext.Provider value={{ 
+      project, loading, error, 
+      activities: _activities, 
+      expenses: _expenses, 
+      locations, 
+      updateActivity, updateExpenses }}>
+
       {children}
     </SelectedProjectContext.Provider>
   );

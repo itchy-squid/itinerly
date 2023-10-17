@@ -14,7 +14,7 @@ import { EditableText } from '../../components/editable';
 import { cloneDeep } from 'lodash';
 
 export const Activity = ({ initialActivity, initialExpenses }) => {
-  const { updateActivity } = useSelectedProject();
+  const { updateActivity, updateExpenses } = useSelectedProject();
   const [ updatedActivity, setUpdatedActivity ] = useState({...initialActivity});
   const [ hasUpdates, setHasUpdates ] = useState(false);
 
@@ -43,6 +43,7 @@ export const Activity = ({ initialActivity, initialExpenses }) => {
     {
       if(hasUpdates) {
         await updateActivity(updatedActivity);
+        await updateExpenses(updatedExpenses);
       }
  
       setIsEditing(false); 
@@ -71,6 +72,7 @@ export const Activity = ({ initialActivity, initialExpenses }) => {
 
   const handleExpensesChange = (expenses) => {
     setUpdatedExpenses(expenses);
+    setHasUpdates(true);
   }
 
   if(!updatedActivity) {

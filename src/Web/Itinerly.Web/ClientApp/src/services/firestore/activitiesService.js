@@ -14,7 +14,7 @@ const queryOperators = {
 
 export const activitiesService = {
   
-  async getActivities(itineraryId) {
+  async fetchActivities(itineraryId) {
     const querySnapshot = await getDocs(
       query(collectionRef,
         where(propertyNames.projectId, queryOperators.equals, itineraryId))

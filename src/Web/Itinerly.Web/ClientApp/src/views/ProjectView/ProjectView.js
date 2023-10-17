@@ -5,6 +5,7 @@ import { SelectedProjectProvider, useSelectedProject } from '../../contexts/Sele
 import { toast } from 'react-toastify';
 import { useParams } from 'react-router-dom';
 import { Activity } from './Activity'
+import { Expenses } from './Expenses';
 
 export const ProjectView = () => {
   const routeParams = useParams();
@@ -42,7 +43,7 @@ export const Project = () => {
             key={index} 
             project={project}
             initialActivity={activity} 
-            expenses={expenses.filter(e => e.activityId == activity.id)} />
+            initialExpenses={expenses.filter(e => e.activityId == activity.id)}/>
         ))}
 
         <Fab 

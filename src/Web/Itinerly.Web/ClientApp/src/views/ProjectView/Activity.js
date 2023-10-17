@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
   Accordion, AccordionDetails, AccordionSummary, Box, Divider, 
   Typography, IconButton, LinearProgress, 
@@ -11,13 +11,14 @@ import { useSelectedProject } from '../../contexts/SelectedProjectContext';
 import { toast } from 'react-toastify';
 import { Expenses } from './Expenses';
 import { EditableText } from '../../components/editable';
+import { cloneDeep } from 'lodash';
 
-export const Activity = ({ initialActivity, expenses }) => {
+export const Activity = ({ initialActivity, initialExpenses }) => {
   const { updateActivity } = useSelectedProject();
   const [ updatedActivity, setUpdatedActivity ] = useState({...initialActivity});
   const [ hasUpdates, setHasUpdates ] = useState(false);
 
-  // const { updatedExpenses, setUpdatedExpenses } = useState(expenses);
+  const [ updatedExpenses, setUpdatedExpenses ] = useState(cloneDeep(initialExpenses));
   const { locations } = useSelectedProject();
   const [ expanded, setExpanded ] = useState(false);
   const [ isEditing, setIsEditing ] = useState(false);
@@ -43,7 +44,7 @@ export const Activity = ({ initialActivity, expenses }) => {
       if(hasUpdates) {
         await updateActivity(updatedActivity);
       }
-
+ 
       setIsEditing(false); 
     }
     catch(err)
@@ -68,9 +69,20 @@ export const Activity = ({ initialActivity, expenses }) => {
     setHasUpdates(true);
   }
 
+  const handleExpensesChange = (expenses) => {
+    console.log("handleExpensesChange");
+    console.log(expenses);
+    setUpdatedExpenses(expenses);
+  }
+
   if(!updatedActivity) {
     return <LinearProgress/>
   }
+
+  console.log("initial expenses: ");
+  console.log(initialExpenses);
+  console.log("updated expenses: ");
+  console.log(updatedExpenses);
 
   return (
     <Accordion expanded={expanded} onChange={handleAccordionChange()}>      
@@ -88,7 +100,7 @@ export const Activity = ({ initialActivity, expenses }) => {
             <Box style={{flex: 1}}>
               <EditableText name='name' 
                 isEditing={isEditing} 
-                defaultValue={updatedActivity.name} 
+                value={updatedActivity.name} 
                 onChange={handlePropertyChange}
               />
             </Box>
@@ -128,7 +140,7 @@ export const Activity = ({ initialActivity, expenses }) => {
         style={{ position: 'relative' }}>
           <EditableText name='description' 
             isEditing={isEditing} 
-            defaultValue={updatedActivity.description} 
+            value={updatedActivity.description} 
             onChange={handlePropertyChange} 
             variant='filled'
             multiline
@@ -139,7 +151,10 @@ export const Activity = ({ initialActivity, expenses }) => {
         <Typography variant="subtitle1" gutterBottom style={{ marginTop: '15px' }}>
           Expenses
         </Typography>
-        <Expenses expenses={expenses} isEditing={isEditing} location={locations.filter(l => l.id === updatedActivity.locationId)[0]}/>
+        <Expenses expenses={updatedExpenses} 
+          isEditing={isEditing} 
+          location={locations.filter(l => l.id === updatedActivity.locationId)[0]}
+          onChange={handleExpensesChange}/>
       </AccordionDetails>
     </Accordion>
   )

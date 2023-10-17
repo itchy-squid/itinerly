@@ -9,20 +9,21 @@ const StyledTextField = styled(TextField)`
   }
 `;
 
-export const EditableText = ({isEditing, defaultValue, ...props}) => {
+export const EditableText = ({isEditing, value, ...props}) => {
   if(isEditing){
     return (
-      <StyledTextField defaultValue={defaultValue}  
+      <StyledTextField
         hiddenLabel
         fullWidth
         size='small' 
         variant='filled'
+        value={value}
         {...props}/>);
   }
   
   return (
     <Typography>
-      {defaultValue}
+      {value}
     </Typography>
   );
 }

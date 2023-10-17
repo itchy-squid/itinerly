@@ -51,8 +51,12 @@ export const SelectedProjectProvider = ({ projectId, children }) => {
     setActivities(prev => prev.map(a => a.id == activity.id ? activity : a));
   }
 
+  const updateExpenses = async (expenses) => {
+    setExpenses(prev => prev.map(e => expenses.find(f => f.id == e.id) ?? e ));
+  }
+
   return (
-    <SelectedProjectContext.Provider value={{ project, loading, error, activities, expenses, locations, updateActivity }}>
+    <SelectedProjectContext.Provider value={{ project, loading, error, activities, expenses, locations, updateActivity, updateExpenses }}>
       {children}
     </SelectedProjectContext.Provider>
   );

@@ -19,11 +19,19 @@ export const Expenses = ({location, expenses, isEditing, onChange}) => {
     return baseCost * taxMultiplier * tipMultiplier;
   }
   
-  const handlePropertyChange = (expense) => {
+  const handleTextPropertyChange = (expense) => {
     return (ev) => 
     {
       const { name, value } = ev.target;
       onChange(expenses.map(e => e.id != expense.id ? e : {...expense, [name]: [value]}));
+    }
+  }
+  
+  const handleCheckboxPropertyChange = (expense) => {
+    return (ev) => 
+    {
+      const { name, checked } = ev.target;
+      onChange(expenses.map(e => e.id != expense.id ? e : {...expense, [name]: checked}));
     }
   }
 
@@ -46,29 +54,31 @@ export const Expenses = ({location, expenses, isEditing, onChange}) => {
               <EditableText name="description" 
                 isEditing={isEditing} 
                 value={expense.description}
-                onChange={handlePropertyChange(expense)}/>
+                onChange={handleTextPropertyChange(expense)}/>
             </StyledTableCell>
             <StyledTableCell>
               <EditableText name="unitCost"
                 isEditing={isEditing} 
                 value={expense.unitCost}
-                onChange={handlePropertyChange(expense)}/>
+                onChange={handleTextPropertyChange(expense)}/>
             </StyledTableCell>
             <StyledTableCell>
               <EditableText name="units"
                 isEditing={isEditing} 
                 value={expense.units}
-                onChange={handlePropertyChange(expense)}/>
+                onChange={handleTextPropertyChange(expense)}/>
             </StyledTableCell>
             <StyledTableCell>
               <EditableCheckbox name="hasTax"
                 isEditing={isEditing} 
-                checked={expense.hasTax}/>
+                checked={expense.hasTax}
+                onChange={handleCheckboxPropertyChange(expense)}/>
             </StyledTableCell>
             <StyledTableCell>
               <EditableCheckbox name="hasTip"
                 isEditing={isEditing} 
-                checked={expense.hasTip}/>
+                checked={expense.hasTip}
+                onChange={handleCheckboxPropertyChange(expense)}/>
             </StyledTableCell>
             <StyledTableCell>{calculateExpense(expense)}</StyledTableCell>
           </TableRow>

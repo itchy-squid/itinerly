@@ -9,7 +9,15 @@ import { createTheme } from '@mui/material';
 import { UserProvider } from './contexts/UserContext/UserContext';
 import { ToastContainer } from 'react-toastify';
 
-const theme = createTheme({});
+const theme = createTheme({
+  overrides: {
+    MuiInput: {
+      underline: {
+        backgroundColor: 'red'
+      }
+    }
+  }
+});
 
 const Root = () => {
     return (

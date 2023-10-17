@@ -1,7 +1,8 @@
 import { firestore } from '../../config/firebase';
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, doc, getDocs, query, updateDoc, where, writeBatch } from "firebase/firestore";
 
-const expensesRef = collection(firestore, "expenses");
+const collectionName = "expenses";
+const expensesRef = collection(firestore, collectionName);
 
 const propertyNames = {
   projectId: 'projectId'
@@ -32,4 +33,13 @@ export const expensesService = {
 
       return docs;
     },
+
+  async updateExpenses(expenses) {
+    await Promise.all(
+      expenses.map(async ({id, ...expense}) => {
+        const docRef = doc(firestore, collectionName, id);
+        await updateDoc(docRef, expense);
+      })
+    )
+  }
 };

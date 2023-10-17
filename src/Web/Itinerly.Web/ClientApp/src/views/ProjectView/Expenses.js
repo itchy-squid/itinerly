@@ -23,8 +23,7 @@ export const Expenses = ({location, expenses, isEditing, onChange}) => {
     return (ev) => 
     {
       const { name, value } = ev.target;
-      console.log("id: " + expense.id + " name: " + name + " value: " + value);
-      onChange([expenses.map(e => e.id != expense.id ? e : {...expense, [name]: [value]})]);
+      onChange(expenses.map(e => e.id != expense.id ? e : {...expense, [name]: [value]}));
     }
   }
 

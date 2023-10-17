@@ -70,19 +70,12 @@ export const Activity = ({ initialActivity, initialExpenses }) => {
   }
 
   const handleExpensesChange = (expenses) => {
-    console.log("handleExpensesChange");
-    console.log(expenses);
     setUpdatedExpenses(expenses);
   }
 
   if(!updatedActivity) {
     return <LinearProgress/>
   }
-
-  console.log("initial expenses: ");
-  console.log(initialExpenses);
-  console.log("updated expenses: ");
-  console.log(updatedExpenses);
 
   return (
     <Accordion expanded={expanded} onChange={handleAccordionChange()}>      

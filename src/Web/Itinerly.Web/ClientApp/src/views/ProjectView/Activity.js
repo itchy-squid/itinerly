@@ -14,7 +14,7 @@ import { EditableText } from '../../components/editable';
 import { cloneDeep } from 'lodash';
 
 export const Activity = ({ initialActivity, initialExpenses }) => {
-  const { updateActivity, updateExpenses } = useSelectedProject();
+  const { project, updateActivity, updateExpenses } = useSelectedProject();
   const [ updatedActivity, setUpdatedActivity ] = useState({...initialActivity});
   const [ hasUpdates, setHasUpdates ] = useState(false);
 
@@ -71,7 +71,12 @@ export const Activity = ({ initialActivity, initialExpenses }) => {
     setHasUpdates(true);
   }
 
-  const handleExpensesChange = (expenses) => {
+  const handleAddExpense = (expense) => {
+    setUpdatedExpenses(prev => [...prev, {...expense, projectId: project.id, activityId: updatedActivity.id}]);
+    setHasUpdates(true);
+  }
+
+  const handleChangeExpenses = (expenses) => {
     setUpdatedExpenses(expenses);
     setHasUpdates(true);
   }
@@ -150,7 +155,8 @@ export const Activity = ({ initialActivity, initialExpenses }) => {
         <Expenses expenses={updatedExpenses} 
           isEditing={isEditing} 
           location={locations.filter(l => l.id === updatedActivity.locationId)[0]}
-          onChange={handleExpensesChange}/>
+          onChange={handleChangeExpenses}
+          onAdd={handleAddExpense}/>
       </AccordionDetails>
     </Accordion>
   )

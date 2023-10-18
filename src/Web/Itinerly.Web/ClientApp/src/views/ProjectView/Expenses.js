@@ -21,15 +21,15 @@ const columns = [
   { name: 'units', header: 'No. of Units', defaultFlex: 1, minWidth: 50}
 ];
 
-export const Expenses = ({location, expenses, isEditing, onChange}) => {
-  const [ newExpense, setNewExpense ] = useState(emptyExpense);
+export const Expenses = ({location, expenses, isEditing, onChange, onAdd}) => {
+  const [ newExpense, setNewExpense ] = useState({...emptyExpense});
 
   const calculateExpense = (expense) => {
     const baseCost = expense.unitCost * expense.units;
     const taxMultiplier = (1 + (expense.hasTax ? (location.tax / 100.0) : 0));
     const tipMultiplier = (1 + (expense.hasTip ? (location.tip / 100.0) : 0));
 
-    return baseCost * taxMultiplier * tipMultiplier;
+    return (baseCost * taxMultiplier * tipMultiplier).toFixed(2);
   }
   
   const handleTextPropertyChange = (expense, idx) => 
@@ -41,7 +41,7 @@ export const Expenses = ({location, expenses, isEditing, onChange}) => {
 
       if(idx >= expenses.length)
       {
-        onChange([...expenses, updatedExpense]);
+        onAdd(updatedExpense);
       }
       else{
         const updatedExpenses = clone(expenses);
@@ -51,19 +51,6 @@ export const Expenses = ({location, expenses, isEditing, onChange}) => {
     }
   }
 
-  // const handleNewExpenseTextPropertyChange = (ev) => 
-  // {
-  //   const { name, value } = ev.target;
-  //   setNewExpense({...newExpense, [name]: [value]});
-  // }
-  
-  // const handleNewExpenseTextPropertyBlur = (ev) => 
-  // {
-  //   const { name, value } = ev.target;
-  //   onChange([...expenses, newExpense]);
-  //   setNewExpense(emptyExpense);
-  // }
-  
   const handleCheckboxPropertyChange = (expense) => 
   {
     return (ev) => 

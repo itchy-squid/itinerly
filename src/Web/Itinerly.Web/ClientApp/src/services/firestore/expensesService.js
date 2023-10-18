@@ -1,8 +1,8 @@
 import { firestore } from '../../config/firebase';
-import { collection, doc, getDocs, query, updateDoc, where, writeBatch } from "firebase/firestore";
+import { addDoc, collection, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
 
 const collectionName = "expenses";
-const expensesRef = collection(firestore, collectionName);
+const collectionRef = collection(firestore, collectionName);
 
 const propertyNames = {
   projectId: 'projectId'
@@ -17,7 +17,7 @@ export const expensesService = {
   
   async fetchExpenses(projectId) {
     const querySnapshot = await getDocs(
-      query(expensesRef,
+      query(collectionRef,
         where(propertyNames.projectId, queryOperators.equals, projectId))
     );
 
@@ -35,10 +35,17 @@ export const expensesService = {
     },
 
   async updateExpenses(expenses) {
+    const updates = expenses.filter(e => e.id).map(async ({id, ...expense}) => {})
+
     await Promise.all(
       expenses.map(async ({id, ...expense}) => {
-        const docRef = doc(firestore, collectionName, id);
-        await updateDoc(docRef, expense);
+        if (id) {
+          const docRef = doc(firestore, collectionName, id);
+          await updateDoc(docRef, expense);
+        }
+        else {
+          await addDoc(collectionRef, expense);
+        }
       })
     )
   }

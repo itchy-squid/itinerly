@@ -1,15 +1,21 @@
 import React, { useState } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableRow, Checkbox, } from '@mui/material';
-import CheckIcon from '@mui/icons-material/Check';
 import { EditableCheckbox, EditableText } from '../../components/editable';
-import { useSelectedProject } from '../../contexts/SelectedProjectContext';
 
 const StyledTableCell = (props) => {
   return (<TableCell sx={{py: 0.5}} {...props}>{props.children}</TableCell>);
 }
 
+const emptyExpense = {
+  description: '',
+  unitCost: '',
+  units: '',
+  hasTax: false,
+  hasTip: false
+}
+
 export const Expenses = ({location, expenses, isEditing, onChange}) => {
-  const [ hasUpdates, setHasUpdates ] = useState(false);
+  const [ newExpense, setNewExpense ] = useState(emptyExpense);
 
   const calculateExpense = (expense) => {
     const baseCost = expense.unitCost * expense.units;
@@ -19,15 +25,30 @@ export const Expenses = ({location, expenses, isEditing, onChange}) => {
     return baseCost * taxMultiplier * tipMultiplier;
   }
   
-  const handleTextPropertyChange = (expense) => {
+  const handleTextPropertyChange = (expense) => 
+  {
     return (ev) => 
     {
       const { name, value } = ev.target;
       onChange(expenses.map(e => e.id != expense.id ? e : {...expense, [name]: [value]}));
     }
   }
+
+  // const handleNewExpenseTextPropertyChange = (ev) => 
+  // {
+  //   const { name, value } = ev.target;
+  //   setNewExpense({...newExpense, [name]: [value]});
+  // }
   
-  const handleCheckboxPropertyChange = (expense) => {
+  // const handleNewExpenseTextPropertyBlur = (ev) => 
+  // {
+  //   const { name, value } = ev.target;
+  //   onChange([...expenses, newExpense]);
+  //   setNewExpense(emptyExpense);
+  // }
+  
+  const handleCheckboxPropertyChange = (expense) => 
+  {
     return (ev) => 
     {
       const { name, checked } = ev.target;
@@ -83,6 +104,39 @@ export const Expenses = ({location, expenses, isEditing, onChange}) => {
             <StyledTableCell>{calculateExpense(expense)}</StyledTableCell>
           </TableRow>
         ))}
+        {/* {isEditing && (
+          <TableRow>
+              <StyledTableCell>
+                <EditableText name="description" 
+                  isEditing={isEditing} 
+                  value={newExpense.description}
+                  onChange={handleNewExpenseTextPropertyChange}
+                  onBlur={handleNewExpenseTextPropertyBlur}/>
+              </StyledTableCell>
+              <StyledTableCell>
+                <EditableText name="unitCost"
+                  isEditing={isEditing} 
+                  value={newExpense.unitCost}
+                  onChange={handleNewExpenseTextPropertyChange}
+                  onBlur={handleNewExpenseTextPropertyBlur}/>
+              </StyledTableCell>
+              <StyledTableCell>
+                <EditableText name="units"
+                  isEditing={isEditing} 
+                  value={newExpense.units}
+                  onChange={handleNewExpenseTextPropertyChange}
+                  onBlur={handleNewExpenseTextPropertyBlur}/>
+              </StyledTableCell>
+              <StyledTableCell>
+                <EditableCheckbox name="hasTax"
+                  isEditing={isEditing} />
+              </StyledTableCell>
+              <StyledTableCell>
+                <EditableCheckbox name="hasTip"
+                  isEditing={isEditing} />
+              </StyledTableCell>
+          </TableRow>
+        )} */}
       </TableBody>
     </Table>
   );

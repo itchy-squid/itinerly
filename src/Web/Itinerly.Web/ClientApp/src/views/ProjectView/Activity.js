@@ -58,6 +58,7 @@ export const Activity = ({ initialActivity, initialExpenses }) => {
   const handleCancelClick = () => {
     return (ev) => { 
       setUpdatedActivity({...initialActivity});
+      setUpdatedExpenses(initialExpenses);
       setHasUpdates(false);
       setIsEditing(false);
       ev.stopPropagation();

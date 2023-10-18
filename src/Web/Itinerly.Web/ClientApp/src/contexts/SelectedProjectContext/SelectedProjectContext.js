@@ -48,13 +48,14 @@ export const SelectedProjectProvider = ({ projectId, children }) => {
 
   const updateActivity = async (activity) => {
     await activitiesService.updateActivity(activity);
-    setActivities(prev => prev.map(a => a.id == activity.id ? activity : a));
+    const activities = await activitiesService.fetchActivities(projectId);
+    setActivities(activities);
   }
 
   const updateExpenses = async (updates) => {
-    const updatesById = new Map(updates.map(e => [e.id, e]));
     await expensesService.updateExpenses(updates);
-    setExpenses(prev => prev.map(e => ({...e, ...updatesById.get(e.id)})));
+    const expenses = await expensesService.fetchExpenses(projectId);
+    setExpenses(expenses);
   }
 
   return (

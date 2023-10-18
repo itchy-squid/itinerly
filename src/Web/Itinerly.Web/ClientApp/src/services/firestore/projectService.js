@@ -1,15 +1,7 @@
 import { firestore } from '../../config/firebase';
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 
 const projectsRef = collection(firestore, "projects");
-
-const propertyNames = {
-  id: 'id'
-};
-
-const queryOperators = {
-  equals: '=='
-}
 
 export const projectService = {
   

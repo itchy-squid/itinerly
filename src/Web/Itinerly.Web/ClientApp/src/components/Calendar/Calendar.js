@@ -1,5 +1,5 @@
 import styles from './Calendar.module.css';
-import moment, { duration } from 'moment';
+import moment from 'moment';
 import {filter, sortBy} from 'lodash';
 import { TIME_UNITS } from '../../constants';
 import {range} from 'lodash';

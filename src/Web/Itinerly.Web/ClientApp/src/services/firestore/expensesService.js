@@ -1,5 +1,5 @@
 import { firestore } from '../../config/firebase';
-import { collection, doc, getDocs, query, updateDoc, where, writeBatch } from "firebase/firestore";
+import { collection, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
 
 const collectionName = "expenses";
 const expensesRef = collection(firestore, collectionName);

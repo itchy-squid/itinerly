@@ -1,18 +1,11 @@
 import React, { useState } from 'react';
-import { Table, TableBody, TableCell, TableHead, TableRow, Checkbox, } from '@mui/material';
+import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import { EditableCheckbox, EditableText } from '../../components/editable';
 import { clone } from 'lodash';
+import { emptyExpense, isEmptyExpense } from '../../utils/expenseUtils';
 
 const StyledTableCell = (props) => {
   return (<TableCell sx={{py: 0.5}} {...props}>{props.children}</TableCell>);
-}
-
-const emptyExpense = {
-  description: '',
-  unitCost: '',
-  units: '',
-  hasTax: false,
-  hasTip: false
 }
 
 const columns = [
@@ -37,27 +30,41 @@ export const Expenses = ({location, expenses, isEditing, onChange, onAdd}) => {
     return (ev) => 
     {
       const { name, value } = ev.target;
-      const updatedExpense = {...expense, [name]: [value]};
-
-      if(idx >= expenses.length)
-      {
-        onAdd(updatedExpense);
-      }
-      else{
-        const updatedExpenses = clone(expenses);
-        updatedExpenses[idx] = updatedExpense;
-        onChange(updatedExpenses);
-      }
+      handlePropertyChangeInner(expense, idx, name, value);
     }
   }
 
-  const handleCheckboxPropertyChange = (expense) => 
+  const handleCheckboxPropertyChange = (expense, idx) => 
   {
     return (ev) => 
     {
       const { name, checked } = ev.target;
-      onChange(expenses.map(e => e.id != expense.id ? e : {...expense, [name]: checked}));
+      handlePropertyChangeInner(expense, idx, name, checked);
     }
+  }
+
+  const handlePropertyChangeInner = (expense, idx, name, value) => 
+  {
+    let updatedExpense = {...expense, [name]: value};
+
+    // add case
+    if(idx >= expenses.length)
+    {
+      onAdd(updatedExpense);
+      return;
+    }
+    
+    // delete case
+    if(isEmptyExpense(updatedExpense))
+    {
+      updatedExpense = {...updatedExpense, isDeleted: true}
+      // fall through because we treat the delete case as any other update.
+    }
+
+    // update case
+    const updatedExpenses = clone(expenses);
+    updatedExpenses[idx] = updatedExpense;
+    onChange(updatedExpenses);  
   }
 
   const style = {
@@ -79,7 +86,7 @@ export const Expenses = ({location, expenses, isEditing, onChange, onAdd}) => {
         </TableRow>
       </TableHead>
       <TableBody>
-        {expenses && (isEditing ? [...expenses, newExpense] : expenses).map((expense, idx) => (
+        {expenses && (isEditing ? [...expenses, emptyExpense] : expenses).map((expense, idx) => !expense.isDeleted && (
           <TableRow key={idx}>
             <StyledTableCell>
               <EditableText name="description" 
@@ -103,50 +110,17 @@ export const Expenses = ({location, expenses, isEditing, onChange, onAdd}) => {
               <EditableCheckbox name="hasTax"
                 isEditing={isEditing} 
                 checked={expense.hasTax}
-                onChange={handleCheckboxPropertyChange(expense)}/>
+                onChange={handleCheckboxPropertyChange(expense, idx)}/>
             </StyledTableCell>
             <StyledTableCell>
               <EditableCheckbox name="hasTip"
                 isEditing={isEditing} 
                 checked={expense.hasTip}
-                onChange={handleCheckboxPropertyChange(expense)}/>
+                onChange={handleCheckboxPropertyChange(expense, idx)}/>
             </StyledTableCell>
             <StyledTableCell>{calculateExpense(expense)}</StyledTableCell>
           </TableRow>
         ))}
-        {/* {isEditing && (
-          <TableRow>
-              <StyledTableCell>
-                <EditableText name="description" 
-                  isEditing={isEditing} 
-                  value={newExpense.description}
-                  onChange={handleNewExpenseTextPropertyChange}
-                  onBlur={handleNewExpenseTextPropertyBlur}/>
-              </StyledTableCell>
-              <StyledTableCell>
-                <EditableText name="unitCost"
-                  isEditing={isEditing} 
-                  value={newExpense.unitCost}
-                  onChange={handleNewExpenseTextPropertyChange}
-                  onBlur={handleNewExpenseTextPropertyBlur}/>
-              </StyledTableCell>
-              <StyledTableCell>
-                <EditableText name="units"
-                  isEditing={isEditing} 
-                  value={newExpense.units}
-                  onChange={handleNewExpenseTextPropertyChange}
-                  onBlur={handleNewExpenseTextPropertyBlur}/>
-              </StyledTableCell>
-              <StyledTableCell>
-                <EditableCheckbox name="hasTax"
-                  isEditing={isEditing} />
-              </StyledTableCell>
-              <StyledTableCell>
-                <EditableCheckbox name="hasTip"
-                  isEditing={isEditing} />
-              </StyledTableCell>
-          </TableRow>
-        )} */}
       </TableBody>
     </Table>
   );

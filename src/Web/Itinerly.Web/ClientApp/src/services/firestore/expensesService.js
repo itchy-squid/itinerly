@@ -39,13 +39,20 @@ export const expensesService = {
 
     await Promise.all(
       expenses.map(async ({id, ...expense}) => {
+        // update
         if (id) {
           const docRef = doc(firestore, collectionName, id);
           await updateDoc(docRef, expense);
         }
-        else {
+
+        // added
+        else if(!expense.isDeleted) {
           await addDoc(collectionRef, expense);
         }
+
+        // added then immediately deleted.
+        // dont send it to the server. save money.
+        else await Promise.resolve();
       })
     )
   }

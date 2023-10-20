@@ -46,6 +46,18 @@ export const SelectedProjectProvider = ({ projectId, children }) => {
     };
   };
 
+  const addActivities = async (newActivities) => 
+  {
+    await activitiesService.addActivities(newActivities.map((a) => { 
+      return {
+        projectId: project.id,
+        name: a.name
+      };
+    }))
+    const activities = await activitiesService.fetchActivities(projectId);
+    setActivities(activities);
+  }
+
   const updateActivity = async (activity) => {
     await activitiesService.updateActivity(activity);
     const activities = await activitiesService.fetchActivities(projectId);
@@ -64,6 +76,7 @@ export const SelectedProjectProvider = ({ projectId, children }) => {
       activities: _activities, 
       expenses: _expenses, 
       locations, 
+      addActivities,
       updateActivity, updateExpenses }}>
 
       {children}

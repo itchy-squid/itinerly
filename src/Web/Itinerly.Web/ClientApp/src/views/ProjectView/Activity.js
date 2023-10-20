@@ -67,7 +67,7 @@ export const Activity = ({ initialActivity, initialExpenses }) => {
 
   const handlePropertyChange = (ev) => {
     const { name, value } = ev.target;
-    setUpdatedActivity({...updatedActivity, [name]: [value]});
+    setUpdatedActivity({...updatedActivity, [name]: value});
     setHasUpdates(true);
   }
 

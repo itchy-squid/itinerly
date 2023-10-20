@@ -1,5 +1,5 @@
 import { firestore } from '../../config/firebase';
-import { collection, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
+import { addDoc, collection, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
 
 const collectionName = "activities";
 const collectionRef = collection(firestore, "activities");
@@ -24,15 +24,36 @@ export const activitiesService = {
       (doc) => {
         const data = doc.data();
 
-        return {
+        const model = {
           ...data,
-          id: doc.id,
-          start: data.start.toDate()
+          id: doc.id
         };
+
+        if(data.start) {
+          model.start = data.start.toDate();
+        }
+
+        return model;
       });
 
       return docs;
     },
+
+  async addActivities(activities) {
+    
+    await Promise.all(
+      activities.map(async (activity) => {
+        // added
+        if(!activity.isDeleted) {
+          await addDoc(collectionRef, activity);
+        }
+
+        // added then immediately deleted.
+        // dont send it to the server. save money.
+        else await Promise.resolve();
+      })
+    )
+  },
 
   // Add a new post
   async updateActivity(activity) {

@@ -19,8 +19,9 @@ export const Expenses = ({location, expenses, isEditing, onChange, onAdd}) => {
 
   const calculateExpense = (expense) => {
     const baseCost = expense.unitCost * expense.units;
-    const taxMultiplier = (1 + (expense.hasTax ? (location.tax / 100.0) : 0));
-    const tipMultiplier = (1 + (expense.hasTip ? (location.tip / 100.0) : 0));
+
+    const taxMultiplier = (1 + (location && expense.hasTax ? (location.tax / 100.0) : 0));
+    const tipMultiplier = (1 + (location && expense.hasTip ? (location.tip / 100.0) : 0));
 
     return (baseCost * taxMultiplier * tipMultiplier).toFixed(2);
   }
@@ -107,16 +108,20 @@ export const Expenses = ({location, expenses, isEditing, onChange, onAdd}) => {
                 onChange={handleTextPropertyChange(expense, idx)}/>
             </StyledTableCell>
             <StyledTableCell>
-              <EditableCheckbox name="hasTax"
-                isEditing={isEditing} 
-                checked={expense.hasTax}
-                onChange={handleCheckboxPropertyChange(expense, idx)}/>
+              {location && (
+                <EditableCheckbox name="hasTax"
+                  isEditing={isEditing} 
+                  checked={expense.hasTax}
+                  onChange={handleCheckboxPropertyChange(expense, idx)}/>
+              )}
             </StyledTableCell>
             <StyledTableCell>
-              <EditableCheckbox name="hasTip"
-                isEditing={isEditing} 
-                checked={expense.hasTip}
-                onChange={handleCheckboxPropertyChange(expense, idx)}/>
+              {location && (
+                <EditableCheckbox name="hasTip"
+                  isEditing={isEditing} 
+                  checked={expense.hasTip}
+                  onChange={handleCheckboxPropertyChange(expense, idx)}/>
+              )}
             </StyledTableCell>
             <StyledTableCell>{calculateExpense(expense)}</StyledTableCell>
           </TableRow>

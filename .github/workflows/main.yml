@@ -1,9 +1,7 @@
 name: Build and Deploy
 
 on:
-  push:
-    branches:
-      - master
+  workflow_dispatch:
 
 jobs:
   build-deploy:
@@ -12,7 +10,7 @@ jobs:
     # Define a parameter for the relative path to your React app
     strategy:
       matrix:
-        app_directory: [./src/Web/Itinerly.Web/ClientApp]  # Modify with your app's directory
+        app_directory: [src/Web/Itinerly.Web/ClientApp]  # Modify with your app's directory
 
     steps:
       - name: Checkout Code

@@ -4,11 +4,10 @@
     "cpus": 2
   },
   "waitFor": "onCreateCommand",
-  "workspaceFolder": "app",
-  "updateContentCommand": "npm install",
+  "updateContentCommand": "",
   "postCreateCommand": "",
   "postAttachCommand": {
-    "server": "npm start"
+    "server": "cd app && npm run start:codespace"
   },
   "customizations": {
     "codespaces": {

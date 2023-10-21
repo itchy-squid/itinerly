@@ -5,7 +5,7 @@ const SelectedProjectContext = createContext();
 
 export const SelectedProjectProvider = ({ projectId, children }) => {
   const [loading, setLoading] = useState(true);
-  const [error, _] = useState(null);
+  const [error] = useState(null);
   const [project, setProject] = useState(null);
   const [_activities, setActivities] = useState([]);
   const [_expenses, setExpenses] = useState([]);

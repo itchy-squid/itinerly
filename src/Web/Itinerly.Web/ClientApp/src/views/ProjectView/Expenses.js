@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import { EditableCheckbox, EditableText } from '../../components/editable';
 import { clone } from 'lodash';
@@ -7,12 +7,6 @@ import { emptyExpense, isEmptyExpense } from '../../utils/expenseUtils';
 const StyledTableCell = (props) => {
   return (<TableCell sx={{py: 0.5}} {...props}>{props.children}</TableCell>);
 }
-
-const columns = [
-  { name: 'description', header: 'Description', defaultFlex: 1, minWidth: 250 },
-  { name: 'unitCost', header: 'Unit Cost', defaultFlex: 1, minWidth: 50 },
-  { name: 'units', header: 'No. of Units', defaultFlex: 1, minWidth: 50}
-];
 
 export const Expenses = ({location, expenses, isEditing, onChange, onAdd}) => {
 

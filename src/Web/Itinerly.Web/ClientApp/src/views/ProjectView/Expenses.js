@@ -15,7 +15,6 @@ const columns = [
 ];
 
 export const Expenses = ({location, expenses, isEditing, onChange, onAdd}) => {
-  const [ newExpense, setNewExpense ] = useState({...emptyExpense});
 
   const calculateExpense = (expense) => {
     const baseCost = expense.unitCost * expense.units;
@@ -66,11 +65,6 @@ export const Expenses = ({location, expenses, isEditing, onChange, onAdd}) => {
     const updatedExpenses = clone(expenses);
     updatedExpenses[idx] = updatedExpense;
     onChange(updatedExpenses);  
-  }
-
-  const style = {
-    minHeight: '500px',
-    minWidth: '500px'
   }
 
   return (

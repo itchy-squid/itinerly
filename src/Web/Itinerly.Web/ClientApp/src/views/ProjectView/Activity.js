@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { 
   Accordion, AccordionDetails, AccordionSummary, Box, Divider, 
   Typography, IconButton, LinearProgress, 

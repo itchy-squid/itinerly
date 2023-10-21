@@ -95,7 +95,7 @@ export const Project = () => {
             key={index} 
             project={project}
             initialActivity={activity} 
-            initialExpenses={expenses.filter(e => e.activityId == activity.id)}/>
+            initialExpenses={expenses.filter(e => e.activityId === activity.id)}/>
         ))}
 
         {isAdding && [...newActivities, emptyActivity].map((a, idx) => (

@@ -1,12 +1,11 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { useProjects } from '../ProjectsContext';
 import { activitiesService, projectService, expensesService, locationsService } from '../../services/firestore';
 
 const SelectedProjectContext = createContext();
 
 export const SelectedProjectProvider = ({ projectId, children }) => {
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, _] = useState(null);
   const [project, setProject] = useState(null);
   const [_activities, setActivities] = useState([]);
   const [_expenses, setExpenses] = useState([]);
@@ -33,7 +32,7 @@ export const SelectedProjectProvider = ({ projectId, children }) => {
 
   // Assuming an API call like:
   const fetchProjectDetails = async (projectId) => {
-    const project = (await projectService.fetchProjects()).filter(p => p.id == projectId)[0];
+    const project = (await projectService.fetchProjects()).filter(p => p.id === projectId)[0];
     const activities = await activitiesService.fetchActivities(projectId);
     const expenses = await expensesService.fetchExpenses(projectId);
     const locations = await locationsService.fetchLocations(projectId);

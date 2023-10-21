@@ -5,11 +5,6 @@
     --hour-height: 48px;
 }
 
-@font-face {
-    font-family: fa;
-    src: url();
-}
-
 .calendar {
     display: flex;
 }

@@ -1,0 +1,106 @@
+# .NET Core / .NET
+**/bin/
+**/obj/
+*.user
+*.suo
+*.userprefs
+*.lock.json
+project.lock.json
+*.vscode/
+.nuget/
+.idea/
+*.dbmdl
+*.backup.*
+*.backups.*
+*.log.*
+*.blend1
+*.pdf
+*.opendb
+*.swp
+*.swx
+*.swo
+*.bak
+*.ac3dbackup
+*.TMP
+*.Temp
+*.temp
+*.o
+*.pdb
+*.pidb
+*.ai
+*.ipch
+*.db
+*.jfm
+*.swm
+*.dmp
+*.map
+*.bak_AutoSave
+*.db-journal
+*.sln.ide
+*.db
+*.vsp
+*.bak_*
+*.bak.*
+*.ncb
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# VS Code directories
+.vscode/
+
+# Windows
+*.dll
+*.exe
+*.winmd
+*.cer
+*.pfx
+*.pdb
+*.pri
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# Node.js / React (Create React App)
+/node_modules/
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Debug
+npm-debug.log*
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Build directory
+/build/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# misc
+.DS_Store
+.TSBuildInfo
+.vs

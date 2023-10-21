@@ -1,0 +1,60 @@
+:root {
+    --hairline: rgb(218,220,224);
+    --primary: rgb(109, 165, 255);
+    --on-primary: #fff;
+    --hour-height: 48px;
+}
+
+.calendar {
+    display: flex;
+}
+
+.daysContainer {
+    flex: 1 1 auto;
+    display: flex;
+    background: repeating-linear-gradient(
+        to bottom,
+        var(--hairline),  /* Line color */
+        var(--hairline) 1px,  /* Line width */
+        transparent 1px,
+        transparent var(--hour-height) /* Space between lines */
+    );
+    border-bottom: var(--hairline) 1px solid;
+}
+
+.daysPrelude {
+    width: 8px;
+    border-right: var(--hairline) 1px solid;
+}
+
+.day {
+    flex: 1 1 auto;
+    padding-right: 12px;
+    max-width: 200px;
+    border-right: var(--hairline) 1px solid;
+}
+
+.hour {
+    height: var(--hour-height);
+    padding-right: 8px;
+    text-align: right;
+}
+
+.hourlabel {
+    display: block;
+    position: relative;
+    top: -6px;
+    font-size: 10px;
+}
+
+.calendarItem {
+    border-radius: 4px;
+    background-color: var(--primary);
+    width: 100%;
+    padding: 4px 8px;
+}
+
+.calendarItemLabel {
+    font-weight: bold;
+    color: var(--on-primary);
+}

@@ -1,1 +1,0 @@
-export { firestore } from './firebase.js'

@@ -14,7 +14,7 @@ jobs:
     # Define a parameter for the relative path to your React app
     strategy:
       matrix:
-        app_directory: [src/Web/Itinerly.Web/ClientApp]  # Modify with your app's directory
+        app_directory: [app]  # Modify with your app's directory
 
     steps:
       - name: Checkout Code

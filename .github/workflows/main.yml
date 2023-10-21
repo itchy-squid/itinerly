@@ -35,7 +35,7 @@ jobs:
           echo REACT_APP_FIREBASE_MESSAGING_SENDER_ID=${{ secrets.REACT_APP_FIREBASE_MESSAGING_SENDER_ID }} >> .env.local
           echo REACT_APP_FIREBASE_APP_ID=${{ secrets.REACT_APP_FIREBASE_APP_ID }} >> .env.local
           echo REACT_APP_FIREBASE_MEASUREMENT_ID=${{ secrets.REACT_APP_FIREBASE_MEASUREMENT_ID }} >> .env.local
-        working-directory: ./src/Itinerly.Web/ClientApp
+        working-directory: ${{ matrix.app_directory }}
         
       - name: Build
         working-directory: ${{ matrix.app_directory }}

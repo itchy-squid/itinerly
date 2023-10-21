@@ -35,8 +35,7 @@ export const expensesService = {
     },
 
   async updateExpenses(expenses) {
-    const updates = expenses.filter(e => e.id).map(async ({id, ...expense}) => {})
-
+    
     await Promise.all(
       expenses.map(async ({id, ...expense}) => {
         // update

@@ -6,7 +6,7 @@ import AddIcon from '@mui/icons-material/Add';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 export const ProjectsView = () => {
-  const { projects, loading, setSelectedProjectId } = useProjects();
+  const { projects, loading } = useProjects();
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
 

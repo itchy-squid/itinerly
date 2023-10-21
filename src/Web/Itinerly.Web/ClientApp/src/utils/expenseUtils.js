@@ -1,4 +1,4 @@
-import { clone, isEqual, keys, pick, update } from 'lodash';
+import { isEqual, keys, pick } from 'lodash';
 
 export const emptyExpense = {
   description: '',

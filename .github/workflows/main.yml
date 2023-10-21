@@ -45,5 +45,5 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@4.1.5
         with:
           branch: gh-pages
-          folder: build
+          folder: ${{ matrix.app_directory }}/build
           token: ${{ secrets.GH_TOKEN }}

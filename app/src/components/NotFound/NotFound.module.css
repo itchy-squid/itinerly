@@ -1,0 +1,26 @@
+:root {
+  --primary: #FCBF60;
+  --secondary: #57636B;
+}
+
+h1 {
+  color: var(--primary);
+}
+
+p {
+  color: var(--secondary);
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.column {
+  margin: 0 auto;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}

@@ -4,6 +4,7 @@ import { Home } from "./components/Home";
 import { ItineraryView } from './views/ItineraryView';
 import { ProjectsView } from './views/ProjectsView';
 import { ProjectView } from './views/ProjectView';
+import { NotFound } from "./components/NotFound/NotFound";
 
 const appRoutes = [
   {
@@ -41,6 +42,10 @@ const appRoutes = [
             name: 'Itinerary'
           }
         ]
+      },
+      {
+        element: <NotFound/>,
+        path: "*"
       }
     ]
   }

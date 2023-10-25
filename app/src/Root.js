@@ -9,11 +9,15 @@ import { UserProvider } from './contexts/UserContext/UserContext';
 import { ToastContainer } from 'react-toastify';
 
 const theme = createTheme({
-  overrides: {
-    MuiInput: {
-      underline: {
-        backgroundColor: 'red'
-      }
+  typography: {
+    h3: {
+      fontFamily: 'Quicksand, sans-serif',
+    },
+    h5: {
+      fontFamily: '"Satisfy", sans-serif',
+    },
+    body: {
+      fontFamily: 'Quicksand, sans-serif',
     }
   }
 });

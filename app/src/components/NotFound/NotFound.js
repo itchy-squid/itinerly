@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import notFoundImage from '../../assets/images/notfound.png';
+import notFoundImage from '../../assets/images/not-found.png';
 import styles from './NotFound.module.css';
 
 export const NotFound = (props) => {

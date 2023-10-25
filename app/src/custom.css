@@ -1,3 +1,10 @@
+:root {
+  --primary: #FCBF60;
+  --secondary: #57636B;
+  --bkg-primary: #ffffff;
+  --bkg-secondary: #eff2f3;
+}
+
 /* Provide sufficient contrast against white background */
 a {
   color: #0366d6;

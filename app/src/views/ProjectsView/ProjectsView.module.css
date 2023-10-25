@@ -1,0 +1,45 @@
+:root{
+  --projectCardBody-minHeight: 277px;
+  --projectCardBody-cornerRadius: 20px;
+}
+
+.projectsBanner {
+  background-image: url("../../assets/images/projects-banner.png");
+  background-size: cover;
+  background-position: center center;
+}
+
+.projectCard {
+}
+
+.projectCardContents {
+}
+
+.projectCardHeader {
+}
+
+.projectCardBody {
+  background-color: var(--bkg-secondary);
+  min-height: var(--projectCardBody-minHeight);
+  border-top-left-radius: var(--projectCardBody-cornerRadius);
+  border-bottom-right-radius: var(--projectCardBody-cornerRadius);   
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.projectCardBody > *:last-child {
+  margin-top: auto;
+  margin-right: auto;
+}
+
+.recentProjectsCardContents {
+  background-image: url("../../assets/images/projects-0.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: left bottom;
+}
+
+.recentProjectsCardBody {
+  min-height: var(--projectCardBody-minHeight);
+}

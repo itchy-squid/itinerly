@@ -23,6 +23,7 @@
   min-height: var(--projectCardBody-minHeight);
   border-top-left-radius: var(--projectCardBody-cornerRadius);
   border-bottom-right-radius: var(--projectCardBody-cornerRadius);   
+  border-bottom: solid 1px var(--bkg-secondary-shadow);
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -38,6 +39,7 @@
   background-size: contain;
   background-repeat: no-repeat;
   background-position: left bottom;
+  max-height: 360px;
 }
 
 .recentProjectsCardBody {

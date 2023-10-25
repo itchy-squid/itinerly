@@ -34,7 +34,7 @@ export const ProjectsView = () => {
         mb={2}
         />
 
-      <Grid container rowSpacing={4}
+      <Grid container rowSpacing={2}
         my={2}>
         {(filteredProjects.length > 4) && (
           <Grid item xs={12}>
@@ -50,12 +50,10 @@ export const ProjectsView = () => {
 
         <Grid item xs={xsSize} sm={smSize} md={mdSize} lg={lgSize}>
           <Box className={[styles.projectCardContents,styles.recentProjectsCardContents]}
-                mx={3}
-                mb={3}
-                mt={0}>
+                >
                 
             <Box className={styles.projectCardHeader}>
-              <Typography variant='h5' component="div">
+              <Typography variant='h3' component="div">
                 Recent Projects
               </Typography>
             </Box>

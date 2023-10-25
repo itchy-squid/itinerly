@@ -3,11 +3,11 @@
   --secondary: #57636B;
   --bkg-primary: #ffffff;
   --bkg-secondary: #eff2f3;
+  --bkg-secondary-shadow: #e3e3e3;
 }
 
-/* Provide sufficient contrast against white background */
-a {
-  color: #0366d6;
+body {
+  font-family: 'Quicksand', sans-serif; /* This only needs to be here until I fix the navbar to use mui */
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {

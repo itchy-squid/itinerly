@@ -7,13 +7,14 @@ import EditIcon from '@mui/icons-material/Edit';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { useSelectedProject } from '../../contexts/SelectedProjectContext';
 import { toast } from 'react-toastify';
 import { Expenses } from './Expenses';
 import { EditableText } from '../../components/editable';
 import { cloneDeep } from 'lodash';
 
-export const Activity = ({ initialActivity, initialExpenses }) => {
+export const Activity = ({ initialActivity, initialExpenses, onIsDeleting }) => {
   const { project, updateActivity, updateExpenses } = useSelectedProject();
   const [ updatedActivity, setUpdatedActivity ] = useState({...initialActivity});
   const [ hasUpdates, setHasUpdates ] = useState(false);
@@ -22,6 +23,7 @@ export const Activity = ({ initialActivity, initialExpenses }) => {
   const { locations } = useSelectedProject();
   const [ expanded, setExpanded ] = useState(false);
   const [ isEditing, setIsEditing ] = useState(false);
+  const [ isDeleting, setIsDeleting ] = useState(false);
 
   const handleAccordionChange = () => {
     return (ev) => {
@@ -62,6 +64,12 @@ export const Activity = ({ initialActivity, initialExpenses }) => {
       setHasUpdates(false);
       setIsEditing(false);
       ev.stopPropagation();
+    }
+  }
+
+  const handleDeleteClick = () => {
+    return (ev) => { 
+      onIsDeleting(updateActivity);
     }
   }
 
@@ -121,6 +129,9 @@ export const Activity = ({ initialActivity, initialExpenses }) => {
                   </IconButton>
                   <IconButton sx={{p: 0.25, mx: 1}} onClick={handleCancelClick()}>
                     <CloseIcon/>
+                  </IconButton>
+                  <IconButton sx={{p: 0.25, mx: 1}} onClick={handleDeleteClick()}>
+                    <DeleteIcon/>
                   </IconButton>
                 </>
               )

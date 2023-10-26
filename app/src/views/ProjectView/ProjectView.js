@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { Box, Container, Fab, LinearProgress, Paper, TextField, Typography }from '@mui/material';
+import { Box, Button, Container, Dialog, DialogTitle, 
+  Fab, LinearProgress, Paper, Stack, TextField, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { SelectedProjectProvider, useSelectedProject } from '../../contexts/SelectedProjectContext';
 import { toast } from 'react-toastify';
 import { useParams } from 'react-router-dom';
@@ -27,6 +29,7 @@ export const Project = () => {
   const { project, activities, expenses, loading, error, addActivities } = useSelectedProject();
   const [ isAdding, setIsAdding ] = useState(false);
   const [ newActivities, setNewActivities ] = useState([]);
+  const [ deletingActivity, setDeletingActivity ] = useState(null);
 
   if(loading) {
     return <LinearProgress/>
@@ -81,6 +84,18 @@ export const Project = () => {
     }
   }
 
+  const handleIsDeleting = (activity) => {
+    setDeletingActivity(activity);
+  }
+
+  const handleConfirmDeleteClick = () => {
+    handleCancelDeleteClick();
+  }
+
+  const handleCancelDeleteClick = () => {
+    setDeletingActivity(null);
+  }
+
   return (
       <Container>
         <Typography variant="h4" gutterBottom>
@@ -95,7 +110,9 @@ export const Project = () => {
             key={index} 
             project={project}
             initialActivity={activity} 
-            initialExpenses={expenses.filter(e => e.activityId === activity.id)}/>
+            initialExpenses={expenses.filter(e => e.activityId === activity.id)}
+            onIsDeleting={handleIsDeleting}
+            />
         ))}
 
         {isAdding && [...newActivities, emptyActivity].map((a, idx) => (
@@ -133,6 +150,18 @@ export const Project = () => {
             </>
           )}
         </Box>
+
+        <Dialog open={deletingActivity !== null}>
+          <DialogTitle>Discard activity?</DialogTitle>
+          <Box mx={3} mb={2}>
+            <Stack mt={2} ml={16} direction='row' spacing={2}>
+              <Button onClick={handleCancelDeleteClick}>Cancel</Button>
+              <Button onClick={handleConfirmDeleteClick} color='error' startIcon={<DeleteIcon/>} variant='contained'>
+                Discard
+              </Button>
+            </Stack>
+          </Box>
+        </Dialog>
       </Container>
   );
 }

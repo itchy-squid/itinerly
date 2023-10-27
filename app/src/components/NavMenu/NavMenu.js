@@ -1,45 +1,41 @@
-import React, { Component } from 'react';
-import { Collapse, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
-import { Link } from 'react-router-dom';
+import React, { Component, useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import { navRoutes } from '../../AppRoutes.js';
-import './NavMenu.css';
+import { AppBar, Box, Button, CssBaseline, IconButton, Link, Toolbar, Typography } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
 
-export class NavMenu extends Component {
-  static displayName = NavMenu.name;
+export const NavMenu = () => {
+  const [isOpen, setIsOpen] = useState(false);
 
-  constructor(props) {
-    super(props);
-
-    this.toggleNavbar = this.toggleNavbar.bind(this);
-    this.state = {
-      collapsed: true
-    };
+  const toggleNavbar = () => {
+    setIsOpen(prev => !prev);
   }
 
-  toggleNavbar() {
-    this.setState({
-      collapsed: !this.state.collapsed
-    });
-  }
-
-  render() {
-    return (
-      <header>
-        <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom box-shadow" container light>
-          <NavbarBrand tag={Link} to="/">itinerly</NavbarBrand>
-          <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
-          <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!this.state.collapsed} navbar>
-            <ul className="navbar-nav flex-grow">
-              {navRoutes
-                .map((item, idx) => (
-                  <NavItem key={`navmenu-${idx}`}>
-                    <NavLink tag={Link} className="text-dark" to={item.path}>{item.name}</NavLink>
-                  </NavItem>
-                ))}
-            </ul>
-          </Collapse>
-        </Navbar>
-      </header>
-    );
-  }
+  return (
+    <AppBar
+      color='inherit' 
+      sx={{minHeight: 0}}
+      elevation={0}
+      position='static'>
+      <Toolbar sx={{minHeight: 0}}>
+        <IconButton size='small'
+          edge='start'
+          color='inherit'
+          aria-label='menu'
+          sx={{mr: 2}}>
+          <MenuIcon/>
+        </IconButton>
+        <Box sx={{ flexGrow: 1, display: 'flex' }}>
+          <Typography variant='h6' sx={{flexGrow: 1}}>
+            itinerly
+          </Typography>
+          {navRoutes.map((item, idx) => (
+            <Button key={idx} to={item.path} component={RouterLink}>
+              {item.name}
+            </Button>
+          ))}
+        </Box>
+      </Toolbar>
+    </AppBar>
+  );
 }

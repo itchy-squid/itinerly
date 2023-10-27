@@ -7,8 +7,35 @@ import { ThemeProvider } from '@emotion/react';
 import { createTheme } from '@mui/material';
 import { UserProvider } from './contexts/UserContext/UserContext';
 import { ToastContainer } from 'react-toastify';
+import { LinkBehavior } from './components/LinkBehavior';
 
 const theme = createTheme({
+  components: {
+    MuiLink: {
+      defaultProps: {
+        component: LinkBehavior,
+      },
+    },
+    MuiButtonBase: {
+      defaultProps: {
+        LinkComponent: LinkBehavior,
+      },
+    },
+    MuiAppBar: {
+      styleOverrides: {
+        root: {
+          minHeight: '40px !important',
+        },
+      },
+    },
+    MuiToolbar: {
+      styleOverrides: {
+        root: {
+          minHeight: '40px !important',
+        },
+      },
+    },
+  },
   typography: {
     h3: {
       fontFamily: 'Quicksand, sans-serif',

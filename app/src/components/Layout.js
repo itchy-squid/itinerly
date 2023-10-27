@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container } from 'reactstrap';
+import { Container } from '@mui/material';
 import { NavMenu } from './NavMenu';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -10,9 +10,9 @@ export class Layout extends Component {
     return (
       <div>
         <NavMenu />
-          <Container tag="main">
-            {this.props.children}
-          </Container>
+        <Container tag="main">
+          {this.props.children}
+        </Container>
       </div>
     );
   }

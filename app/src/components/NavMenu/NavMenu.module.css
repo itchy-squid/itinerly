@@ -1,0 +1,10 @@
+﻿.companyIcon {
+  background-image: url('../../assets/images/itinerly.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.companyName {
+  text-decoration: underline;
+  text-decoration-color: rgba(0,0,0,0.3);
+}

@@ -1,41 +1,98 @@
-import React, { Component, useState } from 'react';
+import React, { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { navRoutes } from '../../AppRoutes.js';
-import { AppBar, Box, Button, CssBaseline, IconButton, Link, Toolbar, Typography } from '@mui/material';
+import { appRoutes, navRoutes } from '../../AppRoutes.js';
+import { AppBar, Box, Button, Divider, Drawer, IconButton, Link, List, ListItem, ListItemButton, ListItemText, Toolbar, Typography, getSelectUtilityClasses } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
+import styles from './NavMenu.module.css';
+import { useSelectedProject } from '../../contexts/SelectedProjectContext/SelectedProjectContext.js';
 
 export const NavMenu = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [sideMenuIsOpen, setSideMenuIsOpen] = useState(false);
+  const { project } = useSelectedProject();
 
-  const toggleNavbar = () => {
-    setIsOpen(prev => !prev);
+  const drawerWidth = 200;
+
+  const handleSideMenuToggle = (ev) => {
+    setSideMenuIsOpen(prev => !prev);
   }
 
-  return (
-    <AppBar
-      color='inherit' 
-      sx={{minHeight: 0}}
-      elevation={0}
-      position='static'>
-      <Toolbar sx={{minHeight: 0}}>
-        <IconButton size='small'
-          edge='start'
-          color='inherit'
-          aria-label='menu'
-          sx={{mr: 2}}>
-          <MenuIcon/>
-        </IconButton>
-        <Box sx={{ flexGrow: 1, display: 'flex' }}>
-          <Typography variant='h6' sx={{flexGrow: 1}}>
-            itinerly
-          </Typography>
-          {navRoutes.map((item, idx) => (
-            <Button key={idx} to={item.path} component={RouterLink}>
+  const drawer = (
+    <Box onClick={handleSideMenuToggle}>
+      <Box sx={{
+        display: 'flex',
+        bgcolor: 'background.paper',
+        color: 'text.secondary',
+        border: (theme) => `1px solid ${theme.palette.divider}`
+      }}>
+        <Box className={styles.companyIcon} p={2} my={1} ml={1} mr={.5}/>
+        <Typography className={styles.companyName} 
+          variant="h5" 
+          sx={{ 
+            my: 'auto'
+          }}>
+          itinerly
+        </Typography>
+      </Box>
+
+      <Divider variant='middle' /> 
+
+      <List>
+        {navRoutes.map((item,idx) => (
+          <ListItem key={idx} disablePadding>
+            <ListItemButton to={item.path} py={0}>
               {item.name}
-            </Button>
-          ))}
-        </Box>
-      </Toolbar>
-    </AppBar>
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+    </Box>
+  );
+
+  return (
+    <>
+      <AppBar
+        color='inherit' 
+        sx={{minHeight: 0}}
+        elevation={0}
+        position='static'>
+        <Toolbar sx={{minHeight: 0}}>
+          <IconButton size='small'
+            edge='start'
+            color='inherit'
+            aria-label='menu'
+            onClick={handleSideMenuToggle}
+            sx={{mr: 2}}>
+
+            <MenuIcon/>
+          </IconButton>
+          <Box sx={{ flexGrow: 1, display: 'flex' }}>
+            <Typography variant='h6' sx={{flexGrow: 1}}>
+              {project && project.name}
+            </Typography>
+            {/* {navRoutes.map((item, idx) => (
+              <Button key={idx} to={item.path} component={RouterLink}>
+                {item.name}
+              </Button>
+            ))} */}
+          </Box>
+        </Toolbar>
+      </AppBar>
+      <nav>
+        <Drawer
+          variant="temporary"
+          open={sideMenuIsOpen}
+          onClose={handleSideMenuToggle}
+          ModalProps={{
+            keepMounted: true, // Better open performance on mobile.
+          }}
+          sx={{
+            //display: { xs: 'block', sm: 'none' },
+            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+          }}
+        >
+          {drawer}
+        </Drawer>
+      </nav>
+    </>
   );
 }

@@ -1,23 +1,27 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Button, Container, Dialog, DialogTitle, 
   Fab, LinearProgress, Paper, Stack, TextField, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { SelectedProjectProvider, useSelectedProject } from '../../contexts/SelectedProjectContext';
+import { useSelectedProject } from '../../contexts/SelectedProjectContext';
 import { toast } from 'react-toastify';
 import { useParams } from 'react-router-dom';
 import { Activity } from './Activity'
 import { clone } from 'lodash';
+import { NotFound } from '../../components/NotFound/NotFound';
 
 export const ProjectView = () => {
-  const routeParams = useParams();
+  const { setSelectedProjectId } = useSelectedProject();
+  const { projectId } = useParams();
+
+  useEffect(() => {
+    setSelectedProjectId(projectId);
+  }, [projectId, setSelectedProjectId])
 
   return (
-    <SelectedProjectProvider projectId={routeParams.projectId}>
-      <Project/>
-    </SelectedProjectProvider>
+    <Project/>
   );
 }
 
@@ -38,6 +42,10 @@ export const Project = () => {
   if(error){
     toast.error(error);
     return <></>
+  }
+
+  if(!project){
+    return <NotFound/>;
   }
 
   const handleAddClick = () => {

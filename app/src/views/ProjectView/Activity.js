@@ -23,7 +23,6 @@ export const Activity = ({ initialActivity, initialExpenses, onIsDeleting }) => 
   const { locations } = useSelectedProject();
   const [ expanded, setExpanded ] = useState(false);
   const [ isEditing, setIsEditing ] = useState(false);
-  const [ isDeleting, setIsDeleting ] = useState(false);
 
   const handleAccordionChange = () => {
     return (ev) => {

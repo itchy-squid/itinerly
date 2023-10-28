@@ -56,7 +56,9 @@
     "nth-check": "2.1.1",
     "webpack": "5.81.0"
   },
-  "scripts": {
+  "scripts": {    
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build" 
     "start": "rimraf ./build ; react-scripts start",
     "start:codespace": "BROWSER=none WDS_SOCKET_PORT=0 react-scripts start",
     "build": "react-scripts build",

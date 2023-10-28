@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Outlet} from 'react-router-dom';
 import { Layout } from './components/Layout';
 import './custom.css';
@@ -8,9 +8,15 @@ import { createTheme } from '@mui/material';
 import { UserProvider } from './contexts/UserContext/UserContext';
 import { ToastContainer } from 'react-toastify';
 import { LinkBehavior } from './components/LinkBehavior';
+import { SelectedProjectProvider } from './contexts/SelectedProjectContext';
 
 const theme = createTheme({
   components: {
+    MuiDivider: {
+      defaultProps: {
+        variant: 'middle',
+      },
+    },
     MuiLink: {
       defaultProps: {
         component: LinkBehavior,
@@ -24,14 +30,14 @@ const theme = createTheme({
     MuiAppBar: {
       styleOverrides: {
         root: {
-          minHeight: '40px !important',
+          minHeight: '49px !important',
         },
       },
     },
     MuiToolbar: {
       styleOverrides: {
         root: {
-          minHeight: '40px !important',
+          minHeight: '49px !important',
         },
       },
     },
@@ -49,19 +55,22 @@ const theme = createTheme({
   }
 });
 
+
 const Root = () => {
-    return (
-      <ThemeProvider theme={theme}>
-        <UserProvider>
-          <ProjectsProvider>
+  return (
+    <ThemeProvider theme={theme}>
+      <UserProvider>
+        <ProjectsProvider>
+          <SelectedProjectProvider>
             <Layout>
               <Outlet/>
               <ToastContainer/>
             </Layout>
-          </ProjectsProvider>
-        </UserProvider>
-      </ThemeProvider>
-    );
+          </SelectedProjectProvider>
+        </ProjectsProvider>
+      </UserProvider>
+    </ThemeProvider>
+  );
 }
 
 export default Root;

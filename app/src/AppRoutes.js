@@ -12,9 +12,9 @@ const appRoutes = [
     path: "",
     children: [
       {
+        name: 'Home',
         index: true,
         element: <Home/>,
-        name: 'Home'
       },
       {
         path: "projects",
@@ -22,24 +22,21 @@ const appRoutes = [
         children:
         [
           {
+            name: 'Projects',
             index: true,
-            element: <ProjectsView/>,
-            name: 'Projects'
+            element: <ProjectsView/>
           },
           {
             path: ":projectId",
-            element: <ProjectView/>
-          }
-        ]
-      },
-      {
-        path: 'itinerary',
-        element: <Outlet/>,
-        children: [
-          {
-            index: true,
-            element: <ItineraryView/>,
-            name: 'Itinerary'
+            element: <ProjectView/>,
+            children:
+            [
+              {
+                name: 'Itinerary',
+                path: 'itinerary',
+                element: <ItineraryView/>,
+              }
+            ]
           }
         ]
       },

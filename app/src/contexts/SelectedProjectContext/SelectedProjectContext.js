@@ -3,7 +3,9 @@ import { activitiesService, projectService, expensesService, locationsService } 
 
 const SelectedProjectContext = createContext();
 
-export const SelectedProjectProvider = ({ projectId, children }) => {
+export const SelectedProjectProvider = ({ children }) => {
+  const [selectedProjectId, setSelectedProjectId] = useState(null);
+
   const [loading, setLoading] = useState(true);
   const [error] = useState(null);
   const [project, setProject] = useState(null);
@@ -27,8 +29,8 @@ export const SelectedProjectProvider = ({ projectId, children }) => {
     }
 
     setLoading(true);
-    fetchData(projectId);
-  }, [projectId]);
+    fetchData(selectedProjectId);
+  }, [selectedProjectId]);
 
   // Assuming an API call like:
   const fetchProjectDetails = async (projectId) => {
@@ -53,19 +55,19 @@ export const SelectedProjectProvider = ({ projectId, children }) => {
         name: a.name
       };
     }))
-    const activities = await activitiesService.fetchActivities(projectId);
+    const activities = await activitiesService.fetchActivities(selectedProjectId);
     setActivities(activities);
   }
 
   const updateActivity = async (activity) => {
     await activitiesService.updateActivity(activity);
-    const activities = await activitiesService.fetchActivities(projectId);
+    const activities = await activitiesService.fetchActivities(selectedProjectId);
     setActivities(activities);
   }
 
   const updateExpenses = async (updates) => {
     await expensesService.updateExpenses(updates);
-    const expenses = await expensesService.fetchExpenses(projectId);
+    const expenses = await expensesService.fetchExpenses(selectedProjectId);
     setExpenses(expenses);
   }
 
@@ -75,8 +77,11 @@ export const SelectedProjectProvider = ({ projectId, children }) => {
       activities: _activities, 
       expenses: _expenses, 
       locations, 
+      setSelectedProjectId,
       addActivities,
-      updateActivity, updateExpenses }}>
+      updateActivity, 
+      updateExpenses 
+      }}>
 
       {children}
     </SelectedProjectContext.Provider>
@@ -84,5 +89,11 @@ export const SelectedProjectProvider = ({ projectId, children }) => {
 }
 
 export const useSelectedProject = () => {
-  return useContext(SelectedProjectContext);
+  const context = useContext(SelectedProjectContext);
+  
+  if (!context) {
+    throw new Error('useSelectedProject must be used within a SelectedProjectProvider');
+  }
+
+  return context;
 }

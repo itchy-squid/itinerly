@@ -48,4 +48,6 @@ jobs:
       - name: Deploy to GH Pages
         run: |
           cd app
+          git config --global user.email "${ITCHY_SQUID_EMAIL}"
+          git config --global user.name "${ITCHY_SQUID_NAME}"
           npm run deploy

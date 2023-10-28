@@ -47,4 +47,5 @@ jobs:
           
       - name: Deploy to GH Pages
         run: |
+          cd app
           npm run deploy

@@ -49,5 +49,5 @@ jobs:
         run: |
           cd app
           git config --global user.email "${ITCHY_SQUID_EMAIL}"
-          git config --global user.name "${ITCHY_SQUID_NAME}"
+          git config --global user.name "Amanda Santi"
           npm run deploy

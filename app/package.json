@@ -47,6 +47,7 @@
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-jsx-a11y": "^6.7.1",
     "eslint-plugin-react": "^7.32.2",
+    "firebase-tools": "^12.7.0",
     "gh-pages": "^6.0.0",
     "nan": "^2.17.0",
     "typescript": "^4.9.5"
@@ -56,9 +57,10 @@
     "nth-check": "2.1.1",
     "webpack": "5.81.0"
   },
-  "scripts": {    
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
+  "scripts": {
+    "firebase:login": "firebase login",
+    "firebase:deploy": "firebase deploy",
+    "firebase:init": "firebase init",
     "start": "rimraf ./build ; react-scripts start",
     "start:codespace": "BROWSER=none WDS_SOCKET_PORT=0 react-scripts start",
     "build": "react-scripts build",

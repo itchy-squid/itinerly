@@ -1,7 +1,7 @@
 {
   "name": "itinerly",
   "version": "0.1.0",
-  "homepage": "https://itchy-squid.github.io/itinerly"
+  "homepage": "https://itchy-squid.github.io/itinerly",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.11.1",
@@ -58,7 +58,7 @@
   },
   "scripts": {    
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build" 
+    "deploy": "gh-pages -d build",
     "start": "rimraf ./build ; react-scripts start",
     "start:codespace": "BROWSER=none WDS_SOCKET_PORT=0 react-scripts start",
     "build": "react-scripts build",

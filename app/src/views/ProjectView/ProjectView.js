@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 import { useParams } from 'react-router-dom';
 import { Activity } from './Activity'
 import { clone } from 'lodash';
+import { NotFound } from '../../components/NotFound/NotFound';
 
 export const ProjectView = () => {
   const { setSelectedProjectId } = useSelectedProject();
@@ -44,8 +45,7 @@ export const Project = () => {
   }
 
   if(!project){
-    toast.error('what?');
-    return <></>
+    return <NotFound/>;
   }
 
   const handleAddClick = () => {

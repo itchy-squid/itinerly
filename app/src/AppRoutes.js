@@ -27,14 +27,18 @@ const appRoutes = [
             element: <ProjectsView/>
           },
           {
-            path: ":projectId",
-            element: <ProjectView/>,
-            children:
+            path: ':projectId',
+            element: <Outlet/>,
+            children: 
             [
+              {
+                element: <ProjectView/>,
+                index: true,
+              },
               {
                 name: 'Itinerary',
                 path: 'itinerary',
-                element: <ItineraryView/>,
+                element: <ItineraryView/>
               }
             ]
           }
@@ -48,28 +52,19 @@ const appRoutes = [
   }
 ]
 
-function flattenRoutes(routes, parentPath = '') {
-  let flatRoutes = [];
-
-  routes
-  .forEach(route => {
-    const fullPath = route.path ? `${parentPath}/${route.path}` : parentPath;
-    
-    // Push current route to the flat model
-    if(route.index) {
-      flatRoutes.push({path: fullPath, name: route.name});
-    }
-
-    // If this route has children, recurse and add them to the flat model
-    if (route.children && route.children.length) {
-      flatRoutes = flatRoutes.concat(flattenRoutes(route.children, fullPath));
-    }
-  });
-
-  return flatRoutes;
-}
-
-const navRoutes = flattenRoutes(appRoutes);
+const navRoutes = 
+[
+  {
+    name: 'Home',
+    path: '/',
+    type: 'root'
+  },
+  {
+    name: 'Projects',
+    path: '/projects',
+    type: 'root'
+  }
+];
 
 export {
   appRoutes,

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import { appRoutes, navRoutes } from '../../AppRoutes.js';
-import { AppBar, Box, Button, Divider, Drawer, IconButton, Link, List, ListItem, ListItemButton, ListItemText, Toolbar, Typography, getSelectUtilityClasses } from '@mui/material';
+import { navRoutes } from '../../AppRoutes.js';
+import { AppBar, Box, Divider, Drawer, IconButton, List, ListItem, ListItemButton, Toolbar, Typography } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import styles from './NavMenu.module.css';
 import { useSelectedProject } from '../../contexts/SelectedProjectContext/SelectedProjectContext.js';

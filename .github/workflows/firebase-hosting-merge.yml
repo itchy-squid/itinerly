@@ -10,8 +10,10 @@ jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Build
+      - name: Checkout
         uses: actions/checkout@v3
+      
+      - name: Build
         run: |
           cd app 
           npm ci 

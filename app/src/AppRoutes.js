@@ -5,11 +5,11 @@ import { ItineraryView } from './views/ItineraryView';
 import { ProjectsView } from './views/ProjectsView';
 import { ProjectView } from './views/ProjectView';
 import { NotFound } from "./components/NotFound/NotFound";
-import { FirebaseAuth } from "./components/FirebaseAuth";
+import { LoginView } from "./views/LoginView/LoginView";
 
 const appRoutes = [
   {
-    element: <Root/>,
+    element: <Outlet/>,
     path: "",
     children: [
       {
@@ -20,12 +20,12 @@ const appRoutes = [
       {
         name: 'Login',
         index: true,
-        path: '/login',
-        element: <FirebaseAuth/>
+        path: 'login',
+        element: <LoginView/>
       },
       {
         path: "projects",
-        element: <Outlet/>,
+        element: <Root/>,
         children:
         [
           {

@@ -4,6 +4,7 @@ import firebase from 'firebase/compat/app';
 import * as firebaseui from 'firebaseui';
 import 'firebaseui/dist/firebaseui.css';
 import { auth } from '../../config/firebase';
+import { Box } from '@mui/system';
 
 const signInSuccessUrl = '/';
 
@@ -29,5 +30,9 @@ export const FirebaseAuth = () => {
     };
   }, []);
 
-  return <div id="firebaseui-auth-container"></div>;
+  return (
+    <Box sx={{paddingTop: '16px', paddingBottom: '16px'}}>
+      <div id="firebaseui-auth-container"/>
+    </Box>
+  );
 }

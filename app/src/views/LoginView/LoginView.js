@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from './LoginView.module.css';
 import { LoginComponent } from './LoginComponent';
 import { Box, Grid, Paper, Typography } from '@mui/material';
@@ -10,10 +10,9 @@ export const LoginView = () => {
   const { user, error } = useUser();
   const navigate = useNavigate();
 
-  if(user)
-  {
-    navigate('/projects');
-  }
+  useEffect(() => {
+    if(user) navigate('/projects');
+  }, [user])
 
   return (
     <Grid container 

@@ -1,0 +1,23 @@
+.container {
+  background-color: var(--bg-overlay);
+  height: 100vh;
+}
+
+.card {
+  height: 50%;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.graphic {
+  background-image: url('../../assets/images/login.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: relative;
+  padding-bottom: 100%;
+}
+
+.loginOptionsContainer {
+  border: solid 1px var(--border-highlight);
+  border-radius: 16px;
+}

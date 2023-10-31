@@ -2,13 +2,10 @@ import React from 'react';
 import { Outlet} from 'react-router-dom';
 import { Layout } from './components/Layout';
 import './custom.css';
-import { ProjectsProvider } from './contexts/ProjectsContext';
 import { ThemeProvider } from '@emotion/react';
 import { createTheme } from '@mui/material';
-import { UserProvider } from './contexts/UserContext/UserContext';
 import { ToastContainer } from 'react-toastify';
 import { LinkBehavior } from './components/LinkBehavior';
-import { SelectedProjectProvider } from './contexts/SelectedProjectContext';
 
 const theme = createTheme({
   components: {
@@ -59,16 +56,10 @@ const theme = createTheme({
 const Root = () => {
   return (
     <ThemeProvider theme={theme}>
-      <UserProvider>
-        <ProjectsProvider>
-          <SelectedProjectProvider>
-            <Layout>
-              <Outlet/>
-              <ToastContainer/>
-            </Layout>
-          </SelectedProjectProvider>
-        </ProjectsProvider>
-      </UserProvider>
+      <Layout>
+        <Outlet/>
+        <ToastContainer/>
+      </Layout>
     </ThemeProvider>
   );
 }

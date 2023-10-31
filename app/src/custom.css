@@ -1,11 +1,77 @@
 :root {
   --primary: #FCBF60;
   --secondary: #57636B;
+
   --bkg-primary: #ffffff;
   --bkg-secondary: #eff2f3;
   --bkg-secondary-shadow: #e3e3e3;
+  --bg-overlay: #687e8f;
+
+  --border-highlight: #FCBF60;
 }
 
 body {
   font-family: 'Quicksand', sans-serif; /* This only needs to be here until I fix the navbar to use mui */
 }
+
+/*
+Text Colors:
+textPrimary
+textSecondary
+textTertiary
+textLink
+textLinkHover
+textError
+textSuccess
+textInfo
+textWarning
+
+Background Colors:
+bgPrimary
+bgSecondary
+bgTertiary
+bgOverlay
+bgModal
+bgError
+bgSuccess
+bgInfo
+bgWarning
+
+Main Theme Colors:
+themePrimary
+themeSecondary
+themeAccent
+themeHighlight
+themeDark
+themeLight
+
+Button Colors:
+btnPrimary
+btnPrimaryHover
+btnSecondary
+btnSecondaryHover
+btnError
+btnSuccess
+btnInfo
+btnWarning
+
+Border Colors:
+borderPrimary
+borderSecondary
+borderTertiary
+borderHighlight
+borderError
+borderSuccess
+borderInfo
+borderWarning
+
+Misc Colors:
+hoverEffect
+activeEffect
+disabledGray
+shadowColor
+Gradients (If you have them)
+gradientPrimary
+gradientSecondary
+gradientAccent
+*/

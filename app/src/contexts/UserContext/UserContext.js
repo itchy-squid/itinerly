@@ -1,36 +1,40 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
+import { auth } from '../../config/firebase';
 
-const UserContext = createContext();
+export const UserContext = createContext({
+  user: null,
+  signOut: () => {}
+});
 
-const UserProvider = ({ children }) => {
-    const [preferences, setPreferences] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+export const UserProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [preferences, setPreferences] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-    useEffect(() => {
-        async function loadProjects() {
-          try
-          {
-            setPreferences({currency: '$'});
-          }
-          catch(error) { setError(error); }
-          finally { setLoading(false); }
-        }
-
-        setLoading(true);
+  useEffect(() => {
+    auth.onAuthStateChanged(
+      (currentUser) => {
+        console.log('setUser():', user)
+        setUser(currentUser);
         setError(null);
-        loadProjects();
-    }, []);
+      },
+      (error) => {
+        setError(error);
+      });
+  }, []);
 
-    return (
-        <UserContext.Provider value={{ preferences, loading, error }}>
-            {children}
-        </UserContext.Provider>
-    );
+  const signOut = () => {
+    auth.signOut();
+  };
+
+  return (
+    <UserContext.Provider value={{ user, preferences, loading, error, signOut }}>
+        {children}
+    </UserContext.Provider>
+  );
 }
 
-const useUser = () => {
+export const useUser = () => {
   return useContext(UserContext);
 }
-
-export { UserContext, UserProvider, useUser };

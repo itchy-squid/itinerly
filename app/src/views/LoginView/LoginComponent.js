@@ -6,21 +6,27 @@ import 'firebaseui/dist/firebaseui.css';
 import { auth } from '../../config/firebase';
 import { Box } from '@mui/system';
 
-const signInSuccessUrl = '/';
+const signInSuccessUrl = '/login';
 
-export const FirebaseAuth = () => {
+export const LoginComponent = () => {
 
   useEffect(() => {
     const uiConfig = {
+      signInFlow: 'popup',
       signInSuccessUrl: signInSuccessUrl,
       signInOptions: [ firebase.auth.GoogleAuthProvider.PROVIDER_ID ],
       callbacks: {
         signInSuccessWithAuthResult: () => {
           return false; // Avoid redirect outside the app
+        },
+        signInFailure: (error) => {
+          console.error("Error during sign-in:", error)
+          return Promise.resolve();
         }
       }
     };
 
+    console.log('ui.start()');
     const ui = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(auth);
     ui.start('#firebaseui-auth-container', uiConfig);
 

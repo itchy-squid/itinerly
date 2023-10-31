@@ -1,1 +1,1 @@
-export * from './FirebaseAuth'
+export * from '../../views/LoginView/FirebaseAuth'

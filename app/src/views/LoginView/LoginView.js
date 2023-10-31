@@ -1,11 +1,20 @@
 import React from 'react';
 import styles from './LoginView.module.css';
-
-import { FirebaseAuth } from '../../components/FirebaseAuth';
-import { Box, Card, CardContent, Grid, Paper } from '@mui/material';
-import { Container } from '@mui/system';
+import { LoginComponent } from './LoginComponent';
+import { Box, Grid, Paper, Typography } from '@mui/material';
+import { useUser } from '../../contexts/UserContext';
+import { useNavigate } from 'react-router';
+import { Stack } from '@mui/system';
 
 export const LoginView = () => {
+  const { user, error } = useUser();
+  const navigate = useNavigate();
+
+  if(user)
+  {
+    navigate('/projects');
+  }
+
   return (
     <Grid container 
       justifyContent='center'
@@ -25,7 +34,14 @@ export const LoginView = () => {
 
           <Grid className={styles.loginOptionsContainer}
             item xs={12} sm={8} md={6} py={0} px={2}>
-            <FirebaseAuth/>
+              <Stack>
+                {error && (
+                  <Typography>
+                    {error}
+                  </Typography>
+                )}
+                <LoginComponent/>
+              </Stack>
           </Grid>
         </Grid>
       </Paper>

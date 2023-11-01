@@ -12,7 +12,7 @@ export const LoginView = () => {
 
   useEffect(() => {
     if(user) navigate('/projects');
-  }, [user])
+  }, [user, navigate])
 
   return (
     <Grid container 

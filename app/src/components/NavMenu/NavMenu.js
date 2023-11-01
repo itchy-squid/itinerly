@@ -4,10 +4,13 @@ import { AppBar, Box, Divider, Drawer, IconButton, List, ListItem, ListItemButto
 import MenuIcon from '@mui/icons-material/Menu';
 import styles from './NavMenu.module.css';
 import { useSelectedProject } from '../../contexts/SelectedProjectContext/SelectedProjectContext.js';
+import { useUser } from '../../contexts/UserContext/UserContext.js';
+import { UserMenu } from './UserMenu.js';
 
 export const NavMenu = () => {
   const [sideMenuIsOpen, setSideMenuIsOpen] = useState(false);
   const { project } = useSelectedProject();
+  const { user } = useUser();
 
   const drawerWidth = 200;
 
@@ -61,18 +64,13 @@ export const NavMenu = () => {
             aria-label='menu'
             onClick={handleSideMenuToggle}
             sx={{mr: 2}}>
-
             <MenuIcon/>
           </IconButton>
           <Box sx={{ flexGrow: 1, display: 'flex' }}>
             <Typography variant='h6' sx={{flexGrow: 1}}>
               {project && project.name}
             </Typography>
-            {/* {navRoutes.map((item, idx) => (
-              <Button key={idx} to={item.path} component={RouterLink}>
-                {item.name}
-              </Button>
-            ))} */}
+            <UserMenu/>
           </Box>
         </Toolbar>
       </AppBar>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { IconButton, Menu, MenuItem } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import LoginIcon from '@mui/icons-material/Login';
 import { useUser } from '../../contexts/UserContext';
 import { useNavigate } from 'react-router';
 
@@ -19,15 +20,25 @@ export const UserMenu = () => {
     setAnchorEl(null);
   };
 
-  const handleSignout = () => {
+  const handleSignOut = () => {
     handleClose();
     signOut();
     navigate('/');
   }
+  
+  const handleSignIn = () => {
+    navigate('/login');
+  }
+
+  if(!user){
+    return (
+      <IconButton onClick={handleSignIn}><LoginIcon/></IconButton>
+    );
+  }
 
   return (
     <React.Fragment>
-      <IconButton
+        <IconButton
         id="basic-button"
         aria-controls={open ? 'basic-menu' : undefined}
         aria-haspopup="true"
@@ -47,7 +58,7 @@ export const UserMenu = () => {
       >
         {/* {user && (<MenuItem onClick={handleClose}>Profile</MenuItem>)}
         {user && (<MenuItem onClick={handleClose}>My account</MenuItem>)} */}
-        {user && (<MenuItem onClick={handleSignout}>Logout</MenuItem>)}
+        <MenuItem onClick={handleSignOut}>Logout</MenuItem>
       </Menu>
     </React.Fragment>
   );

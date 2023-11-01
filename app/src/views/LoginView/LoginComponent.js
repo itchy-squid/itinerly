@@ -26,7 +26,6 @@ export const LoginComponent = () => {
       }
     };
 
-    console.log('ui.start()');
     const ui = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(auth);
     ui.start('#firebaseui-auth-container', uiConfig);
 

@@ -4,9 +4,10 @@ jobs:
   build_and_preview:
     if: '${{ github.event.pull_request.head.repo.full_name == github.repository }}'
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
-      - uses: actions/checkout@v3
+        uses: actions/checkout@v3
 
       - name: Create .env.local file
         run: |
@@ -20,7 +21,7 @@ jobs:
           echo "REACT_APP_FIREBASE_STORAGE_BUCKET=${{ secrets.REACT_APP_FIREBASE_STORAGE_BUCKET }}" >> .env.local
 
       - name: Build            
-      - run: |
+        run: |
           cd app
           npm ci 
           npm run build

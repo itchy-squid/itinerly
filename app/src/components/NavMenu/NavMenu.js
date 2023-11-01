@@ -4,7 +4,6 @@ import { AppBar, Box, Divider, Drawer, IconButton, List, ListItem, ListItemButto
 import MenuIcon from '@mui/icons-material/Menu';
 import styles from './NavMenu.module.css';
 import { useSelectedProject } from '../../contexts/SelectedProjectContext/SelectedProjectContext.js';
-import { useUser } from '../../contexts/UserContext/UserContext.js';
 import { UserMenu } from './UserMenu.js';
 
 export const NavMenu = () => {

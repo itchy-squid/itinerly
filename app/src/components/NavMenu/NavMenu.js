@@ -10,7 +10,6 @@ import { UserMenu } from './UserMenu.js';
 export const NavMenu = () => {
   const [sideMenuIsOpen, setSideMenuIsOpen] = useState(false);
   const { project } = useSelectedProject();
-  const { user } = useUser();
 
   const drawerWidth = 200;
 

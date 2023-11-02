@@ -1,6 +1,5 @@
 import { Outlet } from "react-router-dom";
 import Root from "./Root";
-import { Home } from "./components/Home";
 import { ItineraryView } from './views/ItineraryView';
 import { ProjectsView } from './views/ProjectsView';
 import { ProjectView } from './views/ProjectView';
@@ -15,7 +14,8 @@ const appRoutes = [
       {
         name: 'Home',
         index: true,
-        element: <Home/>,
+        element: <LoginView/>,
+
       },
       {
         name: 'Login',

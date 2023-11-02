@@ -23,7 +23,7 @@ export const UserMenu = () => {
   const handleSignOut = () => {
     handleClose();
     signOut();
-    navigate('/');
+    navigate('/login');
   }
   
   const handleSignIn = () => {

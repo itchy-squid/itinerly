@@ -14,10 +14,10 @@ const queryOperators = {
 
 export const activitiesService = {
   
-  async fetchActivities(itineraryId) {
+  async fetchActivities(projectId) {
     const querySnapshot = await getDocs(
       query(collectionRef,
-        where(propertyNames.projectId, queryOperators.equals, itineraryId))
+        where(propertyNames.projectId, queryOperators.equals, projectId))
     );
 
     const docs = querySnapshot.docs.map(

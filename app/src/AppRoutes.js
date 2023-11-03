@@ -62,11 +62,6 @@ const appRoutes = [
 const navRoutes = 
 [
   {
-    name: 'Home',
-    path: '/',
-    type: 'root'
-  },
-  {
     name: 'Projects',
     path: '/projects',
     type: 'root'

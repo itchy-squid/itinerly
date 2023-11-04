@@ -1,7 +1,7 @@
-import { firestore } from '../../config/firebase';
+import { db } from '../../config/firebase';
 import { collection, getDocs, query, where } from "firebase/firestore";
 
-const collectionRef = collection(firestore, "locations");
+const collectionRef = collection(db, "locations");
 
 const propertyNames = {
   projectId: 'projectId'

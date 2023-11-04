@@ -1,8 +1,8 @@
-import { firestore } from '../../config/firebase';
+import { db } from '../../config/firebase';
 import { addDoc, collection, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
 
 const collectionName = "expenses";
-const collectionRef = collection(firestore, collectionName);
+const collectionRef = collection(db, collectionName);
 
 const propertyNames = {
   projectId: 'projectId'
@@ -40,7 +40,7 @@ export const expensesService = {
       expenses.map(async ({id, ...expense}) => {
         // update
         if (id) {
-          const docRef = doc(firestore, collectionName, id);
+          const docRef = doc(db, collectionName, id);
           await updateDoc(docRef, expense);
         }
 

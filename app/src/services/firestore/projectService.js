@@ -1,9 +1,10 @@
-import { firestore } from '../../config/firebase';
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from '../../config/firebase';
+import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
 
-const collectionRef = collection(firestore, "projects");
+const collectionRef = collection(db, "projects");
 
 const propertyNames = {
+  id: 'id',
   userId: 'userId'
 };
 
@@ -33,5 +34,26 @@ export const projectService = {
 
       return docs;
     },
+
+  async fetchProject(projectId)
+  {
+    console.log(projectId);
+    try{
+    const docRef = doc(db, "projects", projectId);
+    const docSnap = await getDoc(docRef);
+    const data = docSnap.data();
+
+    console.log(data);
+    return {
+        ...data,
+        id: docSnap.id
+      };
+    }
+    catch(err){
+      console.log(err);
+      throw err;
+    }
+
+  }
 
 };

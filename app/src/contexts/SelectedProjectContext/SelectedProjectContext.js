@@ -20,12 +20,12 @@ export const SelectedProjectProvider = ({ children }) => {
 
       if (userId && id) {
         // Fetch the details for the selected project and set them
-        const details = await fetchProjectDetails(userId)
+        const details = await fetchProjectDetails(id)
         
         setProject(details.project);
-        setActivities(details.activities);
-        setExpenses(details.expenses);
-        setLocations(details.locations);
+        // setActivities(details.activities);
+        // setExpenses(details.expenses);
+        // setLocations(details.locations);
         setLoading(false);
       }
       else
@@ -44,17 +44,17 @@ export const SelectedProjectProvider = ({ children }) => {
   }, [user, selectedProjectId]);
 
   // Assuming an API call like:
-  const fetchProjectDetails = async (userId, projectId) => {
-    const project = (await projectService.fetchProjects(userId)).filter(p => p.id === projectId)[0];
-    const activities = await activitiesService.fetchActivities(projectId);
-    const expenses = await expensesService.fetchExpenses(projectId);
-    const locations = await locationsService.fetchLocations(projectId);
+  const fetchProjectDetails = async (projectId) => {
+    const project = await projectService.fetchProject(projectId);
+    // const activities = await activitiesService.fetchActivities(projectId);
+    // const expenses = await expensesService.fetchExpenses(projectId);
+    // const locations = await locationsService.fetchLocations(projectId);
 
     return {
       project: project,
-      activities: activities,
-      expenses: expenses,
-      locations: locations
+      // activities: activities,
+      // expenses: expenses,
+      // locations: locations
     };
   };
 

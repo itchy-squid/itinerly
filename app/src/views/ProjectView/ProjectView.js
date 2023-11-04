@@ -112,7 +112,7 @@ export const Project = () => {
         <Typography variant="body1" gutterBottom>
           {project.description}
         </Typography>
-
+{/* 
         {activities.map((activity, index) => (
           <Activity 
             key={index} 
@@ -121,7 +121,7 @@ export const Project = () => {
             initialExpenses={expenses.filter(e => e.activityId === activity.id)}
             onIsDeleting={handleIsDeleting}
             />
-        ))}
+        ))} */}
 
         {isAdding && [...newActivities, emptyActivity].map((a, idx) => (
           <Paper elevation={1} key={idx}>

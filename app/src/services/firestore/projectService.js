@@ -14,7 +14,7 @@ const queryOperators = {
 export const projectService = {
 
   async fetchProjects(userId) {
-    if(!userId) throw 'User must be defined';
+    if(!userId) throw new Error('User must be defined');
 
     const querySnapshot = await getDocs(
       query(collectionRef,

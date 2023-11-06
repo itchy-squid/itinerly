@@ -5,7 +5,7 @@ import { TIME_UNITS } from '../../constants';
 import {range} from 'lodash';
 
 
-export const Calendar = ({ events, days }) => {
+export const Calendar = ({ activities, days }) => {
     const renderSettings = { 
         renderStartTime: 16,
         renderDuration: 8
@@ -27,7 +27,7 @@ export const Calendar = ({ events, days }) => {
             <div className={styles.daysContainer}>
                 <div className={styles.daysPrelude}/>
                 {days.map((date, index) => (
-                    <Day activities={events} date={date} key={`day-${index}`} renderSettings={renderSettings} />
+                    <Day activities={activities} date={date} key={`day-${index}`} renderSettings={renderSettings} />
                 ))}
             </div>
         </div>

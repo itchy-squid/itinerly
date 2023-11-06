@@ -1,45 +1,50 @@
-import React, { useEffect, useState } from 'react';
-import { activitiesService } from '../../services/firestore';
-import { toast } from 'react-toastify';
-import { CalendarView } from '../CalendarView';
+import React, { useState } from 'react';
+import { useSelectedProject } from '../../contexts/SelectedProjectContext';
+import moment from 'moment';
+import { Calendar } from './Calendar';
+import { TIME_UNITS } from '../../constants';
+import { Grid, List, ListItem, ListItemButton, ListItemText, Stack, Typography } from '@mui/material';
 
 export const ItineraryView = () => {
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { activities } = useSelectedProject();
+  const [selectedIndex, setSelectedIndex] = useState(null);
+  
+  const days = activities.map(ev => moment(ev.start).startOf(TIME_UNITS.DAY).toDate());
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const docs = await activitiesService.getActivities('1');
-        setData(docs);
-      }
-      catch (err) {
-        toast.error(err);
-      }
-      finally {
-        setLoading(false);
-      }
-    }
-
-    fetchData();
-  }, []);
-
-  const renderForecastsTable = (events) => {
-    return (
-      <CalendarView events={events}/>
-    );
-  }
-
-  let contents = loading
-    ? <p><em>Loading...</em></p>
-    : renderForecastsTable(data);
+  const handleListItemClick = (index) => {
+    return () => { setSelectedIndex(index); }
+  };
 
   return (
-    <div>
-      <h1 id="tableLabel">Itinerary</h1>
-      <p>List itinerary details and activities.</p>
-      {contents}
-    </div>
+    <Grid container>
+      <Grid item md={4} lg={2} xxl={1}>
+        <Stack>
+          <Typography h4>Activities</Typography>
+
+          <List>
+            {activities && activities.map((a, idx) => (
+              <ListItemButton 
+                key={idx}
+                selected={selectedIndex === idx }
+                onClick={handleListItemClick(idx)}
+              >
+                <ListItemText 
+                  primary={a.name}/>
+              </ListItemButton>
+            ))}
+          </List>
+        </Stack>
+      </Grid>
+
+      <Grid item md={8} lg={10} xxl={11}>
+        <Stack>
+          <h1 id="tableLabel">Itinerary</h1>
+          <p>List itinerary details and activities.</p>
+          
+          <Calendar activities={activities} days={days}/>
+        </Stack>
+      </Grid>
+      
+    </Grid>
   );
 }
-

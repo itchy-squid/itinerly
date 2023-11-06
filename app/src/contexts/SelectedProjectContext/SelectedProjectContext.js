@@ -16,20 +16,18 @@ export const SelectedProjectProvider = ({ children }) => {
   const [locations, setLocations] = useState([]);
 
   useEffect(() => {
-    const fetchData = async (userId, id) => {
-
-      if (userId && id) {
+    const fetchData = async (id) => {
+      try {
         // Fetch the details for the selected project and set them
         const details = await fetchProjectDetails(id)
-        
+                
         setProject(details.project);
-        // setActivities(details.activities);
+        setActivities(details.activities);
         // setExpenses(details.expenses);
         // setLocations(details.locations);
         setLoading(false);
       }
-      else
-      {
+      catch (err) {
         setProject(null);
         setActivities([]);
         setExpenses([]);
@@ -39,20 +37,19 @@ export const SelectedProjectProvider = ({ children }) => {
       }
     }
 
-    setLoading(true);
-    fetchData(user?.uid, selectedProjectId);
-  }, [user, selectedProjectId]);
+    if(selectedProjectId) fetchData(selectedProjectId);
+  }, [selectedProjectId]);
 
   // Assuming an API call like:
   const fetchProjectDetails = async (projectId) => {
     const project = await projectService.fetchProject(projectId);
-    // const activities = await activitiesService.fetchActivities(projectId);
+    const activities = await activitiesService.fetchActivities(projectId);
     // const expenses = await expensesService.fetchExpenses(projectId);
     // const locations = await locationsService.fetchLocations(projectId);
 
     return {
       project: project,
-      // activities: activities,
+      activities: activities,
       // expenses: expenses,
       // locations: locations
     };

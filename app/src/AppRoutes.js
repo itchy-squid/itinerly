@@ -12,14 +12,11 @@ const appRoutes = [
     path: "",
     children: [
       {
-        name: 'Home',
         index: true,
         element: <LoginView/>,
 
       },
       {
-        name: 'Login',
-        index: true,
         path: 'login',
         element: <LoginView/>
       },
@@ -29,7 +26,6 @@ const appRoutes = [
         children:
         [
           {
-            name: 'Projects',
             index: true,
             element: <ProjectsView/>
           },

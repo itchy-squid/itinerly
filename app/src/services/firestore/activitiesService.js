@@ -1,8 +1,8 @@
-import { firestore } from '../../config/firebase';
+import { db } from '../../config/firebase';
 import { addDoc, collection, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
 
 const collectionName = "activities";
-const collectionRef = collection(firestore, "activities");
+const collectionRef = collection(db, "activities");
 
 const propertyNames = {
   projectId: 'projectId'
@@ -14,10 +14,10 @@ const queryOperators = {
 
 export const activitiesService = {
   
-  async fetchActivities(itineraryId) {
+  async fetchActivities(projectId) {
     const querySnapshot = await getDocs(
       query(collectionRef,
-        where(propertyNames.projectId, queryOperators.equals, itineraryId))
+        where(propertyNames.projectId, queryOperators.equals, projectId))
     );
 
     const docs = querySnapshot.docs.map(
@@ -57,7 +57,7 @@ export const activitiesService = {
 
   // Add a new post
   async updateActivity(activity) {
-    const docRef = doc(firestore, collectionName, activity.id);
+    const docRef = doc(db, collectionName, activity.id);
     await updateDoc(docRef, activity);
   }
 };

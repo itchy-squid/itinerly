@@ -1,49 +1,60 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { activitiesService, projectService, expensesService, locationsService } from '../../services/firestore';
+import { activitiesService, projectService, expensesService } from '../../services/firestore';
+import { useUser } from '../UserContext';
 
 const SelectedProjectContext = createContext();
 
 export const SelectedProjectProvider = ({ children }) => {
+  const {user} = useUser();
   const [selectedProjectId, setSelectedProjectId] = useState(null);
 
   const [loading, setLoading] = useState(true);
-  const [error] = useState(null);
+  const [error, setError] = useState(null);
   const [project, setProject] = useState(null);
   const [_activities, setActivities] = useState([]);
   const [_expenses, setExpenses] = useState([]);
   const [locations, setLocations] = useState([]);
 
   useEffect(() => {
-    const fetchData = async (id) => {
+    const fetchData = async (userId, id) => {
 
-      if (id) {
+      if (userId && id) {
         // Fetch the details for the selected project and set them
         const details = await fetchProjectDetails(id)
         
         setProject(details.project);
-        setActivities(details.activities);
-        setExpenses(details.expenses);
-        setLocations(details.locations);
+        // setActivities(details.activities);
+        // setExpenses(details.expenses);
+        // setLocations(details.locations);
         setLoading(false);
+      }
+      else
+      {
+        setProject(null);
+        setActivities([]);
+        setExpenses([]);
+        setLocations([]);
+        setLoading(false);
+        setError('User or project not found');
       }
     }
 
     setLoading(true);
-    fetchData(selectedProjectId);
-  }, [selectedProjectId]);
+    fetchData(user?.uid, selectedProjectId);
+  }, [user, selectedProjectId]);
 
   // Assuming an API call like:
   const fetchProjectDetails = async (projectId) => {
-    const project = (await projectService.fetchProjects()).filter(p => p.id === projectId)[0];
-    const activities = await activitiesService.fetchActivities(projectId);
-    const expenses = await expensesService.fetchExpenses(projectId);
-    const locations = await locationsService.fetchLocations(projectId);
+    const project = await projectService.fetchProject(projectId);
+    // const activities = await activitiesService.fetchActivities(projectId);
+    // const expenses = await expensesService.fetchExpenses(projectId);
+    // const locations = await locationsService.fetchLocations(projectId);
 
     return {
       project: project,
-      activities: activities,
-      expenses: expenses,
-      locations: locations
+      // activities: activities,
+      // expenses: expenses,
+      // locations: locations
     };
   };
 

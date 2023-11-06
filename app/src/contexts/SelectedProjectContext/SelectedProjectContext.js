@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { activitiesService, projectService, expensesService } from '../../services/firestore';
+import { activitiesService, projectService, expensesService, locationsService } from '../../services/firestore';
 
 const SelectedProjectContext = createContext();
 
@@ -21,8 +21,8 @@ export const SelectedProjectProvider = ({ children }) => {
                 
         setProject(details.project);
         setActivities(details.activities);
-        // setExpenses(details.expenses);
-        // setLocations(details.locations);
+        setExpenses(details.expenses);
+        setLocations(details.locations);
         setLoading(false);
       }
       catch (err) {
@@ -43,13 +43,13 @@ export const SelectedProjectProvider = ({ children }) => {
     const project = await projectService.fetchProject(projectId);
     const activities = await activitiesService.fetchActivities(projectId);
     const expenses = await expensesService.fetchExpenses(projectId);
-    // const locations = await locationsService.fetchLocations(projectId);
+    const locations = await locationsService.fetchLocations(projectId);
 
     return {
       project: project,
       activities: activities,
-      // expenses: expenses,
-      // locations: locations
+      expenses: expenses,
+      locations: locations
     };
   };
 

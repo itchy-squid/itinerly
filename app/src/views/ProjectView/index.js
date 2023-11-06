@@ -1,1 +1,2 @@
-export * from './ProjectView'
+export * from './Project'
+export * from './ProjectOutlet'

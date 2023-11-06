@@ -1,52 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Box, Button, Container, Dialog, DialogTitle, 
-  Fab, LinearProgress, Paper, Stack, TextField, Typography } from '@mui/material';
+  Fab, Paper, Stack, TextField, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useSelectedProject } from '../../contexts/SelectedProjectContext';
 import { toast } from 'react-toastify';
-import { useParams } from 'react-router-dom';
-import { Activity } from './Activity'
 import { clone } from 'lodash';
-import { NotFound } from '../../components/NotFound/NotFound';
-
-export const ProjectView = () => {
-  const { setSelectedProjectId } = useSelectedProject();
-  const { projectId } = useParams();
-
-  useEffect(() => {
-    setSelectedProjectId(projectId);
-  }, [projectId, setSelectedProjectId])
-
-  return (
-    <Project/>
-  );
-}
 
 const emptyActivity = {
   name: ''
 }
 
 export const Project = () => {
-  const { project, activities, expenses, loading, error, addActivities } = useSelectedProject();
+  const { project, addActivities } = useSelectedProject();
   const [ isAdding, setIsAdding ] = useState(false);
   const [ newActivities, setNewActivities ] = useState([]);
   const [ deletingActivity, setDeletingActivity ] = useState(null);
-
-  if(loading) {
-    return <LinearProgress/>
-  }
-
-  if(error){
-    toast.error(error);
-    return <></>
-  }
-
-  if(!project){
-    return <NotFound/>;
-  }
 
   const handleAddClick = () => {
     if(!isAdding) setIsAdding(true);
@@ -92,9 +63,9 @@ export const Project = () => {
     }
   }
 
-  const handleIsDeleting = (activity) => {
-    setDeletingActivity(activity);
-  }
+  // const handleIsDeleting = (activity) => {
+  //   setDeletingActivity(activity);
+  // }
 
   const handleConfirmDeleteClick = () => {
     handleCancelDeleteClick();

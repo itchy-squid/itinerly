@@ -2,7 +2,7 @@ import { Outlet } from "react-router-dom";
 import Root from "./Root";
 import { ItineraryView } from './views/ItineraryView';
 import { ProjectsView } from './views/ProjectsView';
-import { ProjectView } from './views/ProjectView';
+import { Project, ProjectOutlet } from './views/ProjectView';
 import { NotFound } from "./components/NotFound/NotFound";
 import { LoginView } from "./views/LoginView/LoginView";
 
@@ -35,11 +35,11 @@ const appRoutes = [
           },
           {
             path: ':projectId',
-            element: <Outlet/>,
+            element: <ProjectOutlet/>,
             children: 
             [
               {
-                element: <ProjectView/>,
+                element: <Project/>,
                 index: true,
               },
               {

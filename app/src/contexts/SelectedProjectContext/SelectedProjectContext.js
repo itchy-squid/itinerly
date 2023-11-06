@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { activitiesService, projectService, expensesService, locationsService } from '../../services/firestore';
+import { activitiesService, projectService, expensesService } from '../../services/firestore';
 import { useUser } from '../UserContext';
 
 const SelectedProjectContext = createContext();

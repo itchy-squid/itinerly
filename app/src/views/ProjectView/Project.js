@@ -8,13 +8,14 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useSelectedProject } from '../../contexts/SelectedProjectContext';
 import { toast } from 'react-toastify';
 import { clone } from 'lodash';
+import { Activity } from './Activity';
 
 const emptyActivity = {
   name: ''
 }
 
 export const Project = () => {
-  const { project, addActivities } = useSelectedProject();
+  const { project, activities, expenses, addActivities } = useSelectedProject();
   const [ isAdding, setIsAdding ] = useState(false);
   const [ newActivities, setNewActivities ] = useState([]);
   const [ deletingActivity, setDeletingActivity ] = useState(null);
@@ -54,7 +55,6 @@ export const Project = () => {
         setNewActivities(prev => [...prev, {name: value}]);
       }
       else {
-            
         // update case
         const updatedNewActivities = clone(newActivities);
         updatedNewActivities[idx] = {name: value};
@@ -63,9 +63,9 @@ export const Project = () => {
     }
   }
 
-  // const handleIsDeleting = (activity) => {
-  //   setDeletingActivity(activity);
-  // }
+  const handleIsDeleting = (activity) => {
+    setDeletingActivity(activity);
+  }
 
   const handleConfirmDeleteClick = () => {
     handleCancelDeleteClick();
@@ -83,7 +83,7 @@ export const Project = () => {
         <Typography variant="body1" gutterBottom>
           {project.description}
         </Typography>
-{/* 
+
         {activities.map((activity, index) => (
           <Activity 
             key={index} 
@@ -92,7 +92,7 @@ export const Project = () => {
             initialExpenses={expenses.filter(e => e.activityId === activity.id)}
             onIsDeleting={handleIsDeleting}
             />
-        ))} */}
+        ))}
 
         {isAdding && [...newActivities, emptyActivity].map((a, idx) => (
           <Paper elevation={1} key={idx}>

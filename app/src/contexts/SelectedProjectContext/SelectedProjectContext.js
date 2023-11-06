@@ -1,11 +1,9 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { activitiesService, projectService, expensesService } from '../../services/firestore';
-import { useUser } from '../UserContext';
 
 const SelectedProjectContext = createContext();
 
 export const SelectedProjectProvider = ({ children }) => {
-  const {user} = useUser();
   const [selectedProjectId, setSelectedProjectId] = useState(null);
 
   const [loading, setLoading] = useState(true);
@@ -44,7 +42,7 @@ export const SelectedProjectProvider = ({ children }) => {
   const fetchProjectDetails = async (projectId) => {
     const project = await projectService.fetchProject(projectId);
     const activities = await activitiesService.fetchActivities(projectId);
-    // const expenses = await expensesService.fetchExpenses(projectId);
+    const expenses = await expensesService.fetchExpenses(projectId);
     // const locations = await locationsService.fetchLocations(projectId);
 
     return {

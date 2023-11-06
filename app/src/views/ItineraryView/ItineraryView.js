@@ -3,7 +3,8 @@ import { useSelectedProject } from '../../contexts/SelectedProjectContext';
 import moment from 'moment';
 import { Calendar } from './Calendar';
 import { TIME_UNITS } from '../../constants';
-import { Grid, List, ListItem, ListItemButton, ListItemText, Stack, Typography } from '@mui/material';
+import { Grid, Stack } from '@mui/material';
+import { Activities } from './Activities';
 
 export const ItineraryView = () => {
   const { activities } = useSelectedProject();
@@ -11,40 +12,26 @@ export const ItineraryView = () => {
   
   const days = activities.map(ev => moment(ev.start).startOf(TIME_UNITS.DAY).toDate());
 
-  const handleListItemClick = (index) => {
-    return () => { setSelectedIndex(index); }
-  };
-
   return (
-    <Grid container>
-      <Grid item md={4} lg={2} xxl={1}>
-        <Stack>
-          <Typography h4>Activities</Typography>
+    <React.Fragment>
+      <Grid container>
+        <Grid item md={4} lg={2} xxl={1}>
+          <Stack pr={1}>
 
-          <List>
-            {activities && activities.map((a, idx) => (
-              <ListItemButton 
-                key={idx}
-                selected={selectedIndex === idx }
-                onClick={handleListItemClick(idx)}
-              >
-                <ListItemText 
-                  primary={a.name}/>
-              </ListItemButton>
-            ))}
-          </List>
-        </Stack>
-      </Grid>
+            <Activities activities={activities} selectedIndex={selectedIndex} onIndexSelected={setSelectedIndex}/>
+          </Stack>
+        </Grid>
 
-      <Grid item md={8} lg={10} xxl={11}>
-        <Stack>
-          <h1 id="tableLabel">Itinerary</h1>
-          <p>List itinerary details and activities.</p>
-          
-          <Calendar activities={activities} days={days}/>
-        </Stack>
+        <Grid item md={8} lg={10} xxl={11}>
+          <Stack>
+            <h1 id="tableLabel">Itinerary</h1>
+            <p>List itinerary details and activities.</p>
+            
+            <Calendar activities={activities} days={days}/>
+          </Stack>
+        </Grid>
+        
       </Grid>
-      
-    </Grid>
+    </React.Fragment>
   );
 }

@@ -1,45 +1,36 @@
-import React, { useEffect, useState } from 'react';
-import { activitiesService } from '../../services/firestore';
-import { toast } from 'react-toastify';
-import { CalendarView } from '../CalendarView';
+import React, { useState } from 'react';
+import { useSelectedProject } from '../../contexts/SelectedProjectContext';
+import moment from 'moment';
+import { Calendar } from './Calendar';
+import { TIME_UNITS } from '../../constants';
+import { Divider, Grid, Stack, Typography } from '@mui/material';
+import { Activities } from './Activities';
 
 export const ItineraryView = () => {
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const docs = await activitiesService.getActivities('1');
-        setData(docs);
-      }
-      catch (err) {
-        toast.error(err);
-      }
-      finally {
-        setLoading(false);
-      }
-    }
-
-    fetchData();
-  }, []);
-
-  const renderForecastsTable = (events) => {
-    return (
-      <CalendarView events={events}/>
-    );
-  }
-
-  let contents = loading
-    ? <p><em>Loading...</em></p>
-    : renderForecastsTable(data);
+  const { activities } = useSelectedProject();
+  const [selectedIndex, setSelectedIndex] = useState(null);
+  
+  const days = activities.map(ev => moment(ev.start).startOf(TIME_UNITS.DAY).toDate());
 
   return (
-    <div>
-      <h1 id="tableLabel">Itinerary</h1>
-      <p>List itinerary details and activities.</p>
-      {contents}
-    </div>
+    <React.Fragment>
+      <Grid container>
+        <Grid item md={4} lg={2} xxl={1}>
+          <Stack pr={1}>
+            <Typography variant='h3'>Itinerary</Typography>
+            <Typography variant='body'>List itinerary details and activities.</Typography>
+            <Divider/>
+            <Activities activities={activities} selectedIndex={selectedIndex} onIndexSelected={setSelectedIndex}/>
+          </Stack>
+        </Grid>
+
+        <Grid item md={8} lg={10} xxl={11}>
+          <Stack>            
+            <Calendar activities={activities} days={days}/>
+          </Stack>
+        </Grid>
+        
+      </Grid>
+    </React.Fragment>
   );
 }
-

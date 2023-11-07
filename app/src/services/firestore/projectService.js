@@ -37,20 +37,18 @@ export const projectService = {
 
   async fetchProject(projectId)
   {
-    console.log(projectId);
     try{
-    const docRef = doc(db, "projects", projectId);
-    const docSnap = await getDoc(docRef);
-    const data = docSnap.data();
+      const docRef = doc(db, "projects", projectId);
+      const docSnap = await getDoc(docRef);
+      const data = docSnap.data();
 
-    console.log(data);
-    return {
+      return {
         ...data,
         id: docSnap.id
       };
     }
-    catch(err){
-      console.log(err);
+    catch(err)
+    {
       throw err;
     }
 

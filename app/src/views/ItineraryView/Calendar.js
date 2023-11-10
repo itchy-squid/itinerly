@@ -4,36 +4,46 @@ import {filter, sortBy} from 'lodash';
 import { TIME_UNITS } from '../../constants';
 import {range} from 'lodash';
 import { CalendarItem } from './CalendarItem';
+import { useEffect, useState } from 'react';
 
 export const Calendar = ({ activities, days }) => {
-    const renderSettings = { 
-      renderStartTime: 0,
-      renderDuration: 24
-    }
+  const [renderSettings, setRenderSettings] = useState({});
 
-    const style = {
-      height: `calc(var(--hour-height) * ${renderSettings.duration})`,
-    };
+  useEffect(() => {
+    const rootStyle = getComputedStyle(document.documentElement);
+    const pxHeight = parseInt(rootStyle.getPropertyValue('--hour-height'));
 
-    return (
-      <div className={styles.calendar} style={style}>
-        <div>
-            {range(renderSettings.renderStartTime, renderSettings.renderStartTime + renderSettings.renderDuration).map((hour, idx) => (
-                <div key={`segment-${hour}`} className={styles.hour}>
-                    <span className={styles.hourlabel}>{hour}</span>
-                </div>
-            ))}
-        </div>
-        <div className={styles.daysContainer}>
-            <div className={styles.daysPrelude}/>
-            {days.map((date, index) => (
-                <Day activities={activities} 
-                  date={date} key={`day-${index}`} 
-                  renderSettings={renderSettings} />
-            ))}
-        </div>
+    setRenderSettings(
+      { 
+        hourHeight: pxHeight,
+        renderStartTime: 0,
+        renderDuration: 24
+      })
+  }, []);
+
+  const style = {
+    height: `calc(var(--hour-height) * ${renderSettings.duration})`,
+  };
+
+  return (
+    <div className={styles.calendar} style={style}>
+      <div>
+          {range(renderSettings.renderStartTime, renderSettings.renderStartTime + renderSettings.renderDuration).map((hour, idx) => (
+              <div key={`segment-${hour}`} className={styles.hour}>
+                  <span className={styles.hourlabel}>{hour}</span>
+              </div>
+          ))}
       </div>
-    );
+      <div className={styles.daysContainer}>
+          <div className={styles.daysPrelude}/>
+          {days.map((date, index) => (
+              <Day activities={activities} 
+                date={date} key={`day-${index}`} 
+                renderSettings={renderSettings} />
+          ))}
+      </div>
+    </div>
+  );
 }
 
 const Day = ({ date, activities, renderSettings }) => {

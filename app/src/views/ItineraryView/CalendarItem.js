@@ -6,29 +6,21 @@ import { useDispatch } from 'react-redux';
 export const CalendarItem = ({activity, name, duration, start, renderSettings}) => {
   const dispatch = useDispatch();
   // const {updateActivity} = useSelectedProject();
-  const [hourHeight, setHourHeight] = useState();
   const [height, setHeight] = useState();
   const [top, setTop] = useState();
 
   useEffect(() => {
-    const rootStyle = getComputedStyle(document.documentElement);
-    const pxHeight = parseInt(rootStyle.getPropertyValue('--hour-height'));
-
-    setHourHeight(pxHeight);
-  }, []);
-
-  useEffect(() => {
     if(hourHeight) {
-      setHeight(hourHeight * duration);
-      setTop(hourHeight * (start - renderSettings.renderStartTime));
+      setHeight(renderSettings.hourHeight * duration);
+      setTop(renderSettings.hourHeight * (start - renderSettings.renderStartTime));
     }
-  }, [hourHeight, duration, start, renderSettings]);
+  }, [duration, start, renderSettings]);
 
   const startResizing = (mouseDownEvent) => {
 
     const calculateDuration = (mouseMoveEvent) => {
       const newHeight = height + (mouseMoveEvent.clientY - startY);
-      const newDuration = newHeight / hourHeight;
+      const newDuration = newHeight / renderSettings.hourHeight;
 
       let sanitizedDuration = Math.round(newDuration / 0.25) * 0.25;
       sanitizedDuration = Math.max(0.25, sanitizedDuration);

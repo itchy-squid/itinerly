@@ -1,5 +1,5 @@
 import React from 'react';
-import { List, ListItem, ListItemButton, ListItemText, ListSubheader } from '@mui/material';
+import { List, ListItemButton, ListItemText, ListSubheader } from '@mui/material';
 
 export const ActivitiesList = ({activities, selectedIndex, onIndexSelected}) => {
   const handleListItemClick = (index) => {

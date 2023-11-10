@@ -46,5 +46,12 @@ export const fetchAsync = createAsyncThunk(
   }
 );
 
+export const updateDurationAsync = createAsyncThunk(
+  "activities/updateDurationAsync",
+  async (activity) => {
+    console.log("duration: " + activity.duration);
+  }
+);
+
 export const selectActivities = (state) => state.activities.activities;
 export const activitiesReducer = activitiesSlice.reducer;

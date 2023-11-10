@@ -3,9 +3,7 @@ import moment from 'moment';
 import {filter, sortBy} from 'lodash';
 import { TIME_UNITS } from '../../constants';
 import {range} from 'lodash';
-import { useEffect, useState } from 'react';
-// import { useSelectedProject } from '../../contexts/SelectedProjectContext';
-
+import { CalendarItem } from './CalendarItem';
 
 export const Calendar = ({ activities, days }) => {
     const renderSettings = { 
@@ -47,91 +45,17 @@ const Day = ({ date, activities, renderSettings }) => {
 
     return (
         <div className={styles.day}>
-            {todaysEvents.map(({name, duration, start}, idx) => (
+            {todaysEvents.map((activity, idx) => (
                 <CalendarItem 
                   key={idx} 
-                  name={name} 
-                  duration={duration} 
-                  start={moment(start).hour()} 
+                  activity={activity}
+                  name={activity.name} 
+                  duration={activity.duration} 
+                  start={moment(activity.start).hour()} 
                   renderSettings={renderSettings}/>
             ))}
         </div>
     );
-}
-
-const CalendarItem = ({name, duration, start, renderSettings}) => {
-  // const {updateActivity} = useSelectedProject();
-  const [hourHeight, setHourHeight] = useState();
-  const [height, setHeight] = useState();
-  const [top, setTop] = useState();
-
-  useEffect(() => {
-    const rootStyle = getComputedStyle(document.documentElement);
-    const pxHeight = parseInt(rootStyle.getPropertyValue('--hour-height'));
-
-    setHourHeight(pxHeight);
-  }, []);
-
-  useEffect(() => {
-    if(hourHeight) {
-      setHeight(hourHeight * duration);
-      setTop(hourHeight * (start - renderSettings.renderStartTime));
-    }
-  }, [hourHeight, duration, start, renderSettings]);
-
-  const startResizing = (mouseDownEvent) => {
-    mouseDownEvent.preventDefault();
-
-    const startY = mouseDownEvent.clientY;
-
-    const doResize = (mouseMoveEvent) => {
-      const newHeight = height + (mouseMoveEvent.clientY - startY);
-      const newDuration = newHeight / hourHeight;
-
-      let sanitizedDuration = Math.round(newDuration / 0.25) * 0.25;
-      sanitizedDuration = Math.max(0.25, sanitizedDuration);
-      sanitizedDuration = Math.min(
-        sanitizedDuration, 
-        renderSettings.renderStartTime + renderSettings.renderDuration - start);
-      
-      setHeight(hourHeight * sanitizedDuration);
-    };
-
-    const stopResizing = () => {
-        window.removeEventListener('mousemove', doResize);
-        window.removeEventListener('mouseup', stopResizing);
-        // onDurationUpdate(height);
-    };
-
-    window.addEventListener('mousemove', doResize);
-    window.addEventListener('mouseup', stopResizing);
-  };
-
-  return (
-    <div className={styles.calendarItem}
-      style={{
-        position: 'relative',
-        height: `${height}px`,
-        top: `${top}px`
-      }}>
-
-      <span className={styles.calendarItemLabel}>
-          {name}
-      </span>
-      
-      {/* Resizing Handle */}
-      <div
-          style={{ 
-            position: 'absolute', 
-            bottom: 0, 
-            left: '4px', 
-            right: '4px', 
-            height: '10px', 
-            cursor: 'ns-resize' }}
-          onMouseDown={startResizing}
-      />
-    </div>
-  );
 }
 
 export default Calendar;

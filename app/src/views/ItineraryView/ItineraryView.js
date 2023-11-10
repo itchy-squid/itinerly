@@ -11,7 +11,6 @@ export const ItineraryView = () => {
   const activities = useSelector(selectActivities);
   const [selectedIndex, setSelectedIndex] = useState(null);
   
-  console.log(activities);
   const days = activities.map(ev => moment(ev.start).startOf(TIME_UNITS.DAY).toDate());
 
   return (

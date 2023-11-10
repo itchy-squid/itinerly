@@ -30,11 +30,7 @@ export const Calendar = () => {
   useEffect(() => {
     const moments = activities
       .filter(a => a.start && a.duration > 0)
-      .map(a => {
-        const start = moment(a.start);
-        const end = start.add(a.duration);
-        return [start, end];
-      })
+      .map(a => [moment(a.start), moment(a.start).add({hours: a.duration})])
       .reduce((acc, curr) => acc.concat(curr), []);
 
     const localFirstDay = moment.min(moments).startOf('day');

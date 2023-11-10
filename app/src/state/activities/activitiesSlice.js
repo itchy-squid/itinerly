@@ -22,7 +22,6 @@ const activitiesSlice = createSlice({
       .addCase(
         fetchAsync.fulfilled, 
         (state, action) => {
-          console.log(action.payload);
           state.activities = action.payload;
           state.loading = false;
         })

@@ -2,24 +2,24 @@ import styles from './Calendar.module.css';
 import { useEffect, useState } from 'react';
 import { updateActivityAsync } from '../../state/activities';
 import { useDispatch } from 'react-redux';
+import moment from 'moment';
 
-export const CalendarItem = ({activity, name, duration, start, renderSettings}) => {
+export const CalendarItem = ({activity, start, renderSettings}) => {
   const dispatch = useDispatch();
-  // const {updateActivity} = useSelectedProject();
   const [height, setHeight] = useState();
   const [top, setTop] = useState();
-
+  
   useEffect(() => {
-    if(hourHeight) {
-      setHeight(renderSettings.hourHeight * duration);
-      setTop(renderSettings.hourHeight * (start - renderSettings.renderStartTime));
+    if(renderSettings.hourHeight) {
+      setHeight(renderSettings.hourHeight * activity.duration);
+      setTop(renderSettings.hourHeight * (moment(activity.start).hour() - renderSettings.renderStartTime));
     }
-  }, [duration, start, renderSettings]);
+  }, [activity, renderSettings]);
 
   const startResizing = (mouseDownEvent) => {
 
-    const calculateDuration = (mouseMoveEvent) => {
-      const newHeight = height + (mouseMoveEvent.clientY - startY);
+    const calculateDuration = (mouseEvent) => {
+      const newHeight = height + (mouseEvent.clientY - startY);
       const newDuration = newHeight / renderSettings.hourHeight;
 
       let sanitizedDuration = Math.round(newDuration / 0.25) * 0.25;
@@ -32,14 +32,14 @@ export const CalendarItem = ({activity, name, duration, start, renderSettings}) 
     }
 
     const doResize = (mouseMoveEvent) => {
-      setHeight(hourHeight * calculateDuration(mouseMoveEvent));
+      setHeight(renderSettings.hourHeight * calculateDuration(mouseMoveEvent));
     };
 
-    const stopResizing = (mouseMoveEvent) => {
+    const stopResizing = (mouseEvent) => {
         window.removeEventListener('mousemove', doResize);
         window.removeEventListener('mouseup', stopResizing);
         document.body.style.cursor = 'auto';
-        dispatch(updateActivityAsync({...activity, duration: calculateDuration(mouseMoveEvent)}));
+        dispatch(updateActivityAsync({...activity, duration: calculateDuration(mouseEvent)}));
     };
 
     mouseDownEvent.preventDefault();
@@ -51,28 +51,21 @@ export const CalendarItem = ({activity, name, duration, start, renderSettings}) 
   };
 
   return (
-    <div className={styles.calendarItem}
-      style={{
-        position: 'relative',
-        height: `${height}px`,
-        top: `${top}px`
-      }}>
+    <div className={styles.calenderItemContainer}>
+      <div className={styles.calendarItem}
+        style={{
+          height: `${height}px`,
+          top: `${top}px`,
+        }}>
 
-      <span className={styles.calendarItemLabel}>
-          {name}
-      </span>
-      
-      {/* Resizing Handle */}
-      <div
-          style={{ 
-            position: 'absolute', 
-            bottom: 0, 
-            left: '4px', 
-            right: '4px', 
-            height: '10px', 
-            cursor: 'ns-resize' }}
-          onMouseDown={startResizing}
-      />
+        <span className={styles.calendarItemLabel}>
+            {activity.name}
+        </span>
+        
+        <div className={styles.calendarItemResizeHandle}
+            onMouseDown={startResizing}
+        />
+      </div>
     </div>
   );
 }

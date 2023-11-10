@@ -37,7 +37,7 @@ export const Calendar = ({ activities, days }) => {
       <div className={styles.daysContainer}>
           <div className={styles.daysPrelude}/>
           {days.map((date, index) => (
-              <Day activities={activities} 
+              <CalendarDay activities={activities} 
                 date={date} key={`day-${index}`} 
                 renderSettings={renderSettings} />
           ))}
@@ -46,7 +46,7 @@ export const Calendar = ({ activities, days }) => {
   );
 }
 
-const Day = ({ date, activities, renderSettings }) => {
+const CalendarDay = ({ date, activities, renderSettings }) => {
     const today = moment(date);
 
     const todaysEvents = sortBy(

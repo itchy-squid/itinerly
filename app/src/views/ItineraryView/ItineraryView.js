@@ -3,7 +3,7 @@ import moment from 'moment';
 import { Calendar } from './Calendar';
 import { TIME_UNITS } from '../../constants';
 import { Divider, Grid, Stack, Typography } from '@mui/material';
-import { Activities } from './Activities';
+import { ActivitiesList } from './ActivitiesList';
 import { selectActivities } from '../../state/activities';
 import { useSelector } from 'react-redux';
 
@@ -20,8 +20,13 @@ export const ItineraryView = () => {
         <Stack pr={1}>
           <Typography variant='h3'>Itinerary</Typography>
           <Typography variant='body'>List itinerary details and activities.</Typography>
-          <Divider/>
-          <Activities activities={activities} selectedIndex={selectedIndex} onIndexSelected={setSelectedIndex}/>
+          
+          <Divider sx={{my: 2}}/>
+
+          <ActivitiesList 
+            activities={activities} 
+            selectedIndex={selectedIndex} 
+            onIndexSelected={setSelectedIndex}/>
         </Stack>
       </Grid>
 

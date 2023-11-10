@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import moment from 'moment';
 import { Calendar } from './Calendar';
-import { TIME_UNITS } from '../../constants';
 import { Divider, Grid, Stack, Typography } from '@mui/material';
 import { ActivitiesList } from './ActivitiesList';
 import { selectActivities } from '../../state/activities';

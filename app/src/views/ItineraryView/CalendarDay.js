@@ -6,21 +6,19 @@ import { CalendarItem } from './CalendarItem';
 import { useEffect, useState } from 'react';
 
 export const CalendarDay = ({ date, activities, renderSettings }) => {
-  const [todaysEvents, setTodaysActivities] = useState([]);
+  const [todaysActivities, setTodaysActivities] = useState([]);
 
   useEffect(() => {
-    const today = date;
-
     setTodaysActivities(
       sortBy(
-        filter(activities, ev => ev.start && moment(ev.start).isSame(today, TIME_UNITS.DAY)),
+        filter(activities, ev => ev.start && moment(ev.start).isSame(date, TIME_UNITS.DAY)),
         ev => ev.start))
 
-  }, [date])
+  }, [date, activities])
 
   return (
     <div className={styles.day}>
-      {todaysEvents.map((activity, idx) => (
+      {todaysActivities.map((activity, idx) => (
         <CalendarItem 
           key={idx} 
           activity={activity}

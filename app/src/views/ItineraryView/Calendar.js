@@ -1,12 +1,11 @@
 import styles from './Calendar.module.css';
 import moment from 'moment';
-import {filter, sortBy, times} from 'lodash';
-import { TIME_UNITS } from '../../constants';
+import { times } from 'lodash';
 import {range} from 'lodash';
-import { CalendarItem } from './CalendarItem';
 import { useEffect, useState } from 'react';
 import { selectActivities } from '../../state/activities';
 import { useSelector } from 'react-redux';
+import { CalendarDay } from './CalendarDay';
 
 export const Calendar = () => {
   const activities = useSelector(selectActivities);
@@ -59,39 +58,11 @@ export const Calendar = () => {
       <div className={styles.daysContainer}>
           <div className={styles.daysPrelude}/>
           {days.map((date, index) => (
-              <CalendarDay activities={activities} 
-                date={date} key={`day-${index}`} 
-                renderSettings={renderSettings} />
+            <CalendarDay activities={activities} 
+              date={date} key={`day-${index}`} 
+              renderSettings={renderSettings} />
           ))}
       </div>
-    </div>
-  );
-}
-
-const CalendarDay = ({ date, activities, renderSettings }) => {
-  const [todaysEvents, setTodaysActivities] = useState([]);
-
-  useEffect(() => {
-    const today = date;
-
-    setTodaysActivities(
-      sortBy(
-        filter(activities, ev => ev.start && moment(ev.start).isSame(today, TIME_UNITS.DAY)),
-        ev => ev.start))
-
-  }, [date])
-
-  return (
-    <div className={styles.day}>
-      {todaysEvents.map((activity, idx) => (
-        <CalendarItem 
-          key={idx} 
-          activity={activity}
-          name={activity.name} 
-          duration={activity.duration} 
-          start={moment(activity.start).hour()} 
-          renderSettings={renderSettings}/>
-      ))}
     </div>
   );
 }

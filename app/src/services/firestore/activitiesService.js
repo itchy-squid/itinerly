@@ -23,21 +23,17 @@ export const activitiesService = {
     const docs = querySnapshot.docs.map(
       (doc) => {
         const data = doc.data();
-
         const model = {
-          ...data,
-          id: doc.id
+          ...data, 
+          start: data.start?.toDate().toISOString(),
+          id: doc.id 
         };
-
-        if(data.start) {
-          model.start = data.start.toDate();
-        }
 
         return model;
       });
 
-      return docs;
-    },
+    return docs;
+  },
 
   async addActivities(activities) {
     
@@ -58,6 +54,13 @@ export const activitiesService = {
   // Add a new post
   async updateActivity(activity) {
     const docRef = doc(db, collectionName, activity.id);
-    await updateDoc(docRef, activity);
+    await updateDoc(docRef, {
+      name: activity.name,
+      description: activity.description,
+      locationId: activity.locationId,
+      projectId: activity.projectId,
+      start: activity.start ? new Date(activity.start) : undefined,
+      duration: activity.duration
+    });
   }
 };

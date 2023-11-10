@@ -4,6 +4,7 @@ import {filter, sortBy} from 'lodash';
 import { TIME_UNITS } from '../../constants';
 import {range} from 'lodash';
 import { useEffect, useState } from 'react';
+// import { useSelectedProject } from '../../contexts/SelectedProjectContext';
 
 
 export const Calendar = ({ activities, days }) => {
@@ -38,20 +39,15 @@ export const Calendar = ({ activities, days }) => {
 }
 
 const Day = ({ date, activities, renderSettings }) => {
-    // const [ addActivityStart, setAddActivityStart ] = useState(null);
     const today = moment(date);
 
     const todaysEvents = sortBy(
         filter(activities, ev => moment(ev.start).isSame(today, TIME_UNITS.DAY)),
         ev => ev.start);
 
-    // const handleAddClick = (ev) => {
-    //   setAddActivityStart(18);
-    // }
-
     return (
         <div className={styles.day}>
-            {todaysEvents.map(({id, name, duration, start}, idx) => (
+            {todaysEvents.map(({name, duration, start}, idx) => (
                 <CalendarItem 
                   key={idx} 
                   name={name} 
@@ -59,17 +55,12 @@ const Day = ({ date, activities, renderSettings }) => {
                   start={moment(start).hour()} 
                   renderSettings={renderSettings}/>
             ))}
-            {/* {addActivityStart && (
-              <CalendarItem name='(No title)' 
-                duration={1} 
-                start={addActivityStart} 
-                renderSettings={renderSettings}/>
-            )} */}
         </div>
     );
 }
 
 const CalendarItem = ({name, duration, start, renderSettings}) => {
+  // const {updateActivity} = useSelectedProject();
   const [hourHeight, setHourHeight] = useState();
   const [height, setHeight] = useState();
   const [top, setTop] = useState();
@@ -109,6 +100,7 @@ const CalendarItem = ({name, duration, start, renderSettings}) => {
     const stopResizing = () => {
         window.removeEventListener('mousemove', doResize);
         window.removeEventListener('mouseup', stopResizing);
+        // onDurationUpdate(height);
     };
 
     window.addEventListener('mousemove', doResize);

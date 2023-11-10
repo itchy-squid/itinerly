@@ -44,17 +44,17 @@ const Day = ({ date, activities, renderSettings }) => {
         ev => ev.start);
 
     return (
-        <div className={styles.day}>
-            {todaysEvents.map((activity, idx) => (
-                <CalendarItem 
-                  key={idx} 
-                  activity={activity}
-                  name={activity.name} 
-                  duration={activity.duration} 
-                  start={moment(activity.start).hour()} 
-                  renderSettings={renderSettings}/>
-            ))}
-        </div>
+      <div className={styles.day}>
+        {todaysEvents.map((activity, idx) => (
+          <CalendarItem 
+            key={idx} 
+            activity={activity}
+            name={activity.name} 
+            duration={activity.duration} 
+            start={moment(activity.start).hour()} 
+            renderSettings={renderSettings}/>
+        ))}
+      </div>
     );
 }
 

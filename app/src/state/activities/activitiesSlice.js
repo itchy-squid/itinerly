@@ -22,9 +22,22 @@ const activitiesSlice = createSlice({
       .addCase(
         fetchAsync.fulfilled, 
         (state, action) => {
+          console.log(action.payload);
           state.activities = action.payload;
           state.loading = false;
         })
+      .addCase(
+        updateActivityAsync.fulfilled,
+        (state, action) => {      
+          const indexToUpdate = state.activities
+            .findIndex(item => item.id === action.payload.id);
+    
+          // Check if the item exists
+          if (indexToUpdate !== -1) {
+            state.activities[indexToUpdate] = {...action.payload};
+          }
+        }
+      )
   }
 });
 
@@ -33,23 +46,15 @@ export const fetchAsync = createAsyncThunk(
   async (projectId) => {
     var result = await activitiesService.fetchActivities(projectId);
 
-    return result.map(r => 
-      { 
-        return {
-          id: r.id,
-          name: r.name,
-          description: r.description,
-          start: r.start?.toISOString(),
-          duration: r.duration
-        }
-      });
+    return result;
   }
 );
 
-export const updateDurationAsync = createAsyncThunk(
-  "activities/updateDurationAsync",
+export const updateActivityAsync = createAsyncThunk(
+  "activities/updateActivityAsync",
   async (activity) => {
-    console.log("duration: " + activity.duration);
+    await activitiesService.updateActivity(activity);
+    return activity;
   }
 );
 

@@ -1,6 +1,6 @@
 import styles from './Calendar.module.css';
 import { useEffect, useState } from 'react';
-import { updateDurationAsync } from '../../state/activities';
+import { updateActivityAsync } from '../../state/activities';
 import { useDispatch } from 'react-redux';
 
 export const CalendarItem = ({activity, name, duration, start, renderSettings}) => {
@@ -47,7 +47,7 @@ export const CalendarItem = ({activity, name, duration, start, renderSettings}) 
         window.removeEventListener('mousemove', doResize);
         window.removeEventListener('mouseup', stopResizing);
         document.body.style.cursor = 'auto';
-        dispatch(updateDurationAsync({...activity, duration: calculateDuration(mouseMoveEvent)}));
+        dispatch(updateActivityAsync({...activity, duration: calculateDuration(mouseMoveEvent)}));
     };
 
     mouseDownEvent.preventDefault();

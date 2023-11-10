@@ -8,6 +8,7 @@ export const Activities = ({activities, selectedIndex, onIndexSelected}) => {
 
   return (
     <List
+      dense
       subheader={
         <ListSubheader component="div" id="nested-list-subheader">
           Activities

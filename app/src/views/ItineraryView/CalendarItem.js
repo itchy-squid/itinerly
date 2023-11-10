@@ -77,7 +77,8 @@ export const CalendarItem = ({activity, name, duration, start, renderSettings}) 
             bottom: 0, 
             left: '4px', 
             right: '4px', 
-            height: '10px' }}
+            height: '10px', 
+            cursor: 'ns-resize' }}
           onMouseDown={startResizing}
       />
     </div>

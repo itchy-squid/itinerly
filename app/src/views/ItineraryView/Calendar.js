@@ -50,7 +50,7 @@ const CalendarDay = ({ date, activities, renderSettings }) => {
     const today = moment(date);
 
     const todaysEvents = sortBy(
-        filter(activities, ev => moment(ev.start).isSame(today, TIME_UNITS.DAY)),
+        filter(activities, ev => ev.start && moment(ev.start).isSame(today, TIME_UNITS.DAY)),
         ev => ev.start);
 
     return (

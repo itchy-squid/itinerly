@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import moment from 'moment';
 import { Calendar } from './Calendar';
-import { TIME_UNITS } from '../../constants';
 import { Divider, Grid, Stack, Typography } from '@mui/material';
 import { ActivitiesList } from './ActivitiesList';
 import { selectActivities } from '../../state/activities';
@@ -11,8 +9,6 @@ export const ItineraryView = () => {
   const activities = useSelector(selectActivities);
   const [selectedIndex, setSelectedIndex] = useState(null);
   
-  const days = activities.map(ev => moment(ev.start).startOf(TIME_UNITS.DAY).toDate());
-
   return (
     <Grid container>
       <Grid item md={4} lg={2} xxl={1}>
@@ -31,7 +27,7 @@ export const ItineraryView = () => {
 
       <Grid item md={8} lg={10} xxl={11}>
         <Stack>            
-          <Calendar activities={activities} days={days}/>
+          <Calendar/>
         </Stack>
       </Grid>
       

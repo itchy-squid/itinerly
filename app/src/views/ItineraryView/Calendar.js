@@ -1,13 +1,18 @@
 import styles from './Calendar.module.css';
 import moment from 'moment';
-import {filter, sortBy} from 'lodash';
-import { TIME_UNITS } from '../../constants';
+import { times } from 'lodash';
 import {range} from 'lodash';
-import { CalendarItem } from './CalendarItem';
 import { useEffect, useState } from 'react';
+import { selectActivities } from '../../state/activities';
+import { useSelector } from 'react-redux';
+import { CalendarDay } from './CalendarDay';
 
-export const Calendar = ({ activities, days }) => {
+export const Calendar = () => {
+  const activities = useSelector(selectActivities);
   const [renderSettings, setRenderSettings] = useState({});
+  // const [_, setFirstDay] = useState();
+  // const [_, setLastDay] = useState();
+  const [days, setDays] = useState([]);
 
   useEffect(() => {
     const rootStyle = getComputedStyle(document.documentElement);
@@ -20,6 +25,22 @@ export const Calendar = ({ activities, days }) => {
         renderDuration: 24
       })
   }, []);
+
+  useEffect(() => {
+    const moments = activities
+      .filter(a => a.start && a.duration > 0)
+      .map(a => [moment(a.start), moment(a.start).add({hours: a.duration})])
+      .reduce((acc, curr) => acc.concat(curr), []);
+
+    const localFirstDay = moment.min(moments).startOf('day');
+    //const localLastDay = moment.max(moments).day();
+    const nextFiveDays = times(5, nDays => moment(localFirstDay).add({ days: nDays }));
+    
+    // setFirstDay(localFirstDay);
+    // setLastDay(localLastDay);
+    setDays(nextFiveDays);
+
+  }, [activities])
 
   const style = {
     height: `calc(var(--hour-height) * ${renderSettings.duration})`,
@@ -37,35 +58,13 @@ export const Calendar = ({ activities, days }) => {
       <div className={styles.daysContainer}>
           <div className={styles.daysPrelude}/>
           {days.map((date, index) => (
-              <CalendarDay activities={activities} 
-                date={date} key={`day-${index}`} 
-                renderSettings={renderSettings} />
+            <CalendarDay activities={activities} 
+              date={date} key={`day-${index}`} 
+              renderSettings={renderSettings} />
           ))}
       </div>
     </div>
   );
-}
-
-const CalendarDay = ({ date, activities, renderSettings }) => {
-    const today = moment(date);
-
-    const todaysEvents = sortBy(
-        filter(activities, ev => moment(ev.start).isSame(today, TIME_UNITS.DAY)),
-        ev => ev.start);
-
-    return (
-      <div className={styles.day}>
-        {todaysEvents.map((activity, idx) => (
-          <CalendarItem 
-            key={idx} 
-            activity={activity}
-            name={activity.name} 
-            duration={activity.duration} 
-            start={moment(activity.start).hour()} 
-            renderSettings={renderSettings}/>
-        ))}
-      </div>
-    );
 }
 
 export default Calendar;

@@ -4,8 +4,8 @@ import { Outlet, useParams } from 'react-router-dom';
 import { LinearProgress } from '@mui/material';
 import { toast } from 'react-toastify';
 import { NotFound } from '../../components/NotFound/NotFound';
-import { fetchAsync, selectActivities } from '../../state/activities';
-import { useDispatch, useSelector } from 'react-redux';
+import { fetchAsync } from '../../state/activities';
+import { useDispatch } from 'react-redux';
 
 export const ProjectOutlet = () => {
   const { error, loading, project, setSelectedProjectId } = useSelectedProject();
@@ -15,7 +15,7 @@ export const ProjectOutlet = () => {
   useEffect(() => {
     setSelectedProjectId(projectId);
     dispatch(fetchAsync(projectId));
-  }, [projectId, setSelectedProjectId])
+  }, [projectId, setSelectedProjectId, dispatch])
 
   if(loading) {
     return <LinearProgress/>

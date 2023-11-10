@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { useSelectedProject } from '../../contexts/SelectedProjectContext';
+import React, { useState } from 'react';
 import moment from 'moment';
 import { Calendar } from './Calendar';
 import { TIME_UNITS } from '../../constants';

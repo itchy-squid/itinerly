@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { updateActivityAsync } from '../../state/activities';
 import { useDispatch } from 'react-redux';
 import moment from 'moment';
-import { render } from 'react-dom';
 
 export const CalendarItem = ({activity, renderSettings}) => {
   const dispatch = useDispatch();
@@ -18,6 +17,8 @@ export const CalendarItem = ({activity, renderSettings}) => {
   }, [activity, renderSettings]);
 
   const startResizing = (mouseDownEvent) => {
+    const startY = mouseDownEvent.clientY;
+
     const calculateDuration = (mouseEvent) => {
       const newHeight = height + (mouseEvent.clientY - startY);
       const newDuration = newHeight / renderSettings.hourHeight;
@@ -26,7 +27,7 @@ export const CalendarItem = ({activity, renderSettings}) => {
       sanitizedDuration = Math.max(0.25, sanitizedDuration);
       sanitizedDuration = Math.min(
         sanitizedDuration, 
-        renderSettings.renderStartTime + renderSettings.renderDuration - activity.start);
+        renderSettings.renderStartTime + renderSettings.renderDuration - moment(activity.start).hour());
       
         return sanitizedDuration
     }
@@ -42,10 +43,11 @@ export const CalendarItem = ({activity, renderSettings}) => {
         dispatch(updateActivityAsync({...activity, duration: calculateDuration(mouseEvent)}));
     };
 
+    console.log('resizing...');
     mouseDownEvent.preventDefault();
+    mouseDownEvent.stopPropagation();
     document.body.style.cursor = "ns-resize";
 
-    const startY = mouseDownEvent.clientY;
     window.addEventListener('mousemove', doResize);
     window.addEventListener('mouseup', stopResizing);
   };
@@ -74,7 +76,9 @@ export const CalendarItem = ({activity, renderSettings}) => {
           {...activity, start: moment(activity.start).set({hour: calculateStartHour(mouseEvent)}).toISOString()}));
     };
 
+    console.log('dragging...');
     mouseDownEvent.preventDefault();
+    mouseDownEvent.stopPropagation();
     document.body.style.cursor = 'move';
     console.log(`dragging ${activity.name}...`);
 

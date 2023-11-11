@@ -52,38 +52,26 @@ export const CalendarItem = ({activity, renderSettings, dayWidth, dayStart}) => 
     }
   )
 
-  const startDragging = (mouseDownEvent) => {
-    const calculateStartHour = (mouseEvent) => {
-      const newTop = top + (mouseEvent.clientY - startY);
-      const newStartHour = (newTop / renderSettings.hourHeight) + renderSettings.renderStartTime;
-      
-      let sanitizedStart = Math.round(newStartHour / 0.25) * 0.25;
-      sanitizedStart = Math.max(0, sanitizedStart);
-      sanitizedStart = Math.min(23.75, sanitizedStart);
-      
-      return sanitizedStart
-    }
-
-    const doDrag = (mouseMoveEvent) => {
-      setTop(renderSettings.hourHeight * (calculateStartHour(mouseMoveEvent) - renderSettings.renderStartTime));
-    };
-
-    const stopDragging = (mouseEvent) => {
-        window.removeEventListener('mousemove', doDrag);
-        window.removeEventListener('mouseup', stopDragging);
-        document.body.style.cursor = 'auto';
-        dispatch(updateActivityAsync(
-          {...activity, start: moment(activity.start).set({hour: calculateStartHour(mouseEvent)}).toISOString()}));
-    };
-
-    mouseDownEvent.preventDefault();
-    mouseDownEvent.stopPropagation();
-    document.body.style.cursor = 'move';
-
-    const startY = mouseDownEvent.clientY;
-    window.addEventListener('mousemove', doDrag);
-    window.addEventListener('mouseup', stopDragging);
+  const calculateStartHour = ({ deltaY }) => {
+    const newTop = top + deltaY;
+    const newStartHour = (newTop / renderSettings.hourHeight) + renderSettings.renderStartTime;
+    
+    let sanitizedStart = Math.round(newStartHour / 0.25) * 0.25;
+    sanitizedStart = Math.max(0, sanitizedStart);
+    sanitizedStart = Math.min(23.75, sanitizedStart);
+    
+    return sanitizedStart
   }
+
+  const handleDragging = useDragResize(
+    () => { document.body.style.cursor = 'move'; },
+    (delta) => {setTop(renderSettings.hourHeight * (calculateStartHour(delta) - renderSettings.renderStartTime));},
+    (delta) => {
+      document.body.style.cursor = 'auto';
+      dispatch(updateActivityAsync(
+        {...activity, start: moment(activity.start).set({hour: calculateStartHour(delta)}).toISOString()}));
+    }
+  );
 
   if(!activity.start || !activity.duration){
     return <></>
@@ -98,7 +86,7 @@ export const CalendarItem = ({activity, renderSettings, dayWidth, dayStart}) => 
           top: `${top}px`,
           left: `${left}px`}}
 
-        onMouseDown={startDragging}>
+        onMouseDown={handleDragging}>
 
         <span className={styles.calendarItemLabel}>
             {activity.name}

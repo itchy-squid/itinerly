@@ -61,9 +61,6 @@ export const Calendar = () => {
 
   return (
     <div className={styles.calendar} style={style}>
-      <div style={{display: 'absolute'}}>
-        <span>width: {width}</span>
-      </div>
       <div>
           {range(renderSettings.renderStartTime, renderSettings.renderStartTime + renderSettings.renderDuration).map((hour, idx) => (
               <div key={`segment-${hour}`} className={styles.hour}>

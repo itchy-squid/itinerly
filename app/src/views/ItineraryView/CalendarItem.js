@@ -1,15 +1,17 @@
 import styles from './Calendar.module.css';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { updateActivityAsync } from '../../state/activities';
 import { useDispatch } from 'react-redux';
 import moment from 'moment';
 import { TIME_UNITS } from '../../constants';
+import { useDragResize } from '../../hooks/useDragResize';
 
 export const CalendarItem = ({activity, renderSettings, dayWidth, dayStart}) => {
   const dispatch = useDispatch();
   const [height, setHeight] = useState();
   const [top, setTop] = useState();
   const [left, setLeft] = useState();
+  const [width, setWidth] = useState();
   
   useEffect(() => {
     if(renderSettings.hourHeight) {
@@ -19,45 +21,36 @@ export const CalendarItem = ({activity, renderSettings, dayWidth, dayStart}) => 
   }, [activity, renderSettings]);
 
   useEffect(() => {
-    const nDays = moment(activity.start).diff(dayStart, TIME_UNITS.DAYS);
+    const nDays = moment(activity.start).startOf(TIME_UNITS.DAY).diff(dayStart, TIME_UNITS.DAYS);
     setLeft(Math.round(nDays * dayWidth));
   }, [activity, dayWidth, dayStart]);
 
-  const startResizing = (mouseDownEvent) => {
-    const startY = mouseDownEvent.clientY;
+  useEffect(() => {
+    setWidth(Math.round(dayWidth) - 8);
+  }, [dayWidth]);
 
-    const calculateDuration = (mouseEvent) => {
-      const newHeight = height + (mouseEvent.clientY - startY);
-      const newDuration = newHeight / renderSettings.hourHeight;
 
-      let sanitizedDuration = Math.round(newDuration / 0.25) * 0.25;
-      sanitizedDuration = Math.max(0.25, sanitizedDuration);
-      sanitizedDuration = Math.min(
-        sanitizedDuration, 
-        renderSettings.renderStartTime + renderSettings.renderDuration - moment(activity.start).hour());
-      
-        return sanitizedDuration
+  const calculateDuration = ({ deltaY }) => {
+    const newHeight = height + deltaY;
+    const newDuration = newHeight / renderSettings.hourHeight;
+
+    let sanitizedDuration = Math.round(newDuration / 0.25) * 0.25;
+    sanitizedDuration = Math.max(0.25, sanitizedDuration);
+    sanitizedDuration = Math.min(
+      sanitizedDuration, 
+      renderSettings.renderStartTime + renderSettings.renderDuration - moment(activity.start).hour());
+    
+      return sanitizedDuration
+  }
+
+  const handleResizing = useDragResize(
+    () => { document.body.style.cursor = "ns-resize"; },
+    (delta) => { setHeight(renderSettings.hourHeight * calculateDuration(delta)); },
+    (delta) => {
+      document.body.style.cursor = 'auto';
+      dispatch(updateActivityAsync({...activity, duration: calculateDuration(delta)}));
     }
-
-    const doResize = (mouseMoveEvent) => {
-      setHeight(renderSettings.hourHeight * calculateDuration(mouseMoveEvent));
-    };
-
-    const stopResizing = (mouseEvent) => {
-        window.removeEventListener('mousemove', doResize);
-        window.removeEventListener('mouseup', stopResizing);
-        document.body.style.cursor = 'auto';
-        dispatch(updateActivityAsync({...activity, duration: calculateDuration(mouseEvent)}));
-    };
-
-    console.log('resizing...');
-    mouseDownEvent.preventDefault();
-    mouseDownEvent.stopPropagation();
-    document.body.style.cursor = "ns-resize";
-
-    window.addEventListener('mousemove', doResize);
-    window.addEventListener('mouseup', stopResizing);
-  };
+  )
 
   const startDragging = (mouseDownEvent) => {
     const calculateStartHour = (mouseEvent) => {
@@ -101,7 +94,7 @@ export const CalendarItem = ({activity, renderSettings, dayWidth, dayStart}) => 
       <div className={styles.calendarItem}
         style={{ 
           height: `${height}px`, 
-          width: `${dayWidth}px`, 
+          width: `${width}px`, 
           top: `${top}px`,
           left: `${left}px`}}
 
@@ -112,7 +105,7 @@ export const CalendarItem = ({activity, renderSettings, dayWidth, dayStart}) => 
         </span>
         
         <div className={styles.calendarItemResizeHandle}
-            onMouseDown={startResizing}
+            onMouseDown={handleResizing}
         />
       </div>
     // </div>

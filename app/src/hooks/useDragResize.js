@@ -1,4 +1,4 @@
-export const useDragResize = (onDragResizing, onStopDragResizing) => {
+export const useDragResize = (onStartDragResizing, onDragResizing, onStopDragResizing) => {
   
   const startDragResizing = (mouseDownEvent) => {
 
@@ -7,10 +7,14 @@ export const useDragResize = (onDragResizing, onStopDragResizing) => {
     }
 
     const doDrag = (mouseMoveEvent) => {
+      mouseMoveEvent.preventDefault();
+      mouseMoveEvent.stopPropagation();
       onDragResizing(delta(mouseMoveEvent));
     };
 
     const stopDragging = (mouseEvent) => {
+        mouseEvent.preventDefault();
+        mouseEvent.stopPropagation();
         window.removeEventListener('mousemove', doDrag);
         window.removeEventListener('mouseup', stopDragging);
         onStopDragResizing(delta(mouseEvent));
@@ -18,7 +22,7 @@ export const useDragResize = (onDragResizing, onStopDragResizing) => {
 
     mouseDownEvent.preventDefault();
     mouseDownEvent.stopPropagation();
-    document.body.style.cursor = 'move';
+    onStartDragResizing();
 
     const startX = mouseDownEvent.clientX;
     const startY = mouseDownEvent.clientY;
@@ -26,5 +30,5 @@ export const useDragResize = (onDragResizing, onStopDragResizing) => {
     window.addEventListener('mouseup', stopDragging);
   }
 
-  return [ startDragResizing ];
+  return startDragResizing;
 }

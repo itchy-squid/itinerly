@@ -8,8 +8,8 @@
     display: flex;
 }
 
-.daysContainer {
-    flex: 1 1 auto;
+.daysPreludeContainer {
+    flex: 0 1 auto;
     display: flex;
     background: repeating-linear-gradient(
         to bottom,
@@ -24,6 +24,19 @@
 .daysPrelude {
     width: 8px;
     border-right: var(--hairline) 1px solid;
+}
+
+.daysContainer {
+    flex: 1 1 auto;
+    display: flex;
+    background: repeating-linear-gradient(
+        to bottom,
+        var(--hairline),  /* Line color */
+        var(--hairline) 1px,  /* Line width */
+        transparent 1px,
+        transparent var(--hour-height) /* Space between lines */
+    );
+    border-bottom: var(--hairline) 1px solid;
 }
 
 .day {

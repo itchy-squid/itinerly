@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { selectActivities } from '../../state/activities';
 import { useSelector } from 'react-redux';
 import { CalendarDay } from './CalendarDay';
+import { CalendarItem } from './CalendarItem';
 
 export const Calendar = () => {
   const activities = useSelector(selectActivities);
@@ -55,13 +56,15 @@ export const Calendar = () => {
               </div>
           ))}
       </div>
+      <div className={styles.daysPreludeContainer}>
+        <div className={styles.daysPrelude}/>
+      </div>
       <div className={styles.daysContainer}>
-          <div className={styles.daysPrelude}/>
-          {days.map((date, index) => (
-            <CalendarDay activities={activities} 
-              date={date} key={`day-${index}`} 
-              renderSettings={renderSettings} />
-          ))}
+        {days.map((date, index) => (
+          <CalendarDay activities={activities} 
+            date={date} key={`day-${index}`} 
+            renderSettings={renderSettings} />
+        ))}
       </div>
     </div>
   );

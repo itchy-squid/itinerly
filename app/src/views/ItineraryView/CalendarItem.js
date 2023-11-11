@@ -3,11 +3,13 @@ import { useEffect, useState } from 'react';
 import { updateActivityAsync } from '../../state/activities';
 import { useDispatch } from 'react-redux';
 import moment from 'moment';
+import { TIME_UNITS } from '../../constants';
 
-export const CalendarItem = ({activity, renderSettings}) => {
+export const CalendarItem = ({activity, renderSettings, dayWidth, dayStart}) => {
   const dispatch = useDispatch();
   const [height, setHeight] = useState();
   const [top, setTop] = useState();
+  const [left, setLeft] = useState();
   
   useEffect(() => {
     if(renderSettings.hourHeight) {
@@ -15,6 +17,11 @@ export const CalendarItem = ({activity, renderSettings}) => {
       setTop(renderSettings.hourHeight * (moment(activity.start).hour() - renderSettings.renderStartTime));
     }
   }, [activity, renderSettings]);
+
+  useEffect(() => {
+    const nDays = moment(activity.start).diff(dayStart, TIME_UNITS.DAYS);
+    setLeft(Math.round(nDays * dayWidth));
+  }, [activity, dayWidth, dayStart]);
 
   const startResizing = (mouseDownEvent) => {
     const startY = mouseDownEvent.clientY;
@@ -76,21 +83,28 @@ export const CalendarItem = ({activity, renderSettings}) => {
           {...activity, start: moment(activity.start).set({hour: calculateStartHour(mouseEvent)}).toISOString()}));
     };
 
-    console.log('dragging...');
     mouseDownEvent.preventDefault();
     mouseDownEvent.stopPropagation();
     document.body.style.cursor = 'move';
-    console.log(`dragging ${activity.name}...`);
 
     const startY = mouseDownEvent.clientY;
     window.addEventListener('mousemove', doDrag);
     window.addEventListener('mouseup', stopDragging);
   }
 
+  if(!activity.start || !activity.duration){
+    return <></>
+  }
+
   return (
-    <div className={styles.calenderItemContainer}>
+    // <div className={styles.calenderItemContainer}>
       <div className={styles.calendarItem}
-        style={{ height: `${height}px`, top: `${top}px` }}
+        style={{ 
+          height: `${height}px`, 
+          width: `${dayWidth}px`, 
+          top: `${top}px`,
+          left: `${left}px`}}
+
         onMouseDown={startDragging}>
 
         <span className={styles.calendarItemLabel}>
@@ -101,6 +115,6 @@ export const CalendarItem = ({activity, renderSettings}) => {
             onMouseDown={startResizing}
         />
       </div>
-    </div>
+    // </div>
   );
 }

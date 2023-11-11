@@ -52,7 +52,7 @@ export const fetchAsync = createAsyncThunk(
 export const updateActivityAsync = createAsyncThunk(
   "activities/updateActivityAsync",
   async (activity) => {
-    await activitiesService.updateActivity(activity);
+    // await activitiesService.updateActivity(activity);
     return activity;
   }
 );

@@ -18,7 +18,7 @@ export const CalendarDay = ({ date, activities, renderSettings }) => {
 
   return (
     <div className={styles.day}>
-      {todaysActivities.map((activity, idx) => (
+      {/* {todaysActivities.map((activity, idx) => (
         <CalendarItem 
           key={idx} 
           activity={activity}
@@ -26,7 +26,7 @@ export const CalendarDay = ({ date, activities, renderSettings }) => {
           duration={activity.duration} 
           start={moment(activity.start).hour()} 
           renderSettings={renderSettings}/>
-      ))}
+      ))} */}
     </div>
   );
 }

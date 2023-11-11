@@ -6,7 +6,7 @@ import { selectActivities } from '../../state/activities';
 import { useSelector } from 'react-redux';
 
 export const ItineraryView = () => {
-  const activities = useSelector(selectActivities);
+  const { activities } = useSelector(selectActivities);
   const [selectedIndex, setSelectedIndex] = useState(null);
   
   return (

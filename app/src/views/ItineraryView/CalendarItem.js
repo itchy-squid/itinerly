@@ -3,103 +3,107 @@ import { useEffect, useState } from 'react';
 import { updateActivityAsync } from '../../state/activities';
 import { useDispatch } from 'react-redux';
 import moment from 'moment';
+import { useDragResize } from '../../hooks/useDragResize';
+import { TIME_UNITS } from '../../constants';
 
-export const CalendarItem = ({activity, renderSettings}) => {
+export const CalendarItem = ({activity, hourHeight, date, calendarStartHour, calendarDuration}) => {
   const dispatch = useDispatch();
   const [height, setHeight] = useState();
   const [top, setTop] = useState();
+  const [endsToday, setEndsToday] = useState(false);
   
   useEffect(() => {
-    if(renderSettings.hourHeight) {
-      setHeight(renderSettings.hourHeight * activity.duration);
-      setTop(renderSettings.hourHeight * (moment(activity.start).hour() - renderSettings.renderStartTime));
+    setEndsToday(
+      moment(activity.start).local().add({hours: activity.duration}).startOf(TIME_UNITS.DAY)
+      .isSame(date)
+    );
+  }, [activity, date])
+
+  useEffect(() => {
+    if(hourHeight) {
+      const [start, duration] = sanitizeStartDuration(activity.start, activity.duration);
+      setHeight(hourHeight * duration);
+      setTop(hourHeight * start);
     }
-  }, [activity, renderSettings]);
+  }, [activity, calendarStartHour, calendarDuration, hourHeight]);
 
-  const startResizing = (mouseDownEvent) => {
-    const startY = mouseDownEvent.clientY;
+  const sanitizeStartDuration = (start, duration) => {
+    const dayStart = moment(date).local().startOf(TIME_UNITS.DAY).add({hours: calendarStartHour});
 
-    const calculateDuration = (mouseEvent) => {
-      const newHeight = height + (mouseEvent.clientY - startY);
-      const newDuration = newHeight / renderSettings.hourHeight;
+    const sanitizedStart = moment.max([
+      moment(dayStart).local(), 
+      moment(start).local()
+    ]);
 
-      let sanitizedDuration = Math.round(newDuration / 0.25) * 0.25;
-      sanitizedDuration = Math.max(0.25, sanitizedDuration);
-      sanitizedDuration = Math.min(
-        sanitizedDuration, 
-        renderSettings.renderStartTime + renderSettings.renderDuration - moment(activity.start).hour());
-      
-        return sanitizedDuration
-    }
+    const sanitizedEnd = moment.min([
+      moment(dayStart).local().add({hours: calendarDuration}),
+      moment(start).local().add({hours: duration})
+    ]);
 
-    const doResize = (mouseMoveEvent) => {
-      setHeight(renderSettings.hourHeight * calculateDuration(mouseMoveEvent));
-    };
-
-    const stopResizing = (mouseEvent) => {
-        window.removeEventListener('mousemove', doResize);
-        window.removeEventListener('mouseup', stopResizing);
-        document.body.style.cursor = 'auto';
-        dispatch(updateActivityAsync({...activity, duration: calculateDuration(mouseEvent)}));
-    };
-
-    console.log('resizing...');
-    mouseDownEvent.preventDefault();
-    mouseDownEvent.stopPropagation();
-    document.body.style.cursor = "ns-resize";
-
-    window.addEventListener('mousemove', doResize);
-    window.addEventListener('mouseup', stopResizing);
-  };
-
-  const startDragging = (mouseDownEvent) => {
-    const calculateStartHour = (mouseEvent) => {
-      const newTop = top + (mouseEvent.clientY - startY);
-      const newStartHour = (newTop / renderSettings.hourHeight) + renderSettings.renderStartTime;
-      
-      let sanitizedStart = Math.round(newStartHour / 0.25) * 0.25;
-      sanitizedStart = Math.max(0, sanitizedStart);
-      sanitizedStart = Math.min(23.75, sanitizedStart);
-      
-      return sanitizedStart
-    }
-
-    const doDrag = (mouseMoveEvent) => {
-      setTop(renderSettings.hourHeight * (calculateStartHour(mouseMoveEvent) - renderSettings.renderStartTime));
-    };
-
-    const stopDragging = (mouseEvent) => {
-        window.removeEventListener('mousemove', doDrag);
-        window.removeEventListener('mouseup', stopDragging);
-        document.body.style.cursor = 'auto';
-        dispatch(updateActivityAsync(
-          {...activity, start: moment(activity.start).set({hour: calculateStartHour(mouseEvent)}).toISOString()}));
-    };
-
-    console.log('dragging...');
-    mouseDownEvent.preventDefault();
-    mouseDownEvent.stopPropagation();
-    document.body.style.cursor = 'move';
-    console.log(`dragging ${activity.name}...`);
-
-    const startY = mouseDownEvent.clientY;
-    window.addEventListener('mousemove', doDrag);
-    window.addEventListener('mouseup', stopDragging);
+    return [
+      sanitizedStart.hours(),
+      moment.duration(sanitizedEnd.diff(sanitizedStart)).hours()
+    ]
   }
+
+  const calculateDuration = ({deltaY}) => {
+    const newHeight = height + deltaY;
+    const newDuration = newHeight / hourHeight;
+
+    let sanitizedDuration = Math.round(newDuration / 0.25) * 0.25;
+    sanitizedDuration = Math.max(0.25, sanitizedDuration);
+    sanitizedDuration = Math.min(
+      sanitizedDuration, 
+      calendarStartHour + calendarDuration - moment(activity.start).hour());
+    
+      return sanitizedDuration
+  }
+
+  const handleUpdateDuration = useDragResize(
+    () => { document.body.style.cursor = "ns-resize"; },
+    (delta) => { setHeight(hourHeight * calculateDuration(delta)); },
+    (delta) => {
+      document.body.style.cursor = 'auto';
+      dispatch(updateActivityAsync({...activity, duration: calculateDuration(delta)}));
+    }
+  );
+
+  const calculateStart = ({deltaY}) => {
+    const newTop = top + deltaY;
+    const newStartHour = (newTop / hourHeight) + calendarStartHour;
+    
+    let sanitizedStart = Math.round(newStartHour / 0.25) * 0.25;
+    sanitizedStart = Math.max(0, sanitizedStart);
+    sanitizedStart = Math.min(23.75, sanitizedStart);
+    
+    return sanitizedStart
+  }
+
+  const handleUpdateStart = useDragResize(
+    () => { document.body.style.cursor = 'move'; },
+    (delta) => { setTop(hourHeight * (calculateStart(delta) - calendarStartHour)); },
+    (delta) => { 
+      document.body.style.cursor = 'auto';
+      dispatch(updateActivityAsync(
+        {...activity, start: moment(activity.start).set({hour: calculateStart(delta)}).toISOString()}));
+    }
+  );
 
   return (
     <div className={styles.calenderItemContainer}>
       <div className={styles.calendarItem}
         style={{ height: `${height}px`, top: `${top}px` }}
-        onMouseDown={startDragging}>
+        onMouseDown={handleUpdateStart}>
 
         <span className={styles.calendarItemLabel}>
             {activity.name}
         </span>
         
-        <div className={styles.calendarItemResizeHandle}
-            onMouseDown={startResizing}
-        />
+        {endsToday && (
+          <div className={styles.calendarItemResizeHandle}
+              onMouseDown={handleUpdateDuration}
+          />
+        )}
       </div>
     </div>
   );

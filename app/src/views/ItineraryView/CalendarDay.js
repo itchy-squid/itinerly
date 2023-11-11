@@ -5,7 +5,7 @@ import { TIME_UNITS } from '../../constants';
 import { CalendarItem } from './CalendarItem';
 import { useEffect, useState } from 'react';
 
-export const CalendarDay = ({ date, activities, renderSettings }) => {
+export const CalendarDay = ({ date, activities, hourHeight, renderStartTime, renderDuration }) => {
   const [todaysActivities, setTodaysActivities] = useState([]);
 
   useEffect(() => {
@@ -21,11 +21,14 @@ export const CalendarDay = ({ date, activities, renderSettings }) => {
       {todaysActivities.map((activity, idx) => (
         <CalendarItem 
           key={idx} 
+          date={date}
           activity={activity}
           name={activity.name} 
           duration={activity.duration} 
           start={moment(activity.start).hour()} 
-          renderSettings={renderSettings}/>
+          calendarStartHour={renderStartTime}
+          calendarDuration={renderDuration}
+          hourHeight={hourHeight}/>
       ))}
     </div>
   );

@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { activitiesService } from "../../services/firestore";
+import moment from "moment";
 
 // interface ActivitiesSlice {
 //   activities
@@ -7,7 +8,20 @@ import { activitiesService } from "../../services/firestore";
 
 const initialState = {
   activities: [],
-  loading: true
+  loading: true,
+  range: undefined
+}
+
+const calculateRange = (activities) => {
+  const moments = activities
+  .filter(a => a.start && a.duration > 0)
+  .map(a => [moment(a.start), moment(a.start).add({hours: a.duration})])
+  .reduce((acc, curr) => acc.concat(curr), []);
+
+  return {
+    start: moment.min(moments).toISOString(), 
+    end: moment.max(moments).toISOString()
+  };
 }
 
 const activitiesSlice = createSlice({
@@ -23,6 +37,7 @@ const activitiesSlice = createSlice({
         fetchAsync.fulfilled, 
         (state, action) => {
           state.activities = action.payload;
+          state.range = calculateRange(state.activities);
           state.loading = false;
         })
       .addCase(
@@ -34,6 +49,7 @@ const activitiesSlice = createSlice({
           // Check if the item exists
           if (indexToUpdate !== -1) {
             state.activities[indexToUpdate] = {...action.payload};
+            state.range = calculateRange(state.activities);
           }
         }
       )
@@ -57,5 +73,5 @@ export const updateActivityAsync = createAsyncThunk(
   }
 );
 
-export const selectActivities = (state) => state.activities.activities;
+export const selectActivities = (state) => state.activities;
 export const activitiesReducer = activitiesSlice.reducer;

@@ -29,7 +29,6 @@ export const CalendarItem = ({activity, renderSettings, dayWidth, dayStart}) => 
     setWidth(Math.round(dayWidth) - 8);
   }, [dayWidth]);
 
-
   const calculateDuration = ({ deltaY }) => {
     const newHeight = height + deltaY;
     const newDuration = newHeight / renderSettings.hourHeight;

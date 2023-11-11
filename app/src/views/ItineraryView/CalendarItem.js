@@ -1,5 +1,5 @@
 import styles from './Calendar.module.css';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { updateActivityAsync } from '../../state/activities';
 import { useDispatch } from 'react-redux';
 import moment from 'moment';

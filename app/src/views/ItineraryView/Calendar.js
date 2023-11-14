@@ -1,55 +1,42 @@
 import styles from './Calendar.module.css';
 import moment from 'moment';
 import { times } from 'lodash';
-import {range} from 'lodash';
+import { range } from 'lodash';
 import { useEffect, useState } from 'react';
 import { selectActivities } from '../../state/activities';
 import { useSelector } from 'react-redux';
 import { CalendarDay } from './CalendarDay';
 
 export const Calendar = () => {
-  const activities = useSelector(selectActivities);
-  const [renderSettings, setRenderSettings] = useState({});
-  // const [_, setFirstDay] = useState();
-  // const [_, setLastDay] = useState();
-  const [days, setDays] = useState([]);
+  const { activities, range: activitiesRange } = useSelector(selectActivities);
+  const [ hourHeight, setHourHeight ] = useState(0);
+  const [ renderStartTime ] = useState(0);
+  const [ renderDuration ] = useState(24);
+  const [ renderDays ] = useState(5);
+  const [ days, setDays] = useState([]);
 
   useEffect(() => {
     const rootStyle = getComputedStyle(document.documentElement);
     const pxHeight = parseInt(rootStyle.getPropertyValue('--hour-height'));
-
-    setRenderSettings(
-      { 
-        hourHeight: pxHeight,
-        renderStartTime: 0,
-        renderDuration: 24
-      })
+    setHourHeight(pxHeight)
   }, []);
 
   useEffect(() => {
-    const moments = activities
-      .filter(a => a.start && a.duration > 0)
-      .map(a => [moment(a.start), moment(a.start).add({hours: a.duration})])
-      .reduce((acc, curr) => acc.concat(curr), []);
-
-    const localFirstDay = moment.min(moments).startOf('day');
-    //const localLastDay = moment.max(moments).day();
-    const nextFiveDays = times(5, nDays => moment(localFirstDay).add({ days: nDays }));
+    const localFirstDay = moment(activitiesRange.start ?? '').local().startOf('day');
+    const nextFiveDays = times(renderDays, nDays => moment(localFirstDay).add({ days: nDays }));
     
-    // setFirstDay(localFirstDay);
-    // setLastDay(localLastDay);
     setDays(nextFiveDays);
 
-  }, [activities])
+  }, [renderDays, activitiesRange])
 
   const style = {
-    height: `calc(var(--hour-height) * ${renderSettings.duration})`,
+    height: `calc(var(--hour-height) * ${renderDuration})`,
   };
 
   return (
     <div className={styles.calendar} style={style}>
       <div>
-          {range(renderSettings.renderStartTime, renderSettings.renderStartTime + renderSettings.renderDuration).map((hour, idx) => (
+          {range(renderStartTime, renderStartTime + renderDuration).map((hour, idx) => (
               <div key={`segment-${hour}`} className={styles.hour}>
                   <span className={styles.hourlabel}>{hour}</span>
               </div>
@@ -60,7 +47,9 @@ export const Calendar = () => {
           {days.map((date, index) => (
             <CalendarDay activities={activities} 
               date={date} key={`day-${index}`} 
-              renderSettings={renderSettings} />
+              renderStartTime={renderStartTime}
+              renderDuration={renderDuration}
+              hourHeight={hourHeight} />
           ))}
       </div>
     </div>

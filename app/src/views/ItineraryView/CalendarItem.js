@@ -27,7 +27,7 @@ export const CalendarItem = ({activity, hourHeight, date, calendarStartHour, cal
 
     return [
       sanitizedStart.hours(),
-      moment.duration(sanitizedEnd.diff(sanitizedStart)).hours()
+      moment.duration(sanitizedEnd.diff(sanitizedStart)).asHours()
     ]
   }, [date, calendarStartHour, calendarDuration]);
 

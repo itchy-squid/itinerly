@@ -1,5 +1,5 @@
 import styles from './Calendar.module.css';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { updateActivityAsync } from '../../state/activities';
 import { useDispatch } from 'react-redux';
 import moment from 'moment';
@@ -12,22 +12,7 @@ export const CalendarItem = ({activity, hourHeight, date, calendarStartHour, cal
   const [top, setTop] = useState();
   const [endsToday, setEndsToday] = useState(false);
   
-  useEffect(() => {
-    setEndsToday(
-      moment(activity.start).local().add({hours: activity.duration}).startOf(TIME_UNITS.DAY)
-      .isSame(date)
-    );
-  }, [activity, date])
-
-  useEffect(() => {
-    if(hourHeight) {
-      const [start, duration] = sanitizeStartDuration(activity.start, activity.duration);
-      setHeight(hourHeight * duration);
-      setTop(hourHeight * start);
-    }
-  }, [activity, calendarStartHour, calendarDuration, hourHeight]);
-
-  const sanitizeStartDuration = (start, duration) => {
+  const sanitizeStartDuration = useCallback((start, duration) => {
     const dayStart = moment(date).local().startOf(TIME_UNITS.DAY).add({hours: calendarStartHour});
 
     const sanitizedStart = moment.max([
@@ -44,7 +29,22 @@ export const CalendarItem = ({activity, hourHeight, date, calendarStartHour, cal
       sanitizedStart.hours(),
       moment.duration(sanitizedEnd.diff(sanitizedStart)).hours()
     ]
-  }
+  }, [date, calendarStartHour, calendarDuration]);
+
+  useEffect(() => {
+    setEndsToday(
+      moment(activity.start).local().add({hours: activity.duration}).startOf(TIME_UNITS.DAY)
+      .isSame(date)
+    );
+  }, [activity, date]);
+
+  useEffect(() => {
+    if(hourHeight) {
+      const [start, duration] = sanitizeStartDuration(activity.start, activity.duration);
+      setHeight(hourHeight * duration);
+      setTop(hourHeight * start);
+    }
+  }, [activity, calendarStartHour, calendarDuration, hourHeight, sanitizeStartDuration]);
 
   const calculateDuration = ({deltaY}) => {
     const newHeight = height + deltaY;
